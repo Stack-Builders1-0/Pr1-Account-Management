@@ -15,3 +15,10 @@ customer
 
 credit_partial_settle 
 	if insert recored , forigen key issue occur. we want to discuss that
+
+employee
+	this table haven't update by we want to add this
+
+i assume discount is enter by the cash not a persentage  => i calculate the amount in backend 
+
+how to filter using multi filed value
