@@ -80,8 +80,26 @@ router.get('/showAll', (req, res) => {
 router.post('/edit',(req,res) => {
     const body = req.body;
 
-    const updateQuery = "UPDATE accountmanagement.cash_sales SET type_id"+mysql.escape(body.type_id) +"manual_invoice_id"+mysql.escape(body.manual_invoice_id) +" customer_id"+mysql.escape(body.customer_id) +" description"+mysql.escape(body.description) +" bill_amount"+mysql.escape(body.bill_amount) +" discount"+mysql.escape(body.discount) +" employee_id"+mysql.escape(body.employee_id) +" updated_by"+mysql.escape(body.updated_by) +"  WHERE (invoice_id = "+mysql.escape(body.invoice_id) +");";
+    const updateQuery = "UPDATE accountmanagement.cash_sales SET type_id = "+mysql.escape(body.type_id) +", manual_invoice_id = "+mysql.escape(body.manual_invoice_id) +", customer_id = "+mysql.escape(body.customer_id) +", description = "+mysql.escape(body.description) +", bill_amount = "+mysql.escape(body.bill_amount) +", discount ="+mysql.escape(body.discount) +", updated_by = "+mysql.escape(body.employee_id) +"  WHERE (invoice_id = "+mysql.escape(body.invoice_id) +");";
     
+    //  response has 2 field 
+    // error occur then error = true , otherwise error = false
+    // employee regeister is sucess then sucess=true
+    connection.query(updateQuery, (err,result) => {
+        if(err){
+            console.log(err);
+            res.send({
+                sucess : false,
+                error : true
+            });
+        }
+        else{
+            res.send({
+                sucess : true,
+                error : false
+            });
+        }
+    });
 });
 
 

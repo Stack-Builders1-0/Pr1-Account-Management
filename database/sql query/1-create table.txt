@@ -229,7 +229,7 @@ ON accountmanagement.advance_sales_bp (invoice_id, type_id);
 
 CREATE TABLE `accountmanagement`.`credit_partial_settle` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `type` CHAR(3) NULL,
+  `type_id` CHAR(3) NULL,
   `invoice_id` INT NOT NULL,
   `date` DATETIME NOT NULL,
   `description` VARCHAR(400) NULL,
@@ -249,22 +249,67 @@ CREATE TABLE `accountmanagement`.`credit_partial_settle` (
     ON DELETE NO ACTION
     ON UPDATE CASCADE,
     
-  FOREIGN KEY (`invoice_id` , `type`)
+  FOREIGN KEY (`invoice_id` , `type_id`)
     REFERENCES `accountmanagement`.`credit_sales` (`invoice_id` , `type_id`)
-    ON DELETE NO ACTION
-    ON UPDATE CASCADE,
-    
-  FOREIGN KEY (`invoice_id` , `type`)
-    REFERENCES `accountmanagement`.`advance_sales_ap` (`invoice_id` , `type_id`)
-    ON DELETE NO ACTION
-    ON UPDATE CASCADE,
-    
-  FOREIGN KEY (`invoice_id` , `type`)
-    REFERENCES `accountmanagement`.`advance_sales_bp` (`invoice_id` , `type_id`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE
 );
 
+CREATE TABLE `accountmanagement`.`advance_ap_partial_settle` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `type_id` CHAR(3) NULL,
+  `invoice_id` INT NOT NULL,
+  `date` DATETIME NOT NULL,
+  `description` VARCHAR(400) NULL,
+  `customer_id` INT NOT NULL,
+  `settle_amount` FLOAT NOT NULL,
+  `balance` FLOAT NULL,
+  `employee_id` INT NULL,
+  PRIMARY KEY (`id`),
+  
+  FOREIGN KEY (`employee_id`)
+    REFERENCES `accountmanagement`.`employees` (`employee_id`)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE,
+    
+  FOREIGN KEY (`customer_id`)
+    REFERENCES `accountmanagement`.`customers` (`customer_id`)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE,
+    
+  FOREIGN KEY (`invoice_id` , `type_id`)
+    REFERENCES `accountmanagement`.`advance_sales_ap` (`invoice_id` , `type_id`)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE
+);
+
+CREATE TABLE `accountmanagement`.`advance_bp_partial_settle` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `type_id` CHAR(3) NULL,
+  `invoice_id` INT NOT NULL,
+  `date` DATETIME NOT NULL,
+  `description` VARCHAR(400) NULL,
+  `customer_id` INT NOT NULL,
+  `settle_amount` FLOAT NOT NULL,
+  `balance` FLOAT NULL,
+  `employee_id` INT NULL,
+  PRIMARY KEY (`id`),
+  
+  FOREIGN KEY (`employee_id`)
+    REFERENCES `accountmanagement`.`employees` (`employee_id`)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE,
+    
+  FOREIGN KEY (`customer_id`)
+    REFERENCES `accountmanagement`.`customers` (`customer_id`)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE,
+    
+  FOREIGN KEY (`invoice_id` , `type_id`)
+    REFERENCES `accountmanagement`.`advance_sales_bp` (`invoice_id` , `type_id`)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE
+);
 
 
 ALTER TABLE `accountmanagement`.`advance_sales_ap` 
@@ -288,3 +333,7 @@ ADD CONSTRAINT `customers_ibfk_10`
   REFERENCES `accountmanagement`.`employees` (`employee_id`)
   ON DELETE NO ACTION
   ON UPDATE cascade;
+
+
+ALTER TABLE accountmanagement.credit_sales
+ADD COLUMN amount float NOT NULL;
