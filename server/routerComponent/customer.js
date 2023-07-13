@@ -94,10 +94,29 @@ router.post('/filterCustomerNIC', (req, res) => {
 
 });
 
-// router.post('/edit', (req,res) => {
-//     body = req.body;
+router.post('/edit', (req, res) => {
+    body = req.body;
 
-//     // const query = 
-// })
+    const updateQuery = "UPDATE accountmanagement.customers SET customer_name = "+ mysql.escape(body.customer_name) +", business_name = "+ mysql.escape(body.business_name) +", adress = "+ mysql.escape(body.address) +", mobile= "+ mysql.escape(body.mobile) +", lan_line = "+ mysql.escape(body.lan_line) +", w_app_no = "+ mysql.escape(body.w_app_no) +", office_num = "+ mysql.escape(body.office_num) +", email_id = "+ mysql.escape(body.email_id) +", nic_no = "+ mysql.escape(body.nic_no) +", updated_by = "+ mysql.escape(body.employee_id) +" WHERE (customer_id = "+mysql.escape(body.customer_id)+");";
+
+    //  response has 2 field 
+    // error occur then error = true , otherwise error = false
+    // employee regeister is sucess then sucess=true
+    connection.query(updateQuery, (err,result) => {
+        if(err){
+            console.log(err);
+            res.send({
+                sucess : false,
+                error : true
+            });
+        }
+        else{
+            res.send({
+                sucess : true,
+                error : false
+            });
+        }
+    });
+});
 
 module.exports = router;
