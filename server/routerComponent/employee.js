@@ -75,4 +75,31 @@ router.post('/add', (req, res) => {
     
 });
 
+
+router.post('/edit', (req, res) => {
+    body = req.body;
+
+    const updateQuery = "UPDATE accountmanagement.employees SET employee_name = "+ mysql.escape(body.employee_name) +", address = "+ mysql.escape(body.address) +", mobile= "+ mysql.escape(body.mobile) +", email = "+ mysql.escape(body.email) +", nic = "+ mysql.escape(body.nic) +", type_id = "+ mysql.escape(body.type_id) +", age = "+ mysql.escape(body.age) +" WHERE (employee_id = "+mysql.escape(body.employee_id)+");";
+
+    //  response has 2 field 
+    // error occur then error = true , otherwise error = false
+    // employee regeister is sucess then sucess=true
+    connection.query(updateQuery, (err,result) => {
+        if(err){
+            console.log(err);
+            res.send({
+                sucess : false,
+                error : true
+            });
+        }
+        else{
+            res.send({
+                sucess : true,
+                error : false
+            });
+        }
+    });
+});
+
+
 module.exports = router;
