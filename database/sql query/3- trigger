@@ -1,22 +1,22 @@
--- calculate the amount of the credit sale
-
-DELIMITER //  
-CREATE TRIGGER calculate_actual_amount_credit_sales
-BEFORE INSERT ON credit_sales
-FOR EACH ROW
-BEGIN
-    SET NEW.amount = (NEW.bill_amount - NEW.discount);
-END //
-
-drop trigger calculate_actual_amount_credit_sales;
+-- ============ credit_sales ========================
 
 -- create trigger add the new record on the credit_partial_settle table when the insert of the credit_sales table
-
 DELIMITER //
 CREATE TRIGGER after_insert_credit_sales_add_to_partial_settle
 AFTER INSERT ON credit_sales FOR EACH ROW
 BEGIN
-    INSERT INTO credit_partial_settle (type_id, invoice_id, description, customer_id, settle_amount,balance, employee_id)
-    VALUES (NEW.type_id, NEW.manual_invoice_id, NEW.description, NEW.customer_id, NEW.amount, NEW.bill_amount, NEW.discount,NEW.amount, NEW.employee_id);
+    INSERT INTO credit_partial_settle (type_id, invoice_id, description, customer_id, date, settle_amount,balance, employee_id)
+    VALUES (NEW.type_id, NEW.invoice_id, NEW.description, NEW.customer_id, new.date, "0",  NEW.amount, NEW.employee_id);
 END //
 
+
+-- update the balance on credit_partial_settle, credit_sales when the  record is created on credit_partial_settle
+
+DELIMITER //
+CREATE TRIGGER after_insert_credit_partial_update_balance
+AFTER INSERT ON credit_partial_settle FOR EACH ROW
+BEGIN
+	if  new.settle_amount <> 0 then
+		UPDATE credit_sales SET balance = new.balance , balance_updated_by = new.employee_id WHERE (invoice_id = new.invoice_id);
+    end if;
+END //
