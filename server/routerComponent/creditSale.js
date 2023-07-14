@@ -159,6 +159,53 @@ router.post('/settle', (req, res) => {
 
 });
 
+router.get('/creditNotSettle', (req, res) => {
+  const selectQuery = "select invoice_id, manual_invoice_id,type_id, date, amount, balance, customer_id,customer_name, business_name, mobile, office_num from credit_sales left join customers using (customer_id) where balance <> '0'  order by date limit 10;"
+
+  connection.query(selectQuery, (err, result) => {
+    if (err) {
+      console.log(err)
+      res.send({
+          sucess : false,
+          error : true,
+          data : result
+      })
+    }
+    else{
+        res.send({
+            sucess : true,
+            error : false,
+            data : result
+        })
+    }
+  });
+
+});
+
+router.post('/histoyCreditTransection', (req, res) =>{
+  const body = req.body;
+
+  const selectQuery = "select invoice_id,type_id, date, settle_amount, balance, customer_id,customer_name, business_name from credit_partial_settle left join customers using (customer_id) where invoice_id = "+ mysql.escape(body.invoice_id) +"  order by date;";
+
+  connection.query(selectQuery, (err, result) => {
+    if (err) {
+      console.log(err)
+      res.send({
+          sucess : false,
+          error : true,
+          data : result
+      })
+    }
+    else{
+        res.send({
+            sucess : true,
+            error : false,
+            data : result
+        })
+    }
+  });
+});
+
 
 
 module.exports = router;
