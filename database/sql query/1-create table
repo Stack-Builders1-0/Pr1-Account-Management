@@ -368,6 +368,8 @@ ALTER TABLE `accountmanagement`.`cash_sales`
 CHANGE COLUMN `amount` `amount` FLOAT NOT NULL AFTER `discount`;
 
 
-
+ALTER TABLE customers 
+ADD COLUMN credit_limit FLOAT NOT NULL DEFAULT 0,
+ADD COLUMN credit_limit_checked BOOLEAN NOT NULL DEFAULT FALSE;
 
 
