@@ -231,7 +231,7 @@ CREATE TABLE `accountmanagement`.`credit_partial_settle` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `type_id` CHAR(3) NULL,
   `invoice_id` INT NOT NULL,
-  `date` DATETIME NOT NULL,
+  `date` timestamp NOT NULL DEFAULT  CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `description` VARCHAR(400) NULL,
   `customer_id` INT NOT NULL,
   `settle_amount` FLOAT NOT NULL,
@@ -254,6 +254,7 @@ CREATE TABLE `accountmanagement`.`credit_partial_settle` (
     ON DELETE NO ACTION
     ON UPDATE CASCADE
 );
+
 
 CREATE TABLE `accountmanagement`.`advance_ap_partial_settle` (
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -336,4 +337,37 @@ ADD CONSTRAINT `customers_ibfk_10`
 
 
 ALTER TABLE accountmanagement.credit_sales
-ADD COLUMN amount float NOT NULL;
+ADD COLUMN amount float NOT NULL,
+ADD COLUMN balance float NOT NULL;
+
+ALTER TABLE accountmanagement.advance_sales_ap
+ADD COLUMN amount float NOT NULL,
+ADD COLUMN balance float NOT NULL;
+
+ALTER TABLE accountmanagement.advance_sales_bp
+ADD COLUMN amount float NOT NULL,
+ADD COLUMN balance float NOT NULL;
+
+
+--  alter table because add new column balance_updated_by
+alter table credit_sales
+add column balance_updated_by int;
+
+ALTER TABLE `accountmanagement`.`credit_sales` 
+ADD INDEX `credit_sales_ibfk_4_idx` (`balance_updated_by` ASC) VISIBLE;
+;
+ALTER TABLE `accountmanagement`.`credit_sales` 
+ADD CONSTRAINT `credit_sales_ibfk_4`
+  FOREIGN KEY (`balance_updated_by`)
+  REFERENCES `accountmanagement`.`employees` (`employee_id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+
+ALTER TABLE `accountmanagement`.`cash_sales` 
+CHANGE COLUMN `amount` `amount` FLOAT NOT NULL AFTER `discount`;
+
+
+
+
+
