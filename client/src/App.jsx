@@ -6,11 +6,11 @@ import Employee from './Employee'
 import Profile from './Profile'
 import Customer from './Customer'
 import Home from './Home'
-import AddEmployee from './AddEmployee'
-import AddCustomer from './AddCustomer'
+import AddEmployee from './routerComponent/AddEmployee'
+import AddCustomer from './routerComponent/AddCustomer'
 import CashTransaction from './CashTransaction'
 import CreditTransaction from './CreditTransaction'
-import AdvanceOnly from './AdvanceOnly'
+import AdvanceOnly from './routerComponent/AdvanceOnly'
 
 function App() {
   return (
