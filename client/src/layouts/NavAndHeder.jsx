@@ -1,28 +1,38 @@
 import React, { useState } from 'react'
 import 'bootstrap-icons/font/bootstrap-icons.min.css'
-import { Link, Outlet } from 'react-router-dom'
+import { Link, Outlet, NavLink } from 'react-router-dom'
 
 
 
 
-function Dashboard() {
+function NavAndHeder() {
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
     }
+    const setStyle = ({ isActive, isPending }) => {
+        return {
+            fontWeight: isActive ? "bold" : "",
+            color: isActive ? "#1a51a3" : "#0D6EFD",
+            textDecoration: 'none'
+        }
+    }
+
     return (
-        <div className ="container-fluid dashboard">
+        <div className="container-fluid dashboard">
             <div class="row flex-nowrap">
                 <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
                     <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-                        <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                            <span class="fs-5 d-none d-sm-inline">ShopName</span>
+                        <a href="/" class="d-flex align-items-center  py-0 ">
+                            <div className="row  logoContainer px-1 ">
+                                <img src="Images/aivha-full.png" />
+                            </div>
                         </a>
                         <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
                             <li>
-                                <Link to="/" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                                    <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span> </Link>
+                                <NavLink to="/" style={setStyle}>
+                                    <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span> </NavLink>
                             </li>
 
                             <li>
@@ -31,8 +41,8 @@ function Dashboard() {
                                 </a>
                             </li>
                             <li>
-                                <Link to="/customer" class="nav-link px-0 align-middle">
-                                    <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Customers</span> </Link>
+                                <NavLink to="/customer" style={setStyle}>
+                                    <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Customers</span> </NavLink>
                             </li>
                             <li>
                                 <Link to="employee" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
@@ -63,7 +73,7 @@ function Dashboard() {
                             <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded={dropdownOpen} onClick={toggleDropdown}>
                                 <i className="bi bi-gear-fill"></i>
                             </button>
-                            <ul className={`dropdown-menu mr-n5 ${dropdownOpen ? "show" : ""}`} aria-labelledby="dropdownMenuButton" style={{marginLeft:'-100px'}}>
+                            <ul className={`dropdown-menu mr-n5 ${dropdownOpen ? "show" : ""}`} aria-labelledby="dropdownMenuButton" style={{ marginLeft: '-100px' }}>
                                 <li><Link to="/profile" className="dropdown-item"><i className="bi bi-person-fill"></i> Profile</Link></li>
                                 <li><Link to="/logout" className="dropdown-item"><i className="bi bi-box-arrow-right"></i> Logout</Link></li>
                             </ul>
@@ -74,9 +84,9 @@ function Dashboard() {
 
 
             </div>
-        </div>
+        </div >
     )
 }
 
 
-export default Dashboard
+export default NavAndHeder

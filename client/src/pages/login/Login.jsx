@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import './style.css'
+import '../../style.css'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
@@ -38,9 +38,9 @@ function Login() {
 
         </div>
         <div className="row justify-content-center logoContainer">
-          <img src="Images/Screenshot (27).jpg" />
+          <img src="Images/aivha-full.png" /> 
         </div>
-        <h2 className="align-items-center"> Log in</h2>
+        <h3 className="align-items-center "> Log in</h3>
         <form onSubmit={handleSubmit}>
           <div className='mb-3'>
             <label htmlFor="email"><strong>Email</strong></label>
