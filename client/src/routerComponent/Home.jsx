@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Modal, Button } from 'react-bootstrap';
+import axios from 'axios';
 
 function Home() {
   const [data, setData] = useState({ totalIncome: '34567.6$' })

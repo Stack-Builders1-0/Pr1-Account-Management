@@ -28,7 +28,7 @@ router.post('/add', (req, res) => {
     const checkQuery = "select * from accountmanagement.employees where nic = ? ;";
 
     // type id is the forigen key so we set the forigen key correctly 
-    const insertQuery = "insert into accountmanagement.employees (employee_name, address, mobile, email, nic, type_id, age) values(?,?,?,?,?,?,?);";
+    const insertQuery = "insert into accountmanagement.employees (employee_name, address, mobile, email, nic, type_id, age, password) values(?,?,?,?,?,?,?,?);";
 
 
     // response has 3 field 
@@ -52,7 +52,7 @@ router.post('/add', (req, res) => {
                 });
             }
             else{
-                connection.query(insertQuery,[body.employee_name,body.address, body.mobile, body.email, body.nic, body.type_id, body.age], (err, result) => {
+                connection.query(insertQuery,[body.employee_name,body.address, body.mobile, body.email, body.nic, body.type_id, body.age, body.password], (err, result) => {
                     if (err){
                         res.send({
                             sucess : false,
