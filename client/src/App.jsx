@@ -1,24 +1,24 @@
 import React from 'react'
-import Login from './Login'
+import Login from './pages/login/Login'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Dashboard from './Dashboard'
-import Employee from './Employee'
-import Profile from './Profile'
-import Customer from './Customer'
-import Home from './Home'
-import AddEmployee from './routerComponent/AddEmployee'
-import AddCustomer from './routerComponent/AddCustomer'
-import CashTransaction from './CashTransaction'
-import CreditTransaction from './CreditTransaction'
-import AdvanceOnly from './routerComponent/AdvanceOnly'
+import NavAndHeder from './layouts/NavAndHeder'
+import Employee from './pages/employee/Employee'
+import Profile from './pages/employee/Profile'
+import Customer from './pages/customer/Customer'
+import Dashboard from './pages/dashboard/Dashboard'
+import AddEmployee from './pages/employee/AddEmployee'
+import AddCustomer from './pages/customer/AddCustomer'
+import CashTransaction from './pages/transaction/CashTransaction'
+import CreditTransaction from './pages/transaction/CreditTransaction'
+import AdvanceOnly from './pages/transaction/AdvanceOnly'
 
 function App() {
   return (
 
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Dashboard />}>
-          <Route path='' element={<Home />}></Route>
+        <Route path='/' element={<NavAndHeder />}>
+          <Route path='' element={<Dashboard />}></Route>
           <Route path='/employee' element={<Employee />}></Route>
           <Route path='/profile' element={<Profile />}></Route>
           <Route path='/customer' element={<Customer />}></Route>

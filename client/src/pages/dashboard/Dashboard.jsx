@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Modal, Button } from 'react-bootstrap';
 
-function Home() {
+function Dashboard() {
   const [data, setData] = useState({ totalIncome: '34567.6$' })
   const [showTransaction, setShowTransaction] = useState(false);
 
@@ -138,4 +138,4 @@ function Home() {
   )
 }
 
-export default Home
+export default Dashboard

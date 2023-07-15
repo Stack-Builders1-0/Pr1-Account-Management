@@ -5,7 +5,7 @@ import { Link, Outlet } from 'react-router-dom'
 
 
 
-function Dashboard() {
+function NavAndHeder() {
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     const toggleDropdown = () => {
@@ -79,4 +79,4 @@ function Dashboard() {
 }
 
 
-export default Dashboard
+export default NavAndHeder
