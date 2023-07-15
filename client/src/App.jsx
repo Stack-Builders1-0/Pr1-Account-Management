@@ -1,15 +1,15 @@
 import React from 'react'
 import Login from './Login'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Dashboard from './Dashboard'
-import Employee from './Employee'
-import Profile from './Profile'
-import Customer from './Customer'
-import Home from './Home'
+import Dashboard from './routerComponent/Dashboard'
+import Employee from './routerComponent/Employee'
+import Profile from './routerComponent/Profile'
+import Customer from './routerComponent/Customer'
+import Home from './routerComponent/Home'
 import AddEmployee from './routerComponent/AddEmployee'
 import AddCustomer from './routerComponent/AddCustomer'
-import CashTransaction from './CashTransaction'
-import CreditTransaction from './CreditTransaction'
+import CashTransaction from './routerComponent/CashTransaction'
+import CreditTransaction from './routerComponent/CreditTransaction'
 import AdvanceOnly from './routerComponent/AdvanceOnly'
 
 function App() {
@@ -33,7 +33,7 @@ function App() {
 
       </Routes>
     </BrowserRouter>
-
+    
   )
 }
 
