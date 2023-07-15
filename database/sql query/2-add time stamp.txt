@@ -20,7 +20,7 @@ ALTER TABLE expenses
   modify COLUMN date TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 
 
-============================= Add updated time stamp ===========================
+-- ============================= Add updated time stamp ===========================
 
 ALTER TABLE advance_sales_ap 
   ADD COLUMN updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
