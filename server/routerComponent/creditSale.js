@@ -159,6 +159,8 @@ router.post('/settle', (req, res) => {
 
 });
 
+
+// this show the 15 transection which transection not settle 
 router.get('/creditNotSettle', (req, res) => {
   const selectQuery = "select invoice_id, manual_invoice_id,type_id, date, amount, balance, customer_id,customer_name, business_name, mobile, office_num from credit_sales left join customers using (customer_id) where balance <> '0'  order by date limit 10;"
 
@@ -182,6 +184,8 @@ router.get('/creditNotSettle', (req, res) => {
 
 });
 
+
+// this show the history of the specific transection 
 router.post('/histoyCreditTransection', (req, res) =>{
   const body = req.body;
 

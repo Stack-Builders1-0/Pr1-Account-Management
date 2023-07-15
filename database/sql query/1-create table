@@ -376,3 +376,28 @@ ADD COLUMN credit_limit_checked BOOLEAN NOT NULL DEFAULT FALSE;
 alter table employees
 add column password varchar(255) not null;
 
+
+
+--  alter advance_sales_ap table because add new column balance_updated_by
+alter table advance_sales_ap
+add column balance_updated_by int;
+
+ALTER TABLE advance_sales_ap 
+ADD INDEX `advance_sales_ap_ibfk_10_idx` (`balance_updated_by` ASC) VISIBLE;
+;
+ALTER TABLE advance_sales_ap 
+ADD FOREIGN KEY (`balance_updated_by`)
+  REFERENCES `accountmanagement`.`employees` (`employee_id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+
+ALTER TABLE advance_sales_ap 
+drop column date,
+ADD COLUMN date TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+
+ALTER TABLE advance_ap_partial_settle 
+drop column date,
+add COLUMN date TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+

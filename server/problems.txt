@@ -22,3 +22,5 @@ employee
 i assume discount is enter by the cash not a persentage  => i calculate the amount in backend 
 
 how to filter using multi filed value
+
+
