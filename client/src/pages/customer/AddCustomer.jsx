@@ -67,6 +67,17 @@ function AddCustomer() {
                         </div>
                     </div>
                     <div className="col-12">
+                        <label htmlFor="inputBusinessName" className="form-label">BusinessName</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="inputBusinessName"
+                            placeholder='Business Name'
+                            autoComplete='off'
+                            onChange={e => setData({ ...data, BusinessName: e.target.value })}
+                        />
+                    </div>
+                    <div className="col-12">
                         <label htmlFor="inputEmail" className="form-label">Email</label>
                         <input
                             type="email"

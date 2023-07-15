@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { Modal, Button } from 'react-bootstrap';
 
 function Dashboard() {
-  const [data, setData] = useState({ totalIncome: '34567.6$' })
+  const [data, setData] = useState({ totalCashsales: '34567.6$' })
   const [showTransaction, setShowTransaction] = useState(false);
 
   const handleClose = () => setShowTransaction(false);
@@ -21,17 +21,17 @@ function Dashboard() {
       <div className='p-3 d-flex justify-content-around mt-3'>
         <div className='px-3 pt-2 pb-3 border shadow-sm w-25  square-decoration'>
           <div className='text-center pb-1'>
-            <h4>Total Income</h4>
+            <h4>Total Cash Sales</h4>
             <hr />
             <div>
-              <h5>{data.totalIncome}</h5>
+              <h5>{data.totalCashsales}</h5>
             </div>
           </div>
         </div>
 
         <div className='px-3 pt-2 pb-3 border shadow-sm w-25  square-decoration'>
           <div className='text-center pb-1'>
-            <h4>Total Loan</h4>
+            <h4>Total Cridit Sales</h4>
             <hr />
             <div>
               <h5>2456.7$</h5>
@@ -41,7 +41,7 @@ function Dashboard() {
 
         <div className='px-3 pt-2 pb-3 border shadow-sm w-25  square-decoration'>
           <div className='text-center pb-1'>
-            <h4>Cashier Income</h4>
+            <h4>Total Sales</h4>
             <hr />
             <div>
               <h5>12341$</h5>
@@ -55,12 +55,12 @@ function Dashboard() {
 
 
 
-      <div className='d-flex justify-content-between px-5 py-3'>
+      <div className='d-flex justify-content-between px-5 py-5'>
         <Button className="nextButton" onClick={handleShow}>
           Add Transaction
         </Button>
         <Link to='/addcustomer' className='btn btn-primary'>Add Customer</Link>
-
+        <Link to='/addemployee' className='btn btn-primary'>Add Employee</Link>
       </div>
 
       <Modal show={showTransaction} onHide={handleClose} size="lg">
@@ -90,14 +90,19 @@ function Dashboard() {
 
 
       <div className='mt-4 px-4 pt-3'>
-        <h3>List of Loan</h3>
-        <table className='table'>
+        <h3>Total Cridit Sales</h3>
+        <table className='table table-bordered'>
           <thead>
             <tr>
               <th>Name</th>
-              <th>Loan</th>
-              <th>Email</th>
-              <th>Phone</th>
+              <th>BusinessName</th>
+              <th>Address</th>
+              <th>Telephone</th>
+              <th>Mobile</th>
+              <th>TotalAmount</th>
+              <th>AmountSettled</th>
+              <th>Balance</th>
+              <th>StartedDate</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -105,32 +110,27 @@ function Dashboard() {
             {/* Table rows with data */}
             <tr>
               <td>John Doe</td>
-              <td>$10,000</td>
-              <td>johndoe@example.com</td>
+              <td>Business</td>
+              <td>1st,street</td>
               <td>123-456-7890</td>
+              <td>763456742</td>
+              <td>342$</td>
+              <td>100$</td>
+              <td>function or database</td>
+              <td>somedate</td>
               <td>
                 {/* Action buttons */}
-                <button>Pending</button>
                 <button>Paid</button>
               </td>
             </tr>
-            <tr>
-              <td>Jane Smith</td>
-              <td>$5,000</td>
-              <td>janesmith@example.com</td>
-              <td>987-654-3210</td>
-              <td>
-                {/* Action buttons */}
-                <button>Pending</button>
-                <button>Paid</button>
-              </td>
-            </tr>
+            
+           
             {/* Add more rows as needed */}
           </tbody>
         </table>
       </div>
 
-
+      
 
 
     </div>
