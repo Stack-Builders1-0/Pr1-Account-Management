@@ -11,9 +11,8 @@ function Home() {
   const handleShow = () => setShowTransaction(true);
 
   useEffect(() => {
-    console.log("hi");
-    fetch(`http://localhost:5000/dashboard/totalCreditSales`)
-      .then((response) => {console.log(response.body)})
+    fetch(`https://dummy.restapiexample.com/api/v1/employees`)
+      .then((response) => response.body)
     // .then((body) => setData(body.data));
   }, [])
   // console.log(data)
