@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Modal, Button } from 'react-bootstrap';
+import axios from 'axios';
 
 function Home() {
   const [data, setData] = useState({ totalIncome: '34567.6$' })
@@ -10,8 +11,9 @@ function Home() {
   const handleShow = () => setShowTransaction(true);
 
   useEffect(() => {
-    fetch(`https://dummy.restapiexample.com/api/v1/employees`)
-      .then((response) => response.body)
+    console.log("hi");
+    fetch(`http://localhost:5000/dashboard/totalCreditSales`)
+      .then((response) => {console.log(response.body)})
     // .then((body) => setData(body.data));
   }, [])
   // console.log(data)

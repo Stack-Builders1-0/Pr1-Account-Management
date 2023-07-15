@@ -5,11 +5,14 @@ import { useNavigate } from 'react-router-dom';
 
 function AddEmployee() {
     const [data, setData] = useState({
-		name: '',
+		employee_name: '',
 		email: '',
 		password: '',
 		address: '',
-		salary: '',
+		mobile: '',
+		nic :'',
+		type_id : '',
+		age: '',
 		image: ''
 	})
 	const navigate = useNavigate()
@@ -17,14 +20,18 @@ function AddEmployee() {
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		const formdata = new FormData();
-		formdata.append("name", data.name);
+		formdata.append("employee_name", data.name);
 		formdata.append("email", data.email);
 		formdata.append("password", data.password);
 		formdata.append("address", data.address);
-		formdata.append("salary", data.salary);
+		formdata.append("mobile", data.salary);
+		formdata.append("nic", data.nic);
+		formdata.append("type_id", data.type_id);
+		formdata.append("age", data.age);
 		formdata.append("image", data.image);
-		axios.post('http://localhost:5173/create', formdata)
+		axios.post('http://localhost:5000/employee/add', formdata)
 		.then(res => {
+			console.log(res);
 			navigate('/employee')
 		})
 		.catch(err => console.log(err));
