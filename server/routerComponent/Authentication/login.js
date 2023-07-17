@@ -62,24 +62,15 @@ router.post("/", (req, res) => {
         bcrypt.compare(password, hash, function (err, result) {
           if (result) {
             // password is valid
+            // create the session token
             const sessionToken = generateSessionToken(employee_id);
-
-            // Set the session token as an HTTP-only cookie
-            res.cookie("sessionToken", sessionToken, {
-              httpOnly: true,
-              secure: false, // Enable this in a production environment with HTTPS
-              sameSite: "Strict",
-              maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
-              path: "/", // Specify the path for which the cookie is valid
-            });
-
-            console.log(decodeUserId(sessionToken));
             res.send({
               sucess: true,
               isError: false,
               isExist: true,
               error : err,
-              result :result
+              result :result,
+              sessionToken : sessionToken
             });
           } else {
             res.send({

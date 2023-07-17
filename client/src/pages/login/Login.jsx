@@ -21,7 +21,8 @@ function Login() {
       .then(res => {
         console.log(res.data);
         if (res.data.sucess) {
-          
+          // store the session token in the local storage
+          localStorage.setItem('sessionToken',res.data.sessionToken);
           navigate('/')
         } else {
           alert("Incorrect Username pasword");
