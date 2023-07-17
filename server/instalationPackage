@@ -1,0 +1,13 @@
+npm init
+inisalize the node project
+
+npm instal express
+
+npm instal axios
+
+npm install bcrypt
+=> use for encrpt and and compare the encrpt data and plain pasword
+
+npm install jsonwebtoken
+=> use for session token
+

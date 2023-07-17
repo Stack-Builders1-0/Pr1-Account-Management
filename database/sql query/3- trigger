@@ -20,3 +20,48 @@ BEGIN
 		UPDATE credit_sales SET balance = new.balance , balance_updated_by = new.employee_id WHERE (invoice_id = new.invoice_id);
     end if;
 END //
+
+
+-- create trigger add the new record on the advance_ap_partial_settle table when the insert of the advance_sales_ap table
+DELIMITER //
+CREATE TRIGGER after_insert_advance_sales_ap_add_to_partial_settle
+AFTER INSERT ON advance_sales_ap FOR EACH ROW
+BEGIN
+    INSERT INTO advance_ap_partial_settle (type_id, invoice_id, description, customer_id, date, settle_amount,balance, employee_id)
+    VALUES (NEW.type_id, NEW.invoice_id, NEW.description, NEW.customer_id, new.date, new.advance_amount ,  NEW.balance, NEW.employee_id);
+END //
+
+
+-- update the balance on advance_sales_ap when the  record is created on advance_ap_partial_settle
+DELIMITER //
+CREATE TRIGGER after_insert_advance_ap_partial_settle_update_balance
+AFTER INSERT ON advance_ap_partial_settle FOR EACH ROW
+BEGIN
+	if  (select count(id) from advance_ap_partial_settle where invoice_id = new.invoice_id) > 1 then
+		UPDATE advance_sales_ap SET balance = new.balance , balance_updated_by = new.employee_id WHERE (invoice_id = new.invoice_id);
+    end if;
+END //
+
+
+
+
+-- create trigger add the new record on the advance_bp_partial_settle table when the insert of the advance_sales_bp table
+DELIMITER //
+CREATE TRIGGER after_insert_advance_sales_bp_add_to_partial_settle
+AFTER INSERT ON advance_sales_bp FOR EACH ROW
+BEGIN
+    INSERT INTO advance_bp_partial_settle (type_id, invoice_id, description, customer_id, date, settle_amount,balance, employee_id)
+    VALUES (NEW.type_id, NEW.invoice_id, NEW.description, NEW.customer_id, new.date, new.advance_amount ,  NEW.balance, NEW.employee_id);
+END //
+
+
+
+-- update the balance on advance_sales_bp when the  record is created on advance_bp_partial_settle
+DELIMITER //
+CREATE TRIGGER after_insert_advance_bp_partial_settle_update_balance
+AFTER INSERT ON advance_bp_partial_settle FOR EACH ROW
+BEGIN
+	if  (select count(id) from advance_bp_partial_settle where invoice_id = new.invoice_id) > 1 then
+		UPDATE advance_sales_bp SET balance = new.balance , balance_updated_by = new.employee_id, update_at = update_at WHERE (invoice_id = new.invoice_id);
+    end if;
+END //
