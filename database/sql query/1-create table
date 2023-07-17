@@ -231,7 +231,7 @@ CREATE TABLE `accountmanagement`.`credit_partial_settle` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `type_id` CHAR(3) NULL,
   `invoice_id` INT NOT NULL,
-  `date` timestamp NOT NULL DEFAULT  CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `date` timestamp NOT NULL DEFAULT  CURRENT_TIMESTAMP ,
   `description` VARCHAR(400) NULL,
   `customer_id` INT NOT NULL,
   `settle_amount` FLOAT NOT NULL,
@@ -400,4 +400,51 @@ ADD COLUMN date TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 ALTER TABLE advance_ap_partial_settle 
 drop column date,
 add COLUMN date TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+
+
+--  alter advance_sales_bp table because add new column balance_updated_by
+alter table advance_sales_bp
+add column balance_updated_by int;
+
+ALTER TABLE advance_sales_bp 
+ADD INDEX `advance_sales_bp_ibfk_10_idx` (`balance_updated_by` ASC) VISIBLE;
+;
+ALTER TABLE advance_sales_bp 
+ADD FOREIGN KEY (`balance_updated_by`)
+  REFERENCES `accountmanagement`.`employees` (`employee_id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+
+ALTER TABLE advance_sales_bp 
+drop column date,
+ADD COLUMN date TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+
+ALTER TABLE advance_bp_partial_settle 
+drop column date,
+add COLUMN date TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+
+ALTER TABLE `accountmanagement`.`advance_sales_bp` 
+drop COLUMN return_payment;
+
+ALTER TABLE `accountmanagement`.`advance_sales_bp` 
+add COLUMN return_payment float not null DEFAULT 0,
+add column return_update_by int;
+
+
+ALTER TABLE advance_sales_bp 
+ADD INDEX `advance_sales_bp_ibfk_11_idx` (`return_update_by` ASC) VISIBLE;
+;
+ALTER TABLE advance_sales_bp 
+ADD FOREIGN KEY (`return_update_by`)
+  REFERENCES `accountmanagement`.`employees` (`employee_id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+
+
+
 

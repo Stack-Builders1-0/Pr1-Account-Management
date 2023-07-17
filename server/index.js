@@ -11,6 +11,7 @@ const creditSale = require('./routerComponent/creditSale');
 const advanceSaleAfterProduct = require('./routerComponent/advanceSaleAfterProduct');
 const advanceSaleBeforProduct = require('./routerComponent/advanceSaleBeforeProduct');
 const dashboard = require('./routerComponent/dashboard');
+const login = require('./routerComponent/login');
 
 
 server = http.createServer ((req, res)=> {
@@ -27,6 +28,7 @@ app.use('/creditSale', creditSale);
 app.use('/advanceSaleAP', advanceSaleAfterProduct);
 app.use('/advanceSaleBP', advanceSaleBeforProduct);
 app.use('/dashboard', dashboard);
+app.use('/login',login);
 
 app.listen(5000, () => {
     console.log("Listen port 5000");

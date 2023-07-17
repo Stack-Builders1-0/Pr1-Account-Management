@@ -1,5 +1,8 @@
 const mysql = require('mysql');
 const express = require('express');
+const { error } = require('console');
+const bcrypt = require("bcrypt");
+
 
 const router = express.Router();
 
@@ -23,6 +26,8 @@ connection.connect((err) => {
 
 router.post('/add', (req, res) => {
     body = req.body;
+    const password = body.password;
+
 
     // check the employee already exist or not
     const checkQuery = "select * from accountmanagement.employees where nic = ? ;";
@@ -39,34 +44,42 @@ router.post('/add', (req, res) => {
         if(err){
             res.send({
                 sucess : false,
-                error : true,
-                exist : false
+                isError : true,
+                exist : false,
+                error : err
             });
         }
         else{
             if (result.length > 0){
                 res.send({
                     sucess : false,
-                    error : false,
-                    exist : true
+                    isError : false,
+                    exist : true,
+                    error : err
                 });
             }
             else{
-                connection.query(insertQuery,[body.employee_name,body.address, body.mobile, body.email, body.nic, body.type_id, body.age, body.password], (err, result) => {
-                    if (err){
-                        res.send({
-                            sucess : false,
-                            error : true,
-                            exist : false
-                        });
-                    }
-                    else {
-                        res.send({
-                            sucess: true,
-                            error : false,
-                            exist : false
-                        });
-                    }
+                // encrpt the user pasword
+                bcrypt.hash(password, 10, function(err, hash) {
+                    // store hash in the database
+                    connection.query(insertQuery,[body.employee_name,body.address, body.mobile, body.email, body.nic, body.type_id, body.age, hash], (err, result) => {
+                        if (err){
+                            res.send({
+                                sucess : false,
+                                isError : true,
+                                exist : false,
+                                error : err
+                            });
+                        }
+                        else {
+                            res.send({
+                                sucess: true,
+                                isError : false,
+                                exist : false,
+                                error : err
+                            });
+                        }
+                    });
                 });
             }
             
@@ -78,26 +91,30 @@ router.post('/add', (req, res) => {
 
 router.post('/edit', (req, res) => {
     body = req.body;
+    const password = body.password;
 
-    const updateQuery = "UPDATE accountmanagement.employees SET employee_name = "+ mysql.escape(body.employee_name) +", address = "+ mysql.escape(body.address) +", mobile= "+ mysql.escape(body.mobile) +", email = "+ mysql.escape(body.email) +", nic = "+ mysql.escape(body.nic) +", type_id = "+ mysql.escape(body.type_id) +", age = "+ mysql.escape(body.age) +" WHERE (employee_id = "+mysql.escape(body.employee_id)+");";
-
-    //  response has 2 field 
-    // error occur then error = true , otherwise error = false
-    // employee regeister is sucess then sucess=true
-    connection.query(updateQuery, (err,result) => {
-        if(err){
-            console.log(err);
-            res.send({
-                sucess : false,
-                error : true
-            });
-        }
-        else{
-            res.send({
-                sucess : true,
-                error : false
-            });
-        }
+    bcrypt.hash(password, 10, function(err, hash) {
+        // store hash in the database
+        const updateQuery = "UPDATE accountmanagement.employees SET employee_name = "+ mysql.escape(body.employee_name) +", address = "+ mysql.escape(body.address) +", mobile= "+ mysql.escape(body.mobile) +", email = "+ mysql.escape(body.email) +", nic = "+ mysql.escape(body.nic) +", type_id = "+ mysql.escape(body.type_id) +", age = "+ mysql.escape(body.age) +", password = "+ mysql.escape(hash) +" WHERE (employee_id = "+mysql.escape(body.employee_id)+");";
+    
+        //  response has 2 field 
+        // error occur then error = true , otherwise error = false
+        // employee regeister is sucess then sucess=true
+        connection.query(updateQuery, (err,result) => {
+            if(err){
+                console.log(err);
+                res.send({
+                    sucess : false,
+                    error : true
+                });
+            }
+            else{
+                res.send({
+                    sucess : true,
+                    error : false
+                });
+            }
+        });
     });
 });
 
