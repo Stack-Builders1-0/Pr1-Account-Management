@@ -1,47 +1,47 @@
-.loginPage{
-    background: url('Images/istockphoto-1353553203-170667a.jpg');
-    background: linear-gradient(rgba(11,11,11,0.5),rgba(10,10,10,0.5)),url('Images/istockphoto-1353553203-170667a.jpg');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 100% 120%;
-    width: 100%;
-
+.loginPage {
+  background: url("Images/istockphoto-1353553203-170667a.jpg");
+  background: linear-gradient(rgba(11, 11, 11, 0.5), rgba(10, 10, 10, 0.5)),
+    url("Images/istockphoto-1353553203-170667a.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 120%;
+  width: 100%;
 }
 .logoContainer {
-    width: 100px;
-    margin: 15px auto !important;
-    width: 150px;
+  width: 100px;
+  margin: 15px auto !important;
+  width: 150px;
 }
 
-.loginForm{
-    background-color: rgba(1,32,93,0.6);
-    color:white;
+.loginForm {
+  background-color: rgba(1, 32, 93, 0.6);
+  color: white;
 }
 
-.dashboard{
-    background-color: rgba(41, 100, 111, 0.6);
+.dashboard {
+  background-color: rgba(41, 100, 111, 0.6);
 }
 
 .square-decoration {
-    background-color:hsl(330, 14%, 97%);
-    border-radius: 50%;
-    padding: 10px;
-    width: 150px;
-    height: 150px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-  }
-  
-  .white-box {
-    background-color: #ffffff;
-    border: 1px solid #000000;
-    padding: 3%;
-    border: radius 3px;;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    width: 50%;
-  
-    
-  }
-  
+  background-color: hsl(330, 14%, 97%);
+  border-radius: 50%;
+  padding: 10px;
+  width: 150px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.white-box {
+  background-color: #ffffff;
+  border: 1px solid #000000;
+  padding: 3%;
+  border: radius 3px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  width: 50%;
+}
+
+.nav-link.active {
+  background-color: transparent !important;
+}
