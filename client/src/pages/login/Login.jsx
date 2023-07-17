@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 
 function Login() {
   const [values, setValues] = useState({
-    email: '',
+    nic: '',
     password: ''
   })
 
@@ -16,12 +16,15 @@ function Login() {
   const [error, setError] = useState('')
 
   const handleSubmit = (event) => {
-    event.preventDefalt();
-    axios.post('http://localhost:5173/login', values)
+    event.preventDefault();
+    axios.post('http://localhost:5000/login', values)
       .then(res => {
-        if (res.data.Status === 'Success') {
+        console.log(res.data);
+        if (res.data.sucess) {
+          
           navigate('/')
         } else {
+          alert("Incorrect Username pasword");
           setError(res.data.Error);
         }
       })
@@ -38,15 +41,16 @@ function Login() {
 
         </div>
         <div className="row justify-content-center logoContainer">
-          <img src="Images/aivha-full.png" /> 
+          <img src="Images/aivha-full.png" />
         </div>
         <h3 className="align-items-center "> Log in</h3>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} >
           <div className='mb-3'>
-            <label htmlFor="email"><strong>Email</strong></label>
-            <input type="email" placeholder='Enter Email' name='email'
-              onChange={e => setValues({ ...values, email: e.target.value })} className='form-control rounded-0' />
+            <label htmlFor="nic"><strong>NIC</strong></label>
+            <input type="text" placeholder='Enter NIC' name='nic'
+              onChange={e => setValues({ ...values, nic: e.target.value })} className='form-control rounded-0' />
           </div>
+
           <div className='mb-3'>
             <label htmlFor="password"><strong>Password</strong></label>
             <input type="password" placeholder='Enter Password' name='password'
@@ -65,4 +69,4 @@ function Login() {
   )
 }
 
-export default Login
+export default Login
