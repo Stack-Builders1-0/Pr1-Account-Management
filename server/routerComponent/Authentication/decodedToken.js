@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 
 function decodeUserId(token){
-    console.log(token);
     // Get the token from the request cookies
     // const token = req.cookies.token; // Replace 'token' with your cookie name
   
