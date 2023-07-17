@@ -53,9 +53,9 @@ function Dashboard() {
       </div>
 
       <div className="d-flex justify-content-between px-5 py-5">
-        <Button className="nextButton" onClick={handleShow}>
+        <Link to="/transaction" className="btn btn-primary">
           Add Transaction
-        </Button>
+        </Link>
         <Link to="/addcustomer" className="btn btn-primary">
           Add Customer
         </Link>
@@ -64,32 +64,7 @@ function Dashboard() {
         </Link>
       </div>
 
-      <Modal show={showTransaction} onHide={handleClose} size="lg">
-        <Modal.Body>
-          <div className="p-3 d-flex justify-content-around mt-3">
-            <Button variant="primary" onClick={handleClose}>
-              <Link to="/cashtransaction" className="btn btn-primary">
-                CashTransaction
-              </Link>
-            </Button>
-            <Button variant="primary" onClick={handleClose}>
-              <Link to="/credittransaction" className="btn btn-primary">
-                CreditTransaction
-              </Link>
-            </Button>
-            <Button variant="primary" onClick={handleClose}>
-              <Link to="/advanceonly" className="btn btn-primary">
-                AdvanceOnly
-              </Link>
-            </Button>
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      
 
       <div className="mt-4 px-4 pt-3">
         <h3>Total Cridit Sales</h3>

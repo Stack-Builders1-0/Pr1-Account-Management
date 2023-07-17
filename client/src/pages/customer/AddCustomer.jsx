@@ -32,7 +32,7 @@ function AddCustomer() {
         formdata.append("officeNo", data.officeNo);
 
 
-        axios.post('http://localhost:5173/create', formdata)
+        axios.post('http://localhost:5000/create', formdata)
             .then(res => {
                 navigate('/employee')
             })
