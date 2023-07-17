@@ -6,6 +6,10 @@ import axios from "axios";
 function Dashboard() {
   const [data, setData] = useState({ totalCashsales: "34567.6$" });
   const [showTransaction, setShowTransaction] = useState(false);
+  
+  // var today = new Date();
+  // date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+  // console.log(date);
 
   const handleClose = () => setShowTransaction(false);
   const handleShow = () => setShowTransaction(true);
@@ -15,6 +19,10 @@ function Dashboard() {
       (response) => response.body
     );
     // .then((body) => setData(body.data));
+    axios.post("http://localhost:5000/dashboard/totalCreditSales", {date :'2023-07-14', employee_id :'1'} )
+    .then((res) => {
+      console.log(res.data);
+    });
   }, []);
   // console.log(data)
 
