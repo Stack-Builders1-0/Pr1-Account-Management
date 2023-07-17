@@ -1,5 +1,7 @@
 {
   "dependencies": {
-    "react-icons": "^4.10.1"
+    "react-icons": "^4.10.1",
+    "bcrypt": "^5.1.0",
+    "jsonwebtoken": "^9.0.1"
   }
 }

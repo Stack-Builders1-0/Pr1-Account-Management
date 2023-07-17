@@ -4,13 +4,14 @@ const app = express();
 const cors = require('cors');
 app.use(cors());
 
-const employee = require('./routerComponent/employee');
-const customer = require('./routerComponent/customer');
-const cashSale = require('./routerComponent/cashSale');
-const creditSale = require('./routerComponent/creditSale');
-const advanceSaleAfterProduct = require('./routerComponent/advanceSaleAfterProduct');
-const advanceSaleBeforProduct = require('./routerComponent/advanceSaleBeforeProduct');
-const dashboard = require('./routerComponent/dashboard');
+const employee = require('./routerComponent/pages/employee');
+const customer = require('./routerComponent/pages/customer');
+const cashSale = require('./routerComponent/pages/cashSale');
+const creditSale = require('./routerComponent/pages/creditSale');
+const advanceSaleAfterProduct = require('./routerComponent/pages/advanceSaleAfterProduct');
+const advanceSaleBeforProduct = require('./routerComponent/pages/advanceSaleBeforeProduct');
+const dashboard = require('./routerComponent//pages/dashboard');
+const login = require('./routerComponent/Authentication/login');
 
 
 
@@ -28,6 +29,7 @@ app.use('/creditSale', creditSale);
 app.use('/advanceSaleAP', advanceSaleAfterProduct);
 app.use('/advanceSaleBP', advanceSaleBeforProduct);
 app.use('/dashboard', dashboard);
+app.use('/login',login);
 
 app.listen(5000, () => {
     console.log("Listen port 5000");
