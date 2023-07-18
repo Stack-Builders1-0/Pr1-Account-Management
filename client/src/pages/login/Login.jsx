@@ -22,10 +22,13 @@ function Login() {
         console.log(res.data);
         if (res.data.sucess) {
           // store the session token in the local storage
-          localStorage.setItem('sessionToken',res.data.sessionToken);
+          localStorage.setItem('sessionToken', res.data.sessionToken);
+          
           navigate('/')
         } else {
-          alert("Incorrect Username pasword");
+          alert("Incorrect Username or pasword");
+
+
           setError(res.data.Error);
         }
       })
@@ -63,6 +66,7 @@ function Login() {
 
 
       </div>
+
     </div>
 
 
