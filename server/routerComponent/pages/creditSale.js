@@ -1,5 +1,6 @@
 const mysql = require("mysql");
 const express = require("express");
+const decodedUserId = require('../Authentication/decodedToken');
 
 const router = express.Router();
 
@@ -24,6 +25,10 @@ router.post("/add", (req, res) => {
   const amount = body.bill_amount - body.discount;
   const balance = amount;
 
+  const sessionToken = req.headers.authorization.replace('key ','');
+  const employee_id = decodedUserId(sessionToken);
+
+
   const insertQuery =
     "insert into accountmanagement.credit_sales (type_id,manual_invoice_id, customer_id, description, bill_amount, discount, amount,balance, employee_id ) values (?,?,?,?,?,?,?,?,?);";
 
@@ -42,7 +47,7 @@ router.post("/add", (req, res) => {
       body.discount,
       amount,
       balance,
-      body.employee_id,
+      employee_id,
     ],
     (err, result) => {
       if (err) {
@@ -88,6 +93,9 @@ router.post("/edit", (req, res) => {
   const body = req.body;
   const amount = body.bill_amount - body.discount;
 
+  const sessionToken = req.headers.authorization.replace('key ','');    
+  const employee_id = decodedUserId(sessionToken);
+
   const updateQuery =
     "UPDATE accountmanagement.credit_sales SET type_id = " +
     mysql.escape(body.type_id) +
@@ -104,7 +112,7 @@ router.post("/edit", (req, res) => {
     ", amount =" +
     mysql.escape(amount) +
     ", updated_by = " +
-    mysql.escape(body.employee_id) +
+    mysql.escape(employee_id) +
     "  WHERE (invoice_id = " +
     mysql.escape(body.invoice_id) +
     ");";
@@ -133,13 +141,17 @@ router.post('/settle', (req, res) => {
   body  = req.body;
   const balance = body.balance -body.settle_amount;
 
+  const sessionToken = req.headers.authorization.replace('key ','');
+  const employee_id = decodedUserId(sessionToken);
+
+
   const settleQuery = "insert into accountmanagement.credit_partial_settle (type_id,invoice_id, customer_id, description, settle_amount, balance, employee_id ) values (?,?,?,?,?,?,?);";
 
   // response has 3 field 
   // error occur then error = true , otherwise error = false
   // exist => if the employee nic alredy regiterd exist = true else exist = false
   // employee regeister is sucess then sucess=true
-  connection.query(settleQuery, [body.type_id, body.invoice_id, body.customer_id, body.description, body.settle_amount, balance, body.employee_id ], (err, result) => {
+  connection.query(settleQuery, [body.type_id, body.invoice_id, body.customer_id, body.description, body.settle_amount, balance, employee_id ], (err, result) => {
       if (err) {
           console.log(err)
           res.send({
