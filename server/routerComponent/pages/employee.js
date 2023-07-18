@@ -2,6 +2,7 @@ const mysql = require('mysql');
 const express = require('express');
 const { error } = require('console');
 const bcrypt = require("bcrypt");
+const decodedUserId = require('../Authentication/decodedToken');
 
 
 const router = express.Router();
@@ -55,7 +56,7 @@ router.post('/add', (req, res) => {
                     sucess : false,
                     isError : false,
                     isExist : true,
-                    error : err
+                    error : null
                 });
             }
             else{
@@ -76,7 +77,7 @@ router.post('/add', (req, res) => {
                                 sucess: true,
                                 isError : false,
                                 isExist : false,
-                                error : err
+                                error : null
                             });
                         }
                     });
@@ -117,6 +118,70 @@ router.post('/edit', (req, res) => {
         });
     });
 });
+
+
+router.get('/showAll', (req,res) => {
+
+    const selectQuery = "SELECT employee_id, employee_name, type, address, mobile, email, nic, age FROM employees join employee_type using(type_id);";
+
+    connection.query(selectQuery,(err,result)=>{
+        if(err){
+            console.log(err);
+            res.send({
+                sucess : false,
+                isError : true,
+                error:err,
+                result:null
+            });
+        }
+        else{
+            res.send({
+                sucess : true,
+                isError : false,
+                error: null,
+                result: result
+            });
+        }
+    });
+});
+
+
+
+router.post('/showCurrent', (req,res) => {
+    try{
+        const sessionToken = req.headers.authorization.replace('key ','');
+        const employee_id = decodedUserId(sessionToken);
+    
+        // const employee_id = req.body.employee_id;
+
+        const selectQuery = "SELECT employee_id, employee_name, type, address, mobile, email, nic, age FROM employees join employee_type using(type_id) where employee_id = "+ mysql.escape(employee_id) +";";
+
+        connection.query(selectQuery,(err,result)=>{
+            if(err){
+                console.log(err);
+                res.send({
+                    sucess : false,
+                    isError : true,
+                    error:err,
+                    result:null
+                });
+            }
+            else{
+                res.send({
+                    sucess : true,
+                    isError : false,
+                    error: null,
+                    result: result
+                });
+            }
+        });
+    }
+    catch(err){
+        res.send({isTokenValied : false});
+    }
+
+
+})
 
 
 module.exports = router;

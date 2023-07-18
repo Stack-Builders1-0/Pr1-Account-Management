@@ -28,8 +28,9 @@ function AddEmployee() {
 					navigate('/employee');
 				}else if (res.data.isExist){
 					alert("NIC already exist. Please check your NIC!!!")
+				}else if (res.data.isError){
+					alert("Please check your details!!!")
 				}
-				
 			})
 			.catch(err => console.log(err));
 	}

@@ -27,8 +27,8 @@ router.post("/totalCashSales", (req, res) => {
 
   
   try{
-    const sessionToken = req.header("Authorization").replace("key ", "");
-    const employee_id = body.employee_id;
+    const sessionToken = req.headers("Authorization").replace("key ", "");
+    const employee_id = decodedUserId(sessionToken);
 
   // date format is yyyy-mm-dd (2023-07-14)
   const selectQuery =
@@ -82,7 +82,7 @@ router.post("/totalCreditSales", (req, res) => {
   
 
   try{
-    const sessionToken = req.header("Authorization").replace("key ", "");
+    const sessionToken = req.headers("Authorization").replace("key ", "");
     const employee_id = decodedUserId(sessionToken);
 
     // date format is yyyy-mm-dd (2023-07-14)
