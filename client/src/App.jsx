@@ -14,6 +14,8 @@ import CreditTransaction from "./pages/transaction/CreditTransaction";
 import AdvanceOnly from "./pages/transaction/AdvanceOnly";
 import EditTransaction from "./pages/transaction/EditTransaction";
 import EditCashTransaction from "./pages/transaction/EditCashForm";
+import EditCreditTransaction from "./pages/transaction/EditCreditForm";
+import EditAdvanceTransaction from "./pages/transaction/EditAdvanceForm";
 
 function App() {
   return (
@@ -27,6 +29,14 @@ function App() {
           <Route
             path="/editcashtransaction"
             element={<EditCashTransaction />}
+          ></Route>
+          <Route
+            path="/editcredittransaction"
+            element={<EditCreditTransaction />}
+          ></Route>
+          <Route
+            path="/editadvancetransaction"
+            element={<EditAdvanceTransaction />}
           ></Route>
           <Route path="/profile" element={<Profile />}></Route>
           <Route path="/customer" element={<Customer />}></Route>
