@@ -20,34 +20,32 @@ function CreditTransaction() {
 
   return (
     <div>
-      <Navbar sticky="top" bg="light" expand="md">
-        <Container>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
-              <Nav.Link
-                as={Link}
-                to={"/transaction/credittransaction"}
-                onClick={handleShowAddForm}
-              >
-                Add
-              </Nav.Link>
-
-              <Nav.Link
-                as={Link}
-                to={"/transaction/credittransaction"}
-                onClick={handleShowSettleForm}
-              >
-                Settle
-              </Nav.Link>
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-
       <div className="d-flex flex-column align-items-center pt-4">
         <div className="white-box">
-          {/* Form for Add Sales */}
+          <Navbar sticky="top" bg="light" expand="md">
+            <Container>
+              <Navbar.Toggle aria-controls="basic-navbar-nav" />
+              <Navbar.Collapse id="basic-navbar-nav">
+                <Nav className="me-auto">
+                  <Nav.Link
+                    as={Link}
+                    to={"/transaction/credittransaction"}
+                    onClick={handleShowAddForm}
+                  >
+                    Add
+                  </Nav.Link>
+
+                  <Nav.Link
+                    as={Link}
+                    to={"/transaction/credittransaction"}
+                    onClick={handleShowSettleForm}
+                  >
+                    Settle
+                  </Nav.Link>
+                </Nav>
+              </Navbar.Collapse>
+            </Container>
+          </Navbar>
           {showAddForm && (
             <Form>
               <h3 className="text-center">Add Payment</h3>
