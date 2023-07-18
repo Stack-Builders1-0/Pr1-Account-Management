@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Navbar, Container, Nav, Button } from "react-bootstrap";
+import Navbar from "react-bootstrap/Navbar";
+import Nav from "react-bootstrap/Nav";
+import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 import SettleForm from "./SettleForm";
 
 function CreditTransaction() {
@@ -17,35 +20,34 @@ function CreditTransaction() {
 
   return (
     <div>
+      <Navbar sticky="top" bg="light" expand="md">
+        <Container>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="me-auto">
+              <Nav.Link
+                as={Link}
+                to={"/transaction/credittransaction"}
+                onClick={handleShowAddForm}
+              >
+                Add
+              </Nav.Link>
+
+              <Nav.Link
+                as={Link}
+                to={"/transaction/credittransaction"}
+                onClick={handleShowSettleForm}
+              >
+                Settle
+              </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+
       <div className="d-flex flex-column align-items-center pt-4">
         <div className="white-box">
           {/* Form for Add Sales */}
-          <Navbar sticky="top" bg="light" expand="md">
-            <Container>
-              <Navbar.Toggle aria-controls="basic-navbar-nav" />
-              <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="me-auto">
-                  <Nav.Link
-                    as={Link}
-                    to={"/transaction/credittransaction"}
-                    className="mx-2"
-                    onClick={handleShowAddForm}
-                  >
-                    Add
-                  </Nav.Link>
-
-                  <Nav.Link
-                    as={Link}
-                    to={"/transaction/credittransaction"}
-                    className="mx-2"
-                    onClick={handleShowSettleForm}
-                  >
-                    Settle
-                  </Nav.Link>
-                </Nav>
-              </Navbar.Collapse>
-            </Container>
-          </Navbar>
           {showAddForm && (
             <Form>
               <h3 className="text-center">Add Payment</h3>
@@ -69,13 +71,6 @@ function CreditTransaction() {
                 <Form.Control type="number" placeholder="Enter discount" />
               </Form.Group>
 
-              <Form.Group className="mb-3" controlId="formBasicPaidAmount">
-                {" "}
-                {/* Change controlId to formBasicPaidAmount */}
-                <Form.Label>Paid Amount</Form.Label>
-                <Form.Control type="number" placeholder="Enter paid amount" />
-              </Form.Group>
-
               <Form.Group className="mb-3" controlId="formBasicDate">
                 <Form.Label>Date</Form.Label>
                 <Form.Control type="date" placeholder="Enter date" />
@@ -87,8 +82,6 @@ function CreditTransaction() {
               </Form.Group>
 
               <Button variant="primary" type="submit">
-                {" "}
-                {/* Use the imported Button component */}
                 Submit
               </Button>
             </Form>
