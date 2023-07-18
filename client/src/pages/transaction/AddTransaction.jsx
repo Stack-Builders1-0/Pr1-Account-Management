@@ -8,6 +8,7 @@ import CreditSalesTable from "./CreditSales";
 import AdvancedBPSalesTable from "./AdvancedBP";
 import AdvancedAPSalesTable from "./AdvancedAP";
 
+// add
 function AddTransaction() {
   const [selectedTab, setSelectedTab] = useState("");
   const [showTransaction, setShowTransaction] = useState(false);

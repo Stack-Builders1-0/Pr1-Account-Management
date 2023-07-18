@@ -4,24 +4,26 @@ import { Modal, Button } from "react-bootstrap";
 import axios from "axios";
 
 function Dashboard() {
-  const [data, setData] = useState({ totalCashsales: "34567.6$" });
+  // get the session token on the local storage
+  const sessionToken = localStorage.getItem('sessionToken');
+  const [totalCredit, setTotalCredit] = useState('');
+  const [data, setData] = useState({ totalCashsales: "000.00" });
   const [showTransaction, setShowTransaction] = useState(false);
-  
-  // var today = new Date();
-  // date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-  // console.log(date);
+
+  // get the current date in yyyy-mm-dd this format
+  const currentDate = new Date();
+  const date = currentDate.getFullYear() + '-0' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
 
   const handleClose = () => setShowTransaction(false);
   const handleShow = () => setShowTransaction(true);
 
   useEffect(() => {
-    fetch(`https://dummy.restapiexample.com/api/v1/employees`).then(
-      (response) => response.body
-    );
-    // .then((body) => setData(body.data));
-    axios.post("http://localhost:5000/dashboard/totalCreditSales", {date :'2023-07-14', employee_id :'1'} )
+
+    axios.post("http://localhost:5000/dashboard/totalCreditSales",  {date :date}, {headers: {'Authorization': 'key ' + sessionToken}} )
     .then((res) => {
-      console.log(res.data);
+      console.log(res.data.result[0].total_credit);
+      setData({...data, totalCredit : res.data.result[0]} );
+      console.log(data);
     });
   }, []);
   // console.log(data)
