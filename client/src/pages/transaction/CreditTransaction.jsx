@@ -27,6 +27,8 @@ function CreditTransaction() {
 
   const navigate = useNavigate();
 
+  const sessionToken = localStorage.getItem('sessionToken');
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const formdata = new FormData();
@@ -37,8 +39,7 @@ function CreditTransaction() {
     formdata.append("date", data.date);
     formdata.append("employeeId", data.employeeId);
 
-    axios
-      .post("http://localhost:5000/credittransaction/add", formdata)
+    axios.post("http://localhost:5000/creditSale/add", formdata,{headers :{'Authorization' : 'key '+sessionToken}})
       .then((res) => {
         console.log(res);
         navigate("/transaction");
