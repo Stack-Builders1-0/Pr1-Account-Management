@@ -1,14 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState,useContext } from 'react'
 import '../../style.css'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-
+import { UserContext } from "../../UserContext";
 
 function Login() {
   const [values, setValues] = useState({
     nic: '',
     password: ''
   })
+  const { setUser } = useContext(UserContext)
 
   const navigate = useNavigate()
 
@@ -23,7 +24,7 @@ function Login() {
         if (res.data.sucess) {
           // store the session token in the local storage
           localStorage.setItem('sessionToken', res.data.sessionToken);
-          
+          setUser(res.data.sessionToken)
           navigate('/')
         } else {
           alert("Incorrect Username or pasword");
