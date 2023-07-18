@@ -27,13 +27,14 @@ function AddTransaction() {
 
   return (
     <div>
-      <div className="employee-info p-3 mb-3 bg-light border rounded">
-        <p>Employee ID: 12345</p>
-        <p>Today's Date: {new Date().toLocaleDateString()}</p>
-        <p>Employee Added Transactions Count: 10</p>
-      </div>
+      <div className="container d-flex flex-column">
+        <div className="employee-info p-3 mb-3 bg-light border rounded">
+          <p>Employee ID: 12345</p>
+          <p>Today's Date: {new Date().toLocaleDateString()}</p>
+          <p>Employee Added Transactions Count: 10</p>
+        </div>
 
-      <div className="px-5 py-3">
+        {/* Buttons section */}
         <div className="d-flex justify-content-between mb-4">
           <Link to="/transaction/cashtransaction" className="btn btn-primary">
             Cash
@@ -48,27 +49,27 @@ function AddTransaction() {
             AdvancedAP
           </Link>
         </div>
+      </div>
 
-        <div className="mt-4 px-2 pt-5">
-          <div>
-            <h3>Cash List</h3>
-            <CashSalesTable />
-          </div>
+      <div className="mt-4 px-2 pt-5">
+        <div>
+          <h3>Cash List</h3>
+          <CashSalesTable />
+        </div>
 
-          <div>
-            <h3>Credit List</h3>
-            <CreditSalesTable />
-          </div>
+        <div>
+          <h3>Credit List</h3>
+          <CreditSalesTable />
+        </div>
 
-          <div>
-            <h3>Advanced BP List</h3>
-            <AdvancedBPSalesTable />
-          </div>
+        <div>
+          <h3>Advanced BP List</h3>
+          <AdvancedBPSalesTable />
+        </div>
 
-          <div>
-            <h3>Advanced AP List</h3>
-            <AdvancedAPSalesTable />
-          </div>
+        <div>
+          <h3>Advanced AP List</h3>
+          <AdvancedAPSalesTable />
         </div>
       </div>
     </div>

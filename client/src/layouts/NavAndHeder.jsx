@@ -25,6 +25,16 @@ function NavAndHeder() {
     setDropdownOpen(false);
   };
 
+  const [dropDownOpen, setDropDownOpen] = useState(false);
+
+  const toggledropdown = () => {
+    setDropDownOpen(!dropDownOpen);
+  };
+
+  const closedropdown = () => {
+    setDropDownOpen(false);
+  };
+
   const setStyle = ({ isActive, isPending }) => {
     return {
       fontWeight: isActive ? "bold" : "",
@@ -60,21 +70,23 @@ function NavAndHeder() {
                     className={`nav-link px-0 align-middle ${dropdownOpen ? "active" : ""
                       }`}
                     onClick={toggleDropdown}
+
                   >
                     <i className="fs-4 bi-cash-coin"></i>{" "}
                     <span className="ms-1 d-none d-sm-inline">Transaction</span>{" "}
                     <i
                       className={`bi bi-chevron-${dropdownOpen ? "up" : "down"
                         } toggle-btn`}
+
                     ></i>
                   </div>
                 </NavLink>
-                <ul className={`collapse ${dropdownOpen ? "show" : ""}`}>
+                <ul className={`collapse ${dropDownOpen ? "show" : ""}`}>
                   <li>
                     <NavLink
                       to="/transaction"
                       style={setStyle}
-                      onClick={closeDropdown}
+                      onClick={closedropdown}
                     >
                       <i className="fs-5 bi-plus-circle"></i>{" "}
                       <span className="ms-3 d-none d-sm-inline">Add</span>{" "}
@@ -82,9 +94,9 @@ function NavAndHeder() {
                   </li>
                   <li>
                     <NavLink
-                      to="/transaction/edit"
+                      to="/edittransaction"
                       style={setStyle}
-                      onClick={closeDropdown}
+                      onClick={closedropdown}
                     >
                       <i className="fs-5 bi-pencil"></i>{" "}
                       <span className="ms-3 d-none d-sm-inline">Edit</span>{" "}

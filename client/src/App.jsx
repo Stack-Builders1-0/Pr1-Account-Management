@@ -12,6 +12,10 @@ import AddCustomer from "./pages/customer/AddCustomer";
 import CashTransaction from "./pages/transaction/CashTransaction";
 import CreditTransaction from "./pages/transaction/CreditTransaction";
 import AdvanceOnly from "./pages/transaction/AdvanceOnly";
+import EditTransaction from "./pages/transaction/EditTransaction";
+import EditCashTransaction from "./pages/transaction/EditCashForm";
+import EditCreditTransaction from "./pages/transaction/EditCreditForm";
+import EditAdvanceTransaction from "./pages/transaction/EditAdvanceForm";
 import { UserContext } from "./UserContext";
 
 
@@ -57,6 +61,21 @@ function App() {
                   path="/transaction/advanceonly"
                   element={<AdvanceOnly />}
                 ></Route>
+
+                <Route path="/edittransaction" element={<EditTransaction />}></Route>
+                <Route
+                  path="/editcashtransaction"
+                  element={<EditCashTransaction />}
+                ></Route>
+                <Route
+                  path="/editcredittransaction"
+                  element={<EditCreditTransaction />}
+                ></Route>
+                <Route
+                  path="/editadvancetransaction"
+                  element={<EditAdvanceTransaction />}
+                ></Route>
+
                 <Route path="*" element={<p>This page isn't available. Sorry about that.</p>}></Route>
               </Route>
               

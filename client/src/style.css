@@ -45,3 +45,13 @@
 .nav-link.active {
   background-color: transparent !important;
 }
+
+.employee-info {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  width: 300px; /* Set the width of the box */
+  float: left; /* Position the box on the left side */
+  margin-right: 20px; /* Add some right margin for spacing */
+}
