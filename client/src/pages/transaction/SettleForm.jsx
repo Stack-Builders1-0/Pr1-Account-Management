@@ -37,6 +37,22 @@ function SettleForm() {
     },
   ];
 
+  const fetchData = async (invoiceNumber) => {
+    try {
+      const response = await axios.get(
+        `/api/records?invoiceNumber=${invoiceNumber}`
+      );
+      if (response.status === 200) {
+        const data = response.data;
+        setFilteredRecords(data);
+      } else {
+        console.error("Failed to fetch records:", response.status);
+      }
+    } catch (error) {
+      console.error("Error occurred while fetching records:", error);
+    }
+  };
+
   const handleSearch = (e) => {
     e.preventDefault();
     const inputValue = searchInvoiceNumber.trim();
@@ -45,11 +61,7 @@ function SettleForm() {
     if (inputValue === "") {
       setFilteredRecords([]);
     } else {
-      const filtered = records.filter(
-        (record) =>
-          record.invoiceNumber.toLowerCase() === inputValue.toLowerCase()
-      );
-      setFilteredRecords(filtered);
+      fetchData(inputValue);
     }
 
     // Set the flag to indicate that search has been performed.
@@ -67,15 +79,35 @@ function SettleForm() {
 
   const handleSettle = (e) => {
     e.preventDefault();
-    // Handle the settle action here (e.g., make an API call to update the settlement amount for the invoice number).
-    // You can use 'settleAmount' and 'invoiceNumber' states here as needed.
-    console.log(
-      `Invoice Number: ${selectedInvoiceNumber}, Settle Amount: ${settleAmount}, Customer ID: ${CustomerID}`
-    );
-    // After successful settle action, you may want to reset the 'settleAmount' and 'selectedInvoiceNumber' states.
-    setSettleAmount("");
-    setCustomerID("");
-    setSelectedInvoiceNumber("");
+
+    // Extract the required data from the state
+    const settleData = {
+      invoiceNumber: selectedInvoiceNumber,
+      settleAmount: settleAmount,
+      customerID: customerID,
+    };
+
+    // Make the API call to update the settlement amount
+    axios
+      .post("http://localhost:5000/settleInvoice", settleData)
+      .then((response) => {
+        // Handle the API response, if needed
+        console.log("Settle API response:", response.data);
+
+        // After a successful settle action, reset the state
+        setSettleAmount("");
+        setCustomerID("");
+        setSelectedInvoiceNumber("");
+      })
+      .catch((error) => {
+        // Handle any errors that occur during the API call
+        console.error("Error occurred during settle API call:", error);
+
+        // Reset the state even if the API call fails
+        setSettleAmount("");
+        setCustomerID("");
+        setSelectedInvoiceNumber("");
+      });
   };
 
   const handleCancel = () => {
