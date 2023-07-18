@@ -17,15 +17,18 @@ function Login() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    axios.post('http://localhost:5000/login', values)
+    axios.post(import.meta.env.VITE_API_URL + '/login', values)
       .then(res => {
         console.log(res.data);
         if (res.data.sucess) {
           // store the session token in the local storage
-          localStorage.setItem('sessionToken',res.data.sessionToken);
+          localStorage.setItem('sessionToken', res.data.sessionToken);
+          
           navigate('/')
         } else {
-          alert("Incorrect Username pasword");
+          alert("Incorrect Username or pasword");
+
+
           setError(res.data.Error);
         }
       })
@@ -63,6 +66,7 @@ function Login() {
 
 
       </div>
+
     </div>
 
 
@@ -70,4 +74,4 @@ function Login() {
   )
 }
 
-export default Login
+export default Login
