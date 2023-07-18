@@ -5,46 +5,40 @@ import { useNavigate } from 'react-router-dom';
 
 function AddCustomer() {
     const [data, setData] = useState({
-        name: '',
-        businessname: '',
-        email: '',
-        mobile: '',
-        address: '',
-        nicNo: '',
-        telephone: '',
-        whatsappNo: '',
-        officeNo: '',
+        name: 'nithu',
+        businessname: 'stack',
+        address: 'erlalai',
+        mobile: '123456778',
+        telephone: '123456789',
+        whatsappNo: '123456789',
+        officeNo: '123456789',
+        email: 'nithu@gmail.com',
+        nicNo: '20055700870',
+        employee_id: "1",
+        credit_limit: "40000"
+
 
     })
     const navigate = useNavigate()
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const formdata = new FormData();
-        formdata.append("name", data.name);
-        formdata.append("businessname", data.businessname);
-        formdata.append("email", data.email);
-        formdata.append("mobile", data.mobile);
-        formdata.append("nicno", data.nicNo);
-        formdata.append("address", data.address);
-        formdata.append("telephone", data.telephone);
-        formdata.append("whatsappNo", data.whatsappNo);
-        formdata.append("officeNo", data.officeNo);
 
-
-        axios.post('http://localhost:5000/create', formdata)
+        axios.post(import.meta.env.VITE_API_URL + '/customer/add', data)
             .then(res => {
-                navigate('/employee')
+                console.log(res);
+                navigate('/customer')
             })
             .catch(err => console.log(err));
     }
+
     return (
         <div className='d-flex flex-column align-items-center pt-3'>
-            
+
             <div className='white-box'>
-            <div className='d-flex flex-column align-items-center'><h2>New Customer Registration  </h2></div>
+                <div className='d-flex flex-column align-items-center'><h2>New Customer Registration  </h2></div>
                 <form className="row g-3 w-50" onSubmit={handleSubmit}>
-               
+
                     <div className="col-12">
                         <label htmlFor="inputCustomerName" className="form-label">Customer Name</label>
                         <div className="d-flex">
@@ -78,16 +72,18 @@ function AddCustomer() {
                         />
                     </div>
                     <div className="col-12">
-                        <label htmlFor="inputEmail" className="form-label">Email</label>
+                        <label htmlFor="inputAddress" className="form-label">Address</label>
                         <input
-                            type="email"
+                            type="text"
                             className="form-control"
-                            id="inputEmail4"
-                            placeholder='Enter Email'
+                            id="inputAddress"
+                            placeholder="1234 Main St"
                             autoComplete='off'
-                            onChange={e => setData({ ...data, email: e.target.value })}
+                            onChange={e => setData({ ...data, address: e.target.value })}
                         />
                     </div>
+
+
                     <div className="col-12">
                         <label htmlFor="inputMobile" className="form-label">Mobile</label>
                         <input
@@ -133,6 +129,17 @@ function AddCustomer() {
                         />
                     </div>
                     <div className="col-12">
+                        <label htmlFor="inputEmail" className="form-label">Email</label>
+                        <input
+                            type="email"
+                            className="form-control"
+                            id="inputEmail4"
+                            placeholder='Enter Email'
+                            autoComplete='off'
+                            onChange={e => setData({ ...data, email: e.target.value })}
+                        />
+                    </div>
+                    <div className="col-12">
                         <label htmlFor="inputNIC" className="form-label">NIC Number</label>
                         <input
                             type="text"
@@ -143,26 +150,42 @@ function AddCustomer() {
                             onChange={e => setData({ ...data, nicNo: e.target.value })}
                         />
                     </div>
+
                     <div className="col-12">
-                        <label htmlFor="inputAddress" className="form-label">Address</label>
+                        <label htmlFor="inputEmployeeID" className="form-label">Employee ID</label>
                         <input
                             type="text"
                             className="form-control"
-                            id="inputAddress"
-                            placeholder="1234 Main St"
-                            autoComplete='off'
-                            onChange={e => setData({ ...data, address: e.target.value })}
+                            id="inputEmployeeID"
+                            placeholder="Enter Employee ID"
+                            autoComplete="off"
+                            onChange={e => setData({ ...data, employee_id: e.target.value })}
                         />
                     </div>
+
+                    <div className="col-12">
+                        <label htmlFor="inputCreditLimit" className="form-label">Credit Limit</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="inputCreditLimit"
+                            placeholder="Enter Credit Limit"
+                            autoComplete="off"
+                            onChange={e => setData({ ...data, credit_limit: e.target.value })}
+                        />
+                    </div>
+
+
+
                     <div className="col-12">
                         <button type="submit" className="btn btn-primary">Create</button>
                         <button type="button" className="btn btn-secondary">Cancel</button>
-                        </div>
-                     
+                    </div>
+
                 </form>
             </div>
-            </div>
-        
+        </div>
+
     )
 }
 

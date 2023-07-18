@@ -19,19 +19,10 @@ function AddEmployee() {
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		const formdata = new FormData();
-		formdata.append("employee_name", data.name);
-		formdata.append("email", data.email);
-		formdata.append("password", data.password);
-		formdata.append("address", data.address);
-		formdata.append("mobile", data.salary);
-		formdata.append("nic", data.nic);
-		formdata.append("type_id", data.type_id);
-		formdata.append("age", data.age);
-		formdata.append("image", data.image);
-		axios.post('http://localhost:5000/employee/add', formdata)
+		// formdata.append("image", data.image);
+		axios.post(import.meta.env.VITE_API_URL +'/employee/add', data)
 			.then(res => {
-				console.log(res);
+				console.log(res.data);
 				navigate('/employee')
 			})
 			.catch(err => console.log(err));
@@ -58,11 +49,7 @@ function AddEmployee() {
 							<input type="password" className="form-control" id="inputPassword4" placeholder="Enter Password"
 								onChange={e => setData({ ...data, password: e.target.value })} />
 						</div>
-						<div className="col-12">
-							<label htmlFor="inputSalary" className="form-label">Salary</label>
-							<input type="text" className="form-control" id="inputSalary" placeholder="Enter Salary" autoComplete="off"
-								onChange={e => setData({ ...data, salary: e.target.value })} />
-						</div>
+						
 						<div className="col-12">
 							<label htmlFor="inputAddress" className="form-label">Address</label>
 							<input type="text" className="form-control" id="inputAddress" placeholder="1234 Main St" autoComplete="off"

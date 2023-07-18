@@ -17,7 +17,7 @@ function Login() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    axios.post(import.meta.env.VITE_API_URL + 'login', values)
+    axios.post(import.meta.env.VITE_API_URL + '/login', values)
       .then(res => {
         console.log(res.data);
         if (res.data.sucess) {
@@ -68,4 +68,4 @@ function Login() {
   )
 }
 
-export default Login
+export default Login
