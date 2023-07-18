@@ -1,35 +1,36 @@
 import React, { useState } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 
-const sampleCashTransactionData = {
+const sampleAdvanceTransactionData = {
   billNumber: "BILL-001",
   Date: "2023-07-18",
   customerName: "John Doe",
   Description: "Product ABC",
   Bill_amount: 500,
+  Advance_amount: 200,
   Discount: 50,
   Updated_by: "User123",
 };
 
-function EditCashTransaction() {
+function EditAdvanceTransaction() {
   const [billNumber, setBillNumber] = useState("");
   const [showEditForm, setShowEditForm] = useState(false);
-  const [cashTransactionData, setCashTransactionData] = useState(null);
+  const [advanceTransactionData, setAdvanceTransactionData] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleSearch = (e) => {
     e.preventDefault();
 
     // Simulate the backend search based on the entered billNumber
-    // For testing, we'll use the sampleCashTransactionData as the response
+    // For testing, we'll use the sampleAdvanceTransactionData as the response
     // In a real application, you would perform the search based on the entered billNumber and fetch data from the backend.
-    // Replace the sampleCashTransactionData with your actual search logic.
-    if (billNumber === sampleCashTransactionData.billNumber) {
-      setCashTransactionData(sampleCashTransactionData);
+    // Replace the sampleAdvanceTransactionData with your actual search logic.
+    if (billNumber === sampleAdvanceTransactionData.billNumber) {
+      setAdvanceTransactionData(sampleAdvanceTransactionData);
       setShowEditForm(true);
       setErrorMessage(""); // Clear any previous error message
     } else {
-      setCashTransactionData(null);
+      setAdvanceTransactionData(null);
       setShowEditForm(false);
       setErrorMessage("No such bill number available.");
     }
@@ -37,14 +38,14 @@ function EditCashTransaction() {
 
   const handleEditSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission for editing the cash transaction
+    // Handle form submission for editing the advancetransaction
     // Implement the logic to update the transaction with the edited data
-    console.log("Cash transaction edited!");
+    console.log("Advance transaction edited!");
   };
 
   return (
     <div>
-      <h3 className="text-center">Edit Cash Transaction</h3>
+      <h3 className="text-center">Edit Advance Transaction</h3>
       <Form onSubmit={handleSearch}>
         <Form.Group className="mb-3" controlId="formBasicBillNumber">
           <Form.Label>Enter Bill Number to Edit</Form.Label>
@@ -63,17 +64,17 @@ function EditCashTransaction() {
 
       {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
 
-      {showEditForm && cashTransactionData && (
+      {showEditForm && advanceTransactionData && (
         <Form onSubmit={handleEditSubmit}>
           <Form.Group className="mb-3" controlId="formBasicCustomerId">
             <Form.Label>Customer Name</Form.Label>
             <Form.Control
               type="text"
               placeholder="Enter customer name"
-              value={cashTransactionData.customerName}
+              value={advanceTransactionData.customerName}
               onChange={(e) =>
-                setCashTransactionData({
-                  ...cashTransactionData,
+                setAdvanceTransactionData({
+                  ...advanceTransactionData,
                   customerName: e.target.value,
                 })
               }
@@ -85,10 +86,10 @@ function EditCashTransaction() {
             <Form.Control
               type="text"
               placeholder="Enter description"
-              value={cashTransactionData.Description}
+              value={advanceTransactionData.Description}
               onChange={(e) =>
-                setCashTransactionData({
-                  ...cashTransactionData,
+                setAdvanceTransactionData({
+                  ...advanceTransactionData,
                   Description: e.target.value,
                 })
               }
@@ -96,15 +97,30 @@ function EditCashTransaction() {
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicAmount">
-            <Form.Label>Amount</Form.Label>
+            <Form.Label>Bill Amount</Form.Label>
             <Form.Control
               type="number"
               placeholder="Enter amount"
-              value={cashTransactionData.Bill_amount}
+              value={advanceTransactionData.Bill_amount}
               onChange={(e) =>
-                setCashTransactionData({
-                  ...cashTransactionData,
+                setAdvanceTransactionData({
+                  ...advanceTransactionData,
                   Bill_amount: e.target.value,
+                })
+              }
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicAmount">
+            <Form.Label>Advanced amount</Form.Label>
+            <Form.Control
+              type="number"
+              placeholder="Enter amount"
+              value={advanceTransactionData.Advance_amount}
+              onChange={(e) =>
+                setAdvanceTransactionData({
+                  ...advanceTransactionData,
+                  Advance_amount: e.target.value,
                 })
               }
             />
@@ -115,10 +131,10 @@ function EditCashTransaction() {
             <Form.Control
               type="number"
               placeholder="Enter discount"
-              value={cashTransactionData.Discount}
+              value={advanceTransactionData.Discount}
               onChange={(e) =>
-                setCashTransactionData({
-                  ...cashTransactionData,
+                setAdvanceTransactionData({
+                  ...advanceTransactionData,
                   Discount: e.target.value,
                 })
               }
@@ -130,10 +146,10 @@ function EditCashTransaction() {
             <Form.Control
               type="date"
               placeholder="Enter date"
-              value={cashTransactionData.Date}
+              value={advanceTransactionData.Date}
               onChange={(e) =>
-                setCashTransactionData({
-                  ...cashTransactionData,
+                setAdvanceTransactionData({
+                  ...advanceTransactionData,
                   Date: e.target.value,
                 })
               }
@@ -145,10 +161,10 @@ function EditCashTransaction() {
             <Form.Control
               type="text"
               placeholder="Enter employee ID"
-              value={cashTransactionData.Updated_by}
+              value={advanceTransactionData.Updated_by}
               onChange={(e) =>
-                setCashTransactionData({
-                  ...cashTransactionData,
+                setAdvanceTransactionData({
+                  ...advanceTransactionData,
                   Updated_by: e.target.value,
                 })
               }
@@ -164,4 +180,4 @@ function EditCashTransaction() {
   );
 }
 
-export default EditCashTransaction;
+export default EditAdvanceTransaction;

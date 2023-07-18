@@ -1,8 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "bootstrap-icons/font/bootstrap-icons.min.css";
 import { Link, Outlet, NavLink } from "react-router-dom";
+import { UserContext } from "../UserContext";
+import { useNavigate } from 'react-router-dom'
 
 function NavAndHeder() {
+  const navigate = useNavigate()
+  const { setUser } = useContext(UserContext)
+
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem("sessionToken");
+    navigate('/login');
+    setIsLoggedin(false);
+  };
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {
@@ -55,17 +67,17 @@ function NavAndHeder() {
               <li>
                 <NavLink to="/transaction" style={setStyle}>
                   <div
-                    className={`nav-link px-0 align-middle ${
-                      dropDownOpen ? "active" : ""
-                    }`}
-                    onClick={toggledropdown}
+                    className={`nav-link px-0 align-middle ${dropdownOpen ? "active" : ""
+                      }`}
+                    onClick={toggleDropdown}
+
                   >
                     <i className="fs-4 bi-cash-coin"></i>{" "}
                     <span className="ms-1 d-none d-sm-inline">Transaction</span>{" "}
                     <i
-                      className={`bi bi-chevron-${
-                        dropDownOpen ? "up" : "down"
-                      } toggle-btn`}
+                      className={`bi bi-chevron-${dropdownOpen ? "up" : "down"
+                        } toggle-btn`}
+
                     ></i>
                   </div>
                 </NavLink>
@@ -151,7 +163,7 @@ function NavAndHeder() {
                 </li>
                 <li>
                   <Link to="/logout" className="dropdown-item">
-                    <i className="bi bi-box-arrow-right"></i> Logout
+                    <button onClickCapture={logout}> logout </button>
                   </Link>
                 </li>
               </ul>

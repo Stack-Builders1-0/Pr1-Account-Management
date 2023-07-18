@@ -4,7 +4,10 @@ import { Modal, Button } from "react-bootstrap";
 import axios from "axios";
 
 function Dashboard() {
+  // get the session token on the local storage
   const sessionToken = localStorage.getItem('sessionToken');
+
+  
 
   const [data, setData] = useState({ totalCashSales: "N/A", totalCreditSales: "N/A", totalSales: "00.00" });
 

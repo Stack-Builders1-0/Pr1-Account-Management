@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 
-const sampleCashTransactionData = {
+const sampleCreditTransactionData = {
   billNumber: "BILL-001",
   Date: "2023-07-18",
   customerName: "John Doe",
@@ -11,10 +11,10 @@ const sampleCashTransactionData = {
   Updated_by: "User123",
 };
 
-function EditCashTransaction() {
+function EditCreditTransaction() {
   const [billNumber, setBillNumber] = useState("");
   const [showEditForm, setShowEditForm] = useState(false);
-  const [cashTransactionData, setCashTransactionData] = useState(null);
+  const [creditTransactionData, setCreditTransactionData] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleSearch = (e) => {
@@ -24,12 +24,12 @@ function EditCashTransaction() {
     // For testing, we'll use the sampleCashTransactionData as the response
     // In a real application, you would perform the search based on the entered billNumber and fetch data from the backend.
     // Replace the sampleCashTransactionData with your actual search logic.
-    if (billNumber === sampleCashTransactionData.billNumber) {
-      setCashTransactionData(sampleCashTransactionData);
+    if (billNumber === sampleCreditTransactionData.billNumber) {
+      setCreditTransactionData(sampleCreditTransactionData);
       setShowEditForm(true);
       setErrorMessage(""); // Clear any previous error message
     } else {
-      setCashTransactionData(null);
+      setCreditTransactionData(null);
       setShowEditForm(false);
       setErrorMessage("No such bill number available.");
     }
@@ -39,12 +39,12 @@ function EditCashTransaction() {
     e.preventDefault();
     // Handle form submission for editing the cash transaction
     // Implement the logic to update the transaction with the edited data
-    console.log("Cash transaction edited!");
+    console.log("Credit transaction edited!");
   };
 
   return (
     <div>
-      <h3 className="text-center">Edit Cash Transaction</h3>
+      <h3 className="text-center">Edit credit Transaction</h3>
       <Form onSubmit={handleSearch}>
         <Form.Group className="mb-3" controlId="formBasicBillNumber">
           <Form.Label>Enter Bill Number to Edit</Form.Label>
@@ -63,17 +63,17 @@ function EditCashTransaction() {
 
       {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
 
-      {showEditForm && cashTransactionData && (
+      {showEditForm && creditTransactionData && (
         <Form onSubmit={handleEditSubmit}>
           <Form.Group className="mb-3" controlId="formBasicCustomerId">
             <Form.Label>Customer Name</Form.Label>
             <Form.Control
               type="text"
               placeholder="Enter customer name"
-              value={cashTransactionData.customerName}
+              value={creditTransactionData.customerName}
               onChange={(e) =>
-                setCashTransactionData({
-                  ...cashTransactionData,
+                setCreditTransactionData({
+                  ...creditTransactionData,
                   customerName: e.target.value,
                 })
               }
@@ -85,10 +85,10 @@ function EditCashTransaction() {
             <Form.Control
               type="text"
               placeholder="Enter description"
-              value={cashTransactionData.Description}
+              value={creditTransactionData.Description}
               onChange={(e) =>
-                setCashTransactionData({
-                  ...cashTransactionData,
+                setCreditTransactionData({
+                  ...creditTransactionData,
                   Description: e.target.value,
                 })
               }
@@ -100,10 +100,10 @@ function EditCashTransaction() {
             <Form.Control
               type="number"
               placeholder="Enter amount"
-              value={cashTransactionData.Bill_amount}
+              value={creditTransactionData.Bill_amount}
               onChange={(e) =>
-                setCashTransactionData({
-                  ...cashTransactionData,
+                setCreditTransactionData({
+                  ...creditTransactionData,
                   Bill_amount: e.target.value,
                 })
               }
@@ -115,10 +115,10 @@ function EditCashTransaction() {
             <Form.Control
               type="number"
               placeholder="Enter discount"
-              value={cashTransactionData.Discount}
+              value={creditTransactionData.Discount}
               onChange={(e) =>
-                setCashTransactionData({
-                  ...cashTransactionData,
+                setCreditTransactionData({
+                  ...creditTransactionData,
                   Discount: e.target.value,
                 })
               }
@@ -130,10 +130,10 @@ function EditCashTransaction() {
             <Form.Control
               type="date"
               placeholder="Enter date"
-              value={cashTransactionData.Date}
+              value={creditTransactionData.Date}
               onChange={(e) =>
-                setCashTransactionData({
-                  ...cashTransactionData,
+                setCreditTransactionData({
+                  ...creditTransactionData,
                   Date: e.target.value,
                 })
               }
@@ -145,10 +145,10 @@ function EditCashTransaction() {
             <Form.Control
               type="text"
               placeholder="Enter employee ID"
-              value={cashTransactionData.Updated_by}
+              value={creditTransactionData.Updated_by}
               onChange={(e) =>
-                setCashTransactionData({
-                  ...cashTransactionData,
+                setCreditTransactionData({
+                  ...creditTransactionData,
                   Updated_by: e.target.value,
                 })
               }
@@ -164,4 +164,4 @@ function EditCashTransaction() {
   );
 }
 
-export default EditCashTransaction;
+export default EditCreditTransaction;
