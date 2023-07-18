@@ -1,7 +1,21 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useEffect } from 'react'
+import axios from 'axios';
+
+
 
 function Employee() {
+
+  useEffect(() => {
+    // show all the emplyee and details
+    axios.get("http://localhost:5000/employee/showAll")
+    .then((res) => {
+      console.log(res.data.result);
+    });
+  }, []);
+
+
   return (
     <div className='px-5 py-3'>
       
