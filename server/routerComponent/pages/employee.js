@@ -45,7 +45,7 @@ router.post('/add', (req, res) => {
             res.send({
                 sucess : false,
                 isError : true,
-                exist : false,
+                isExist : false,
                 error : err
             });
         }
@@ -54,7 +54,7 @@ router.post('/add', (req, res) => {
                 res.send({
                     sucess : false,
                     isError : false,
-                    exist : true,
+                    isExist : true,
                     error : err
                 });
             }
@@ -67,7 +67,7 @@ router.post('/add', (req, res) => {
                             res.send({
                                 sucess : false,
                                 isError : true,
-                                exist : false,
+                                isExist : false,
                                 error : err
                             });
                         }
@@ -75,7 +75,7 @@ router.post('/add', (req, res) => {
                             res.send({
                                 sucess: true,
                                 isError : false,
-                                exist : false,
+                                isExist : false,
                                 error : err
                             });
                         }

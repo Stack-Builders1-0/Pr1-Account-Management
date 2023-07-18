@@ -73,13 +73,13 @@ router.get("/showAll", (req, res) => {
       res.send({
         sucess: false,
         error: true,
-        data: null,
+        result: null,
       });
     } else {
       res.send({
         sucess: true,
         error: false,
-        data: result,
+        result: result,
       });
     }
   });
@@ -176,14 +176,14 @@ router.get('/creditNotSettle', (req, res) => {
       res.send({
           sucess : false,
           error : true,
-          data : result
+          result : result
       })
     }
     else{
         res.send({
             sucess : true,
             error : false,
-            data : result
+            result : result
         })
     }
   });
@@ -204,14 +204,14 @@ router.post('/histoyCreditTransection', (req, res) =>{
       res.send({
           sucess : false,
           error : true,
-          data : result
+          result : result
       })
     }
     else{
         res.send({
             sucess : true,
             error : false,
-            data : result
+            result : result
         })
     }
   });

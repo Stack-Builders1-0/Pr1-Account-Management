@@ -4,10 +4,7 @@ import { Modal, Button } from "react-bootstrap";
 import axios from "axios";
 
 function Dashboard() {
-  // const {user ,setUser} = useContext(useContext);
-  // get the session token on the local storage
   const sessionToken = localStorage.getItem('sessionToken');
-  // setUser(sessionToken)
 
   const [data, setData] = useState({ totalCashSales: "N/A", totalCreditSales: "N/A", totalSales: "00.00" });
 
@@ -20,18 +17,35 @@ function Dashboard() {
   useEffect(() => {
 
     axios.post(import.meta.env.VITE_API_URL +"/dashboard/totalCreditSales", { date: date }, { headers: { 'Authorization': 'key ' + sessionToken } })
-      .then((res) => {
-        console.log(res.data.result[0].total_credit);
-        setData({ ...data, totalCreditSales: res.data.result[0].total_credit });
-        console.log(data);
-      });
-      axios.post(import.meta.env.VITE_API_URL +"/dashboard/totalCashSales", { date: date }, { headers: { 'Authorization': 'key ' + sessionToken } })
-      .then((res) => {
-        // console.log(res.data.result[0].total_credit);
-        // setData({ ...data, totalCashSales: res.data.result[0].total_credit });
-        console.log(res);
-      });
+    .then((res) => {
+      console.log(res.data.result[0].total_credit);
+      setData({ ...data, totalCreditSales: res.data.result[0].total_credit });
+    });
+
+    axios.post(import.meta.env.VITE_API_URL +"/dashboard/totalCashSales", { date: date }, { headers: { 'Authorization': 'key ' + sessionToken } })
+    .then((res) => {
+      console.log(res.data.result[0].total_cash);
+      setData({ ...data, totalCashSales: res.data.result[0].total_cash});
+    });
+
       setData({ ...data, totalSales: data.totalCashSales + data.totalCreditSales });
+      // console.log(data);
+
+
+    axios.get("http://localhost:5000/creditSale/creditNotSettle")
+    .then((res) => {
+      console.log(res.data.result);
+    });
+
+    axios.get("http://localhost:5000/advanceSaleAP/creditNotSettle")
+    .then((res) => {
+      console.log(res.data.result);
+    });
+
+    axios.get("http://localhost:5000/advanceSaleBP/creditNotSettle")
+    .then((res) => {
+      console.log(res.data.result);
+    });
   }, []);
   // console.log(data)
 

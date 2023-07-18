@@ -24,6 +24,7 @@ function AddCustomer() {
     const handleSubmit = (event) => {
         event.preventDefault();
 
+
         axios.post(import.meta.env.VITE_API_URL + '/customer/add', data)
             .then(res => {
                 console.log(res);

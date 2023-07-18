@@ -77,13 +77,13 @@ router.get("/showAll", (req, res) => {
       res.send({
         sucess: false,
         error: true,
-        data: null,
+        result: null,
       });
     } else {
       res.send({
         sucess: true,
         error: false,
-        data: result,
+        result: result,
       });
     }
   });
@@ -101,13 +101,13 @@ router.post("/filterCustomerNIC", (req, res) => {
       res.send({
         sucess: false,
         error: true,
-        data: null,
+        result: null,
       });
     } else {
       res.send({
         sucess: true,
         error: false,
-        data: result,
+        result: result,
       });
     }
   });

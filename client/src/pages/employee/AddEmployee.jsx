@@ -20,10 +20,16 @@ function AddEmployee() {
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		// formdata.append("image", data.image);
-		axios.post(import.meta.env.VITE_API_URL +'/employee/add', data)
+		axios.post('http://localhost:5000/employee/add', data)
 			.then(res => {
 				console.log(res.data);
-				navigate('/employee')
+				if(res.data.sucess){
+					// we want to diply sucess message 
+					navigate('/employee');
+				}else if (res.data.isExist){
+					alert("NIC already exist. Please check your NIC!!!")
+				}
+				
 			})
 			.catch(err => console.log(err));
 	}
