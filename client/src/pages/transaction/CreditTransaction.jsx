@@ -8,11 +8,11 @@ import SettleForm from "./SettleForm";
 function CreditTransaction() {
   const [data, setData] = useState({
     customer_id: "",
+    manual_invoice_id: "",
     description: "",
     billAmount: "",
     discount: "",
     date: "",
-    employeeId: "",
   });
 
   const [showAddForm, setShowAddForm] = useState(true);
@@ -31,11 +31,11 @@ function CreditTransaction() {
     event.preventDefault();
     const formdata = new FormData();
     formdata.append("customer_id", data.customer_id);
+    formdata.append("manual_invoice_id", data.manual_invoice_id);
     formdata.append("description", data.description);
     formdata.append("billAmount", data.billAmount);
     formdata.append("discount", data.discount);
     formdata.append("date", data.date);
-    formdata.append("employeeId", data.employeeId);
 
     axios
       .post("http://localhost:5000/credittransaction/add", formdata)
@@ -89,6 +89,18 @@ function CreditTransaction() {
               />
             </Form.Group>
 
+            <Form.Group className="mb-3" controlId="formBasicManualInvoiceId">
+              <Form.Label>Bill number</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter bill number"
+                value={data.manual_invoice_id}
+                onChange={(e) =>
+                  setData({ ...data, manual_invoice_id: e.target.value })
+                }
+              />
+            </Form.Group>
+
             <Form.Group className="mb-3" controlId="formBasicDescription">
               <Form.Label>Description</Form.Label>
               <Form.Control
@@ -130,18 +142,6 @@ function CreditTransaction() {
                 placeholder="Enter date"
                 value={data.date}
                 onChange={(e) => setData({ ...data, date: e.target.value })}
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="formBasicEmployeeId">
-              <Form.Label>Employee ID</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter employee ID"
-                value={data.employeeId}
-                onChange={(e) =>
-                  setData({ ...data, employeeId: e.target.value })
-                }
               />
             </Form.Group>
 

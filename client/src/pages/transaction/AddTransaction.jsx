@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import CashForm from "./CashTransaction";
-import CreditForm from "./CreditTransaction";
-import AdvancedForm from "./AdvanceOnly";
 import CashSalesTable from "./CashSales";
 import CreditSalesTable from "./CreditSales";
 import AdvancedBPSalesTable from "./AdvancedBP";
@@ -42,10 +39,16 @@ function AddTransaction() {
           <Link to="/transaction/credittransaction" className="btn btn-primary">
             Credit
           </Link>
-          <Link to="/transaction/advanceonly" className="btn btn-primary">
+          <Link
+            to="/transaction/advancebptransaction"
+            className="btn btn-primary"
+          >
             AdvancedBP
           </Link>
-          <Link to="/transaction/advanceonly" className="btn btn-primary">
+          <Link
+            to="/transaction/advanceaptransaction"
+            className="btn btn-primary"
+          >
             AdvancedAP
           </Link>
         </div>

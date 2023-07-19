@@ -4,14 +4,17 @@ import { useNavigate } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
-function CashTransaction() {
+function AdvanceBPTransaction() {
   const [data, setData] = useState({
     customer_id: "",
     manual_invoice_id: "",
+    return_payment: "",
     description: "",
     billAmount: "",
+    advanceAmount: "",
     discount: "",
     date: "",
+    employeeId: "",
   });
 
   const navigate = useNavigate();
@@ -21,13 +24,16 @@ function CashTransaction() {
     const formdata = new FormData();
     formdata.append("customer_id", data.customer_id);
     formdata.append("manual_invoice_id", data.manual_invoice_id);
+    formdata.append("return_payment", data.return_payment);
     formdata.append("description", data.description);
     formdata.append("billAmount", data.billAmount);
+    formdata.append("advanceAmount", data.advanceAmount);
     formdata.append("discount", data.discount);
     formdata.append("date", data.date);
+    formdata.append("employeeId", data.employeeId);
 
     axios
-      .post("http://localhost:5000/cashtransaction/add", formdata)
+      .post("http://localhost:5000/advancebppayment/add", formdata)
       .then((res) => {
         console.log(res);
         navigate("/transaction");
@@ -39,14 +45,14 @@ function CashTransaction() {
     <div className="d-flex flex-column align-items-center pt-4">
       <div className="white-box">
         <div className="d-flex flex-column align-items-center">
-          <h2>Cash Payment</h2>
+          <h2>AdvanceBP Payment Only</h2>
         </div>
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicCustomerId">
-            <Form.Label>Customer name</Form.Label>
+            <Form.Label>Customer ID</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Enter customer name"
+              placeholder="Enter customer ID"
               value={data.customer_id}
               onChange={(e) =>
                 setData({ ...data, customer_id: e.target.value })
@@ -62,6 +68,18 @@ function CashTransaction() {
               value={data.manual_invoice_id}
               onChange={(e) =>
                 setData({ ...data, manual_invoice_id: e.target.value })
+              }
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicReturnPayment">
+            <Form.Label>Return Payment</Form.Label>
+            <Form.Control
+              type="number"
+              placeholder="Enter return payment"
+              value={data.return_payment}
+              onChange={(e) =>
+                setData({ ...data, return_payment: e.target.value })
               }
             />
           </Form.Group>
@@ -88,6 +106,18 @@ function CashTransaction() {
             />
           </Form.Group>
 
+          <Form.Group className="mb-3" controlId="formBasicAdvanceAmount">
+            <Form.Label>Advance Amount</Form.Label>
+            <Form.Control
+              type="number"
+              placeholder="Enter advance amount"
+              value={data.advanceAmount}
+              onChange={(e) =>
+                setData({ ...data, advanceAmount: e.target.value })
+              }
+            />
+          </Form.Group>
+
           <Form.Group className="mb-3" controlId="formBasicDiscount">
             <Form.Label>Discount</Form.Label>
             <Form.Control
@@ -108,6 +138,16 @@ function CashTransaction() {
             />
           </Form.Group>
 
+          <Form.Group className="mb-3" controlId="formBasicEmployeeId">
+            <Form.Label>Employee ID</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter employee ID"
+              value={data.employeeId}
+              onChange={(e) => setData({ ...data, employeeId: e.target.value })}
+            />
+          </Form.Group>
+
           <Button variant="primary" type="submit">
             Submit
           </Button>
@@ -117,4 +157,4 @@ function CashTransaction() {
   );
 }
 
-export default CashTransaction;
+export default AdvanceBPTransaction;
