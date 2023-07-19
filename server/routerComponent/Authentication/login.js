@@ -25,7 +25,6 @@ connection.connect((err) => {
 
 //  body has nic and password
 router.post("/", (req, res) => {
-  console.log(req.body);
   body = req.body;
   const password = body.password;
 

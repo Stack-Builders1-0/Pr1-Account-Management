@@ -5,17 +5,19 @@ import { useNavigate } from 'react-router-dom';
 
 function AddCustomer() {
     const [data, setData] = useState({
-        name: 'nithu',
-        businessname: 'stack',
-        address: 'erlalai',
-        mobile: '123456778',
-        telephone: '123456789',
-        whatsappNo: '123456789',
-        officeNo: '123456789',
-        email: 'nithu@gmail.com',
-        nicNo: '20055700870',
-        employee_id: "1",
-        credit_limit: "40000"
+        customer_name: 'set defult',
+        firstName:'',
+        lastName:'',
+        businessname: '',
+        adress: '',
+        mobile: '',
+        lan_line: '',
+        w_app_no: '',
+        officeNo: '',
+        email_id: '',
+        nic_no: '',
+        employee_id: "",
+        credit_limit: ""
 
 
     })
@@ -29,8 +31,15 @@ function AddCustomer() {
 
         axios.post('http://localhost:5000/customer/add', data, {headers : {'Authorization' : 'key '+sessionToken}})
             .then(res => {
-                console.log(res);
-                navigate('/customer')
+                if(res.data.sucess){
+                    navigate('/customer');
+                    // we want to display sucess message
+                }else if (res.data.isExist){
+                    alert("this nic no has the acount. Please check your nic no");
+                }else if(res.data.isError){
+                    alert("please check your details");
+                }
+                
             })
             .catch(err => console.log(err));
     }
@@ -82,7 +91,7 @@ function AddCustomer() {
                             id="inputAddress"
                             placeholder="1234 Main St"
                             autoComplete='off'
-                            onChange={e => setData({ ...data, address: e.target.value })}
+                            onChange={e => setData({ ...data, adress: e.target.value })}
                         />
                     </div>
 
@@ -99,14 +108,14 @@ function AddCustomer() {
                         />
                     </div>
                     <div className="col-12">
-                        <label htmlFor="inputTelephone" className="form-label">Telephone</label>
+                        <label htmlFor="inputLandLine" className="form-label">LandLine</label>
                         <input
                             type="tel"
                             className="form-control"
-                            id="inputTelephone"
-                            placeholder='Enter Telephone Number'
+                            id="inputLandLine"
+                            placeholder='Enter Landline Number'
                             autoComplete='off'
-                            onChange={e => setData({ ...data, telephone: e.target.value })}
+                            onChange={e => setData({ ...data, lan_line: e.target.value })}
                         />
                     </div>
                     <div className="col-12">
@@ -117,7 +126,7 @@ function AddCustomer() {
                             id="inputWhatsApp"
                             placeholder='Enter WhatsApp Number'
                             autoComplete='off'
-                            onChange={e => setData({ ...data, whatsappNo: e.target.value })}
+                            onChange={e => setData({ ...data, w_app_no: e.target.value })}
                         />
                     </div>
                     <div className="col-12">
@@ -139,7 +148,7 @@ function AddCustomer() {
                             id="inputEmail4"
                             placeholder='Enter Email'
                             autoComplete='off'
-                            onChange={e => setData({ ...data, email: e.target.value })}
+                            onChange={e => setData({ ...data, email_id: e.target.value })}
                         />
                     </div>
                     <div className="col-12">
@@ -150,7 +159,7 @@ function AddCustomer() {
                             id="inputNIC"
                             placeholder='Enter NIC Number'
                             autoComplete='off'
-                            onChange={e => setData({ ...data, nicNo: e.target.value })}
+                            onChange={e => setData({ ...data, nic_no: e.target.value })}
                         />
                     </div>
 

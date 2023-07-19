@@ -449,4 +449,9 @@ ADD FOREIGN KEY (`return_update_by`)
 
 
 
+ALTER TABLE customers
+MODIFY COLUMN adress VARCHAR(400) NOT NULL;
+
+
+
 
