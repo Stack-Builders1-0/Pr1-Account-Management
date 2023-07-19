@@ -19,13 +19,15 @@ function AddCustomer() {
 
 
     })
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
+    const sessionToken = localStorage.getItem('sessionToken');
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
 
-        axios.post(import.meta.env.VITE_API_URL + '/customer/add', data)
+        axios.post('http://localhost:5000/customer/add', data, {headers : {'Authorization' : 'key '+sessionToken}})
             .then(res => {
                 console.log(res);
                 navigate('/customer')

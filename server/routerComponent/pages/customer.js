@@ -22,10 +22,10 @@ connection.connect((err) => {
 
 router.post("/add", (req, res) => {
   const body = req.body;
-  
-  console.log(req.cookies);
-//   const employee_id = decodeUserId(req.cookies.sessionToken);
-//   console.log(employee_id);
+
+  const sessionToken = req.headers.authorization.replace('key ','');
+
+  const employee_id = decodeUserId(sessionToken);
 
 
   const insertQuery =
