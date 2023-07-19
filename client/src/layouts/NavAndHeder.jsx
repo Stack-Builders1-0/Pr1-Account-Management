@@ -37,7 +37,7 @@ function NavAndHeder() {
   const setStyle = ({ isActive, isPending }) => {
     return {
       fontWeight: isActive ? "bold" : "",
-      color: isActive ? "#fff" : "#ccc",
+      color: isActive ? "#fff" : "#f9f6f6",
       textDecoration: "none",
     };
   };
@@ -71,14 +71,14 @@ function NavAndHeder() {
                     }`}
                     onClick={toggleDropdown}
                   >
-                    <i className="fs-4 bi-cash-coin text"></i>{" "}
-                    <span className="ms-1 d-none d-sm-inline text ">
+                    <i className="fs-4 bi-cash-coin "></i>{" "}
+                    <span className="ms-1 d-none d-sm-inline  ">
                       Transaction
                     </span>{" "}
                     <i
                       className={`bi bi-chevron-${
                         dropdownOpen ? "up" : "down"
-                      } toggle-btn text`}
+                      } toggle-btn `}
                     ></i>
                   </div>
                 </NavLink>
@@ -159,12 +159,15 @@ function NavAndHeder() {
                 style={{ marginLeft: "-100px" }}
               >
                 <li>
-                  <Link to="/profile" className="dropdown-item">
+                  <Link to="/profile" className="btn btn-primary">
                     <i className="bi bi-person-fill"></i> Profile
                   </Link>
                 </li>
                 <li>
-                  <button onClickCapture={logout}> logout </button>
+                  <button className="btn btn-primary" onClickCapture={logout}>
+                    {" "}
+                    logout{" "}
+                  </button>
                 </li>
               </ul>
             </div>

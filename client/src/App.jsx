@@ -11,7 +11,8 @@ import AddTransaction from "./pages/transaction/AddTransaction";
 import AddCustomer from "./pages/customer/AddCustomer";
 import CashTransaction from "./pages/transaction/CashTransaction";
 import CreditTransaction from "./pages/transaction/CreditTransaction";
-import AdvanceOnly from "./pages/transaction/AdvanceOnly";
+import AdvanceBPTransaction from "./pages/transaction/AdvanceBPTransaction";
+import AdvanceAPTransaction from "./pages/transaction/AdvanceAPTransaction";
 import EditTransaction from "./pages/transaction/EditTransaction";
 import EditCashTransaction from "./pages/transaction/EditCashForm";
 import EditCreditTransaction from "./pages/transaction/EditCreditForm";
@@ -45,8 +46,6 @@ function App() {
             <Route path="/" element={<NavAndHeder />}>
               <Route path="" element={<Dashboard />}></Route>
               <Route path="/employee" element={<Employee />}></Route>
-              <Route path="/expenses" element={<Expenses />}></Route>
-              <Route path="/addexpense" element={<AddExpense />}></Route>
               <Route path="/transaction" element={<AddTransaction />}></Route>
               <Route path="/profile" element={<Profile />}></Route>
               <Route path="/customer" element={<Customer />}></Route>

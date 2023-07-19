@@ -1,9 +1,10 @@
 import axios from 'axios';
 import React, { useState } from 'react'
-import { CloseButton } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
 
 function AddCustomer() {
+    const handleClose = () => setShow(false);
     const [data, setData] = useState({
         customer_name: 'set defult',
         firstName:'',
@@ -29,7 +30,7 @@ function AddCustomer() {
         event.preventDefault();
 
 
-        axios.post('http://localhost:5000/customer/add', data, {headers : {'Authorization' : 'key '+sessionToken}})
+        axios.post('http://localhost:5000/customer/add', data, { headers: { 'Authorization': 'key ' + sessionToken } })
             .then(res => {
                 if(res.data.sucess){
                     navigate('/customer');
@@ -191,7 +192,9 @@ function AddCustomer() {
 
                     <div className="col-12">
                         <button type="submit" className="btn btn-primary">Create</button>
-                        <button type="button" className="btn btn-secondary">Cancel</button>
+                        <button type="submit" className="btn btn-primary" onClick={handleClose}>
+                            Cancel
+                        </button>
                     </div>
 
                 </form>

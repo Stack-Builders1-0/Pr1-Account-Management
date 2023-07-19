@@ -102,15 +102,18 @@ router.post("/filterCustomerNIC", (req, res) => {
 
   connection.query(selectQuery, (err, result) => {
     if (err) {
+      console.log(err);
       res.send({
         sucess: false,
-        error: true,
+        isError: true,
+        error:err,
         result: null,
       });
     } else {
       res.send({
         sucess: true,
-        error: false,
+        isError: false,
+        error: null,
         result: result,
       });
     }
@@ -118,7 +121,7 @@ router.post("/filterCustomerNIC", (req, res) => {
 });
 
 router.post("/edit", (req, res) => {
-    console.log(req.headers.cookie);
+  
   body = req.body;
 
   const updateQuery =

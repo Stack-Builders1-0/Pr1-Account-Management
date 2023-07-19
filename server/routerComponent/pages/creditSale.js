@@ -89,6 +89,40 @@ router.get("/showAll", (req, res) => {
   });
 });
 
+
+router.post("/filterManualInvoice", (req, res) => {
+
+  const selectQuery =
+    "SELECT invoice_id, accountmanagement.credit_sales.type_id, type, manual_invoice_id,customer_id, description, bill_amount, discount, amount, balance, date , customer_name, business_name, credit_limit, nic_no, mobile FROM accountmanagement.credit_sales join accountmanagement.income_type using (type_id)  join customers using (customer_id) where manual_invoice_id = "+ mysql.escape(req.body.manual_invoice_id);
+
+  connection.query(selectQuery, (err, result) => {
+    if (err) {
+      res.send({
+        sucess: false,
+        isError: true,
+        result: null,
+      });
+    } else {
+      if (result.length == 0){
+        res.send({
+          sucess: true,
+          isError: false,
+          result: null,
+        });
+      }else{
+        res.send({
+          sucess: true,
+          isError: false,
+          result: result,
+        });
+      }
+      
+    }
+  });
+});
+
+
+
 router.post("/edit", (req, res) => {
   const body = req.body;
   const amount = body.bill_amount - body.discount;
