@@ -124,6 +124,15 @@ function NavAndHeder() {
               </li>
 
               <li>
+                <NavLink to="/expenses" 
+                style={setStyle}>
+                  <i class="fs-4 bi-cash"></i>{" "}
+                  <span class="ms-1 d-none d-sm-inline">Expenses</span>
+                </NavLink>
+              </li>
+
+
+              <li>
               <NavLink
                   to="/report"
                   style={setStyle}
