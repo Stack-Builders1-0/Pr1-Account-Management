@@ -104,13 +104,15 @@ router.post("/filterCustomerNIC", (req, res) => {
     if (err) {
       res.send({
         sucess: false,
-        error: true,
+        isError: true,
+        error:err,
         result: null,
       });
     } else {
       res.send({
         sucess: true,
-        error: false,
+        isError: true,
+        error: null,
         result: result,
       });
     }
