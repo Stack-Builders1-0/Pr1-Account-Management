@@ -64,7 +64,8 @@ function CreditTransaction() {
       });
   };
 
-  const sessionToken = localStorage.getItem("sessionToken");
+
+  const sessionToken = localStorage.getItem('sessionToken');
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -75,6 +76,7 @@ function CreditTransaction() {
       const creditLimit = parseFloat(customerInfo.creditLimit);
 
       if (billAmount <= creditLimit) {
+        
         const formdata = {
           type_id: "cr", // we manually set the type id of tha credit sale
           manual_invoice_id: data.manual_invoice_id,
@@ -86,9 +88,7 @@ function CreditTransaction() {
         };
 
         axios
-          .post("http://localhost:5000/creditSale/add", formdata, {
-            headers: { Authorization: "key " + sessionToken },
-          })
+          .post("http://localhost:5000/creditSale/add", formdata, {headers : {'Authorization' : 'key '+sessionToken}})
           .then((res) => {
             navigate("/transaction");
           })
@@ -175,8 +175,7 @@ function CreditTransaction() {
                   <strong>Business Name:</strong> {customerInfo.businessName}
                 </p>
                 <p>
-                  <strong>Credit Limit:</strong>{" "}
-                  <strong>{customerInfo.creditLimit}</strong>
+                  <strong>Credit Limit:</strong> {customerInfo.creditLimit}
                 </p>
               </div>
             )}

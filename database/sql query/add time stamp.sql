@@ -18,9 +18,6 @@ ALTER TABLE customers
 
 ALTER TABLE expenses 
   modify COLUMN date TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
-
-  alter table advance_ap_partial_settle
-modify column date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   
   
 -- add updated time stamp
