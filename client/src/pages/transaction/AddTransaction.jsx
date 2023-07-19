@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import CashForm from "./CashTransaction";
 import CreditForm from "./CreditTransaction";
-import AdvancedForm from "./AdvanceOnly";
+// import AdvancedForm from "./AdvanceOnly";
 import CashSalesTable from "./CashSales";
 import CreditSalesTable from "./CreditSales";
 import AdvancedBPSalesTable from "./AdvancedBP";
@@ -39,13 +39,13 @@ function AddTransaction() {
     // show the the emplyee and details
     axios.post("http://localhost:5000/employee/showCurrent",{}, { headers: { 'Authorization': 'key ' + sessionToken } })
     .then((res) => {
-      console.log(res.data.result[0]);
+      // console.log(res.data.result[0]);
     });
 
     // get the count of the add transection on today
     axios.post("http://localhost:5000/employee/count",{date:date}, { headers: { 'Authorization': 'key ' + sessionToken } })
     .then((res) => {
-      console.log(res.data.result[0]);
+      // console.log(res.data.result[0]);
     });
   }, []);
 

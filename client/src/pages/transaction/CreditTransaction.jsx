@@ -9,7 +9,7 @@ import Alert from "react-bootstrap/Alert";
 function CreditTransaction() {
   const [data, setData] = useState({
     nic_no: "",
-    customer_name: "",
+    customer_id: "",
     manual_invoice_id: "",
     description: "",
     billAmount: "",
@@ -32,32 +32,17 @@ function CreditTransaction() {
 
   const navigate = useNavigate();
 
-
   const handleSearch = () => {
     const apiUrl = "http://localhost:5000/customer/filterCustomerNIC";
 
     axios
       .post(apiUrl, { nic: data.nic_no })
-  }
-  
-  const sessionToken = localStorage.getItem('sessionToken');
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const formdata = new FormData();
-    formdata.append("customer_id", data.customer_id);
-    formdata.append("description", data.description);
-    formdata.append("billAmount", data.billAmount);
-    formdata.append("discount", data.discount);
-    formdata.append("date", data.date);
-    formdata.append("employeeId", data.employeeId);
-
-    axios.post("http://localhost:5000/creditSale/add", formdata,{headers :{'Authorization' : 'key '+sessionToken}})
       .then((res) => {
         const responseData = res.data;
-        if (responseData.success && responseData.data.length > 0) {
+        console.log(responseData);
+        if (responseData.sucess && responseData.result.length > 0) {
           // NIC number is valid and customer information is found
-          const customerData = responseData.data[0];
+          const customerData = responseData.result[0];
           setCustomerInfo({
             customerName: customerData.customer_name,
             businessName: customerData.business_name,
@@ -65,6 +50,7 @@ function CreditTransaction() {
           });
           setShowAlert(false);
           setData({ ...data, customer_name: customerData.customer_name });
+          setData({ ...data, customer_id: customerData.customer_id });
           setSearchedNic(true);
         } else {
           // NIC number is invalid or no customer found
@@ -78,6 +64,9 @@ function CreditTransaction() {
       });
   };
 
+
+  const sessionToken = localStorage.getItem('sessionToken');
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -87,18 +76,20 @@ function CreditTransaction() {
       const creditLimit = parseFloat(customerInfo.creditLimit);
 
       if (billAmount <= creditLimit) {
-        const formdata = new FormData();
-        formdata.append("customer_name", data.customer_name);
-        formdata.append("manual_invoice_id", data.manual_invoice_id);
-        formdata.append("description", data.description);
-        formdata.append("billAmount", data.billAmount);
-        formdata.append("discount", data.discount);
-        formdata.append("date", data.date);
+        
+        const formdata = {
+          type_id: "cr", // we manually set the type id of tha credit sale
+          manual_invoice_id: data.manual_invoice_id,
+          date: data.date,
+          customer_id: data.customer_id,
+          description: data.description,
+          bill_amount: data.billAmount,
+          discount: data.discount,
+        };
 
         axios
-          .post("http://localhost:5000/cashtransaction/add", formdata)
+          .post("http://localhost:5000/creditSale/add", formdata, {headers : {'Authorization' : 'key '+sessionToken}})
           .then((res) => {
-            console.log(res);
             navigate("/transaction");
           })
           .catch((err) => console.log(err));
@@ -190,18 +181,6 @@ function CreditTransaction() {
             )}
 
             <Form onSubmit={handleSubmit}>
-              <Form.Group className="mb-3" controlId="formBasicCustomerName">
-                <Form.Label>Customer name</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter customer name"
-                  value={data.customer_name}
-                  onChange={(e) =>
-                    setData({ ...data, customer_name: e.target.value })
-                  }
-                />
-              </Form.Group>
-
               <Form.Group className="mb-3" controlId="formBasicManualInvoiceId">
                 <Form.Label>Bill number</Form.Label>
                 <Form.Control

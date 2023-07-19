@@ -27,18 +27,15 @@ function Dashboard() {
 
     axios.post(import.meta.env.VITE_API_URL + "/dashboard/totalCreditSales", { date: date }, { headers: { 'Authorization': 'key ' + sessionToken } })
       .then((res) => {
-        console.log(res.data.result);
         setData({ ...data, totalCreditSales: res.data.result });
       });
 
     axios.post(import.meta.env.VITE_API_URL + "/dashboard/totalCashSales", { date: date }, { headers: { 'Authorization': 'key ' + sessionToken } })
       .then((res) => {
-        console.log(res.data.result);
         setData({ ...data, totalCashSales: res.data.result });
       });
 
     setData({ ...data, totalSales: data.totalCashSales + data.totalCreditSales });
-    // console.log(data);
 
 
     axios
@@ -52,15 +49,14 @@ function Dashboard() {
 
     axios.get(import.meta.env.VITE_API_URL + "/advanceSaleAP/creditNotSettle")
       .then((res) => {
-        console.log(res.data.result);
+        // console.log(res.data.result);
       });
 
     axios.get(import.meta.env.VITE_API_URL + "/advanceSaleBP/creditNotSettle")
       .then((res) => {
-        console.log(res.data.result);
+        // console.log(res.data.result);
       });
   }, []);
-  // console.log(data)
 
   return (
 
