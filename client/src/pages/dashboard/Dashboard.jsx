@@ -4,48 +4,54 @@ import { Modal, Button } from "react-bootstrap";
 import axios from "axios";
 
 function Dashboard() {
+
   // get the session token on the local storage
   const sessionToken = localStorage.getItem('sessionToken');
 
-  
-
   const [data, setData] = useState({ totalCashSales: "N/A", totalCreditSales: "N/A", totalSales: "00.00" });
+
+  //table content
+  const [creditSaleData, setCreditSaleData] = useState([]);
+  const [advanceSaleAPData, setAdvanceSaleAPData] = useState([]);
+  const [advanceSaleBPData, setAdvanceSaleBPData] = useState([]);
 
   // get the current date in yyyy-mm-dd this format
   const currentDate = new Date();
   const date = currentDate.getFullYear() + '-0' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
 
-  
-
   useEffect(() => {
 
     axios.post(import.meta.env.VITE_API_URL +"/dashboard/totalCreditSales", { date: date }, { headers: { 'Authorization': 'key ' + sessionToken } })
     .then((res) => {
-      console.log(res.data.result[0].total_credit);
-      setData({ ...data, totalCreditSales: res.data.result[0].total_credit });
+      console.log(res.data.result);
+      setData({ ...data, totalCreditSales: res.data.result });
     });
 
     axios.post(import.meta.env.VITE_API_URL +"/dashboard/totalCashSales", { date: date }, { headers: { 'Authorization': 'key ' + sessionToken } })
     .then((res) => {
-      console.log(res.data.result[0].total_cash);
-      setData({ ...data, totalCashSales: res.data.result[0].total_cash});
+      console.log(res.data.result);
+      setData({ ...data, totalCashSales: res.data.result });
     });
 
       setData({ ...data, totalSales: data.totalCashSales + data.totalCreditSales });
       // console.log(data);
 
 
-    axios.get("http://localhost:5000/creditSale/creditNotSettle")
+      axios
+      .get(import.meta.env.VITE_API_URL + "/creditSale/creditNotSettle")
+      .then((res) => {
+        setCreditSaleData(res.data.result);
+      })
+      .catch((error) => {
+        console.log("Error fetching creditSale data:", error);
+      });
+
+    axios.get(import.meta.env.VITE_API_URL +"/advanceSaleAP/creditNotSettle")
     .then((res) => {
       console.log(res.data.result);
     });
 
-    axios.get("http://localhost:5000/advanceSaleAP/creditNotSettle")
-    .then((res) => {
-      console.log(res.data.result);
-    });
-
-    axios.get("http://localhost:5000/advanceSaleBP/creditNotSettle")
+    axios.get(import.meta.env.VITE_API_URL +"/advanceSaleBP/creditNotSettle")
     .then((res) => {
       console.log(res.data.result);
     });
@@ -104,7 +110,7 @@ function Dashboard() {
 
 
       <div className="mt-4 px-4 pt-3">
-        <h3>Total Cridit Sales</h3>
+        <h3> Cridit Sales</h3>
         <table className="table table-bordered">
           <thead>
             <tr>
@@ -122,21 +128,23 @@ function Dashboard() {
           </thead>
           <tbody>
             {/* Table rows with data */}
-            <tr>
-              <td>John Doe</td>
-              <td>Business</td>
-              <td>1st,street</td>
-              <td>123-456-7890</td>
-              <td>763456742</td>
-              <td>342$</td>
-              <td>100$</td>
-              <td>function or database</td>
-              <td>somedate</td>
-              <td>
-                {/* Action buttons */}
-                <button>History</button>
-              </td>
-            </tr>
+            {creditSaleData.map((sale) => (
+              <tr key={sale.invoice_id}>
+                <td>{sale.customer_name}</td>
+                <td>{sale.business_name}</td>
+                <td>{sale.address}</td>
+                <td>{sale.office_num}</td>
+                <td>{sale.mobile}</td>
+                <td>{sale.amount}</td>
+                <td>{sale.settle_amount}</td>
+                <td>{sale.balance}</td>
+                <td>{sale.date}</td>
+                <td>
+                  {/* Action buttons */}
+                  <button onClick={() => handleHistory(sale.invoice_id)}>History</button>
+                </td>
+              </tr>
+            ))}
 
             {/* Add more rows as needed */}
           </tbody>
