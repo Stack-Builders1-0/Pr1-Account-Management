@@ -1,6 +1,8 @@
 -- create database acountmanagement
 
 
+
+
 CREATE TABLE `accountmanagement`.`employee_type` (
   `type_id` CHAR(3) NOT NULL,
   `type` VARCHAR(45) NOT NULL,
