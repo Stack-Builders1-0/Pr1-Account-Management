@@ -48,7 +48,7 @@
 
 .employee-info {
   background-color: #fff;
-  border: 1px solid #ccc;
+  border: 1px solid #f9f6f6;
   border-radius: 8px;
   padding: 20px;
   width: 300px; /* Set the width of the box */
@@ -58,9 +58,6 @@
 
 
 .navstyle{
-  background-color: #37137f;
+  background-color: #2b80eb;
   
-}
-.text{
-  color: #ffffff;
 }
