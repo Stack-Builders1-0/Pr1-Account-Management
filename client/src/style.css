@@ -19,11 +19,11 @@
 }
 
 .dashboard {
-  background-color: rgba(41, 100, 111, 0.6);
+  background-color: hsl(330, 14%, 97%);
 }
 
 .square-decoration {
-  background-color: hsl(330, 14%, 97%);
+  background-color: hsl(0, 0%, 98%);
   border-radius: 50%;
   padding: 10px;
   width: 150px;
@@ -48,10 +48,16 @@
 
 .employee-info {
   background-color: #fff;
-  border: 1px solid #ccc;
+  border: 1px solid #f9f6f6;
   border-radius: 8px;
   padding: 20px;
   width: 300px; /* Set the width of the box */
   float: left; /* Position the box on the left side */
   margin-right: 20px; /* Add some right margin for spacing */
+}
+
+
+.navstyle{
+  background-color: #2b80eb;
+  
 }

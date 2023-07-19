@@ -22,11 +22,10 @@ connection.connect((err) => {
 
 router.post("/add", (req, res) => {
   const body = req.body;
-  
-  console.log(req.cookies);
-//   const employee_id = decodeUserId(req.cookies.sessionToken);
-//   console.log(employee_id);
 
+  const sessionToken = req.headers.authorization.replace('key ','');
+
+  const employee_id = decodeUserId(sessionToken);
 
   const insertQuery =
     "insert into accountmanagement.customers (customer_name, business_name, adress, mobile, lan_line, w_app_no, office_num, email_id, nic_no, employee_id, credit_limit ) values (?,?,?,?,?,?,?,?,?,?,?);";
@@ -52,16 +51,21 @@ router.post("/add", (req, res) => {
     ],
     (err, result) => {
       if (err) {
+        console.log(err)
         res.send({
           sucess: false,
-          error: true,
-          exist: false,
+          isError: true,
+          isExist: false,
+          error : err,
+          result : result
         });
       } else {
         res.send({
           sucess: true,
-          error: false,
-          exist: false,
+          isError: false,
+          isExist: false,
+          error : null,
+          result : result
         });
       }
     }
@@ -77,13 +81,13 @@ router.get("/showAll", (req, res) => {
       res.send({
         sucess: false,
         error: true,
-        data: null,
+        result: null,
       });
     } else {
       res.send({
         sucess: true,
         error: false,
-        data: result,
+        result: result,
       });
     }
   });
@@ -100,14 +104,16 @@ router.post("/filterCustomerNIC", (req, res) => {
     if (err) {
       res.send({
         sucess: false,
-        error: true,
-        data: null,
+        isError: true,
+        error:err,
+        result: null,
       });
     } else {
       res.send({
         sucess: true,
-        error: false,
-        data: result,
+        isError: true,
+        error: null,
+        result: result,
       });
     }
   });

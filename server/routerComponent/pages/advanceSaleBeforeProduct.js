@@ -74,13 +74,13 @@ router.get("/showAll", (req, res) => {
       res.send({
         sucess: false,
         error: true,
-        data: null,
+        result: null,
       });
     } else {
       res.send({
         sucess: true,
         error: false,
-        data: result,
+        result: result,
       });
     }
   });
@@ -187,13 +187,13 @@ router.get("/creditNotSettle", (req, res) => {
       res.send({
         sucess: false,
         error: true,
-        data: result,
+        result: result,
       });
     } else {
       res.send({
         sucess: true,
         error: false,
-        data: result,
+        result: result,
       });
     }
   });
@@ -214,16 +214,48 @@ router.post("/histoyCreditTransection", (req, res) => {
       res.send({
         sucess: false,
         error: true,
-        data: result,
+        result: result,
       });
     } else {
       res.send({
         sucess: true,
         error: false,
-        data: result,
+        result: result,
       });
     }
   });
 });
+
+
+router.post("/filterManualInvoice", (req, res) => {
+
+  const selectQuery =
+    "SELECT invoice_id, income_type.type_id, type, manual_invoice_id,customer_id, description, bill_amount, discount, amount, balance, date , customer_name, business_name, credit_limit, nic_no, mobile FROM advance_sales_bp join accountmanagement.income_type using (type_id)  join customers using (customer_id) where manual_invoice_id = "+ mysql.escape(req.body.manual_invoice_id);
+
+  connection.query(selectQuery, (err, result) => {
+    if (err) {
+      res.send({
+        sucess: false,
+        isError: true,
+        result: null,
+      });
+    } else {
+      if (result.length == 0){
+        res.send({
+          sucess: true,
+          isError: false,
+          result: null,
+        });
+      }else{
+        res.send({
+          sucess: true,
+          isError: false,
+          result: result,
+        });
+      }
+    }
+  });
+});
+
 
 module.exports = router;

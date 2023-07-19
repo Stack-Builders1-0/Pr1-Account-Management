@@ -1,11 +1,17 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import axios from "axios";
+import CashForm from "./CashTransaction";
+import CreditForm from "./CreditTransaction";
+import AdvancedForm from "./AdvanceOnly";
 import CashSalesTable from "./CashSales";
 import CreditSalesTable from "./CreditSales";
 import AdvancedBPSalesTable from "./AdvancedBP";
 import AdvancedAPSalesTable from "./AdvancedAP";
 
-// add
+ 
+
 function AddTransaction() {
   const [selectedTab, setSelectedTab] = useState("");
   const [showTransaction, setShowTransaction] = useState(false);
@@ -21,6 +27,28 @@ function AddTransaction() {
   const handleShow = () => {
     setShowTransaction(true);
   };
+
+  const sessionToken = localStorage.getItem('sessionToken');
+
+  // get the current date in yyyy-mm-dd this format
+  const currentDate = new Date();
+  const date = currentDate.getFullYear() + '-0' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
+
+
+  useEffect(() => {
+    // show the the emplyee and details
+    axios.post("http://localhost:5000/employee/showCurrent",{}, { headers: { 'Authorization': 'key ' + sessionToken } })
+    .then((res) => {
+      console.log(res.data.result[0]);
+    });
+
+    // get the count of the add transection on today
+    axios.post("http://localhost:5000/employee/count",{date:date}, { headers: { 'Authorization': 'key ' + sessionToken } })
+    .then((res) => {
+      console.log(res.data.result[0]);
+    });
+  }, []);
+
 
   return (
     <div>

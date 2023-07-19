@@ -1,50 +1,57 @@
 import axios from 'axios';
 import React, { useState } from 'react'
-import { CloseButton } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
 
 function AddCustomer() {
+    const handleClose = () => setShow(false);
     const [data, setData] = useState({
-        name: '',
+        customer_name: 'set defult',
+        firstName:'',
+        lastName:'',
         businessname: '',
-        email: '',
+        adress: '',
         mobile: '',
-        address: '',
-        nicNo: '',
-        telephone: '',
-        whatsappNo: '',
+        lan_line: '',
+        w_app_no: '',
         officeNo: '',
+        email_id: '',
+        nic_no: '',
+        employee_id: "",
+        credit_limit: ""
+
 
     })
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
+    const sessionToken = localStorage.getItem('sessionToken');
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const formdata = new FormData();
-        formdata.append("name", data.name);
-        formdata.append("businessname", data.businessname);
-        formdata.append("email", data.email);
-        formdata.append("mobile", data.mobile);
-        formdata.append("nicno", data.nicNo);
-        formdata.append("address", data.address);
-        formdata.append("telephone", data.telephone);
-        formdata.append("whatsappNo", data.whatsappNo);
-        formdata.append("officeNo", data.officeNo);
 
 
-        axios.post('http://localhost:5173/create', formdata)
+        axios.post('http://localhost:5000/customer/add', data, { headers: { 'Authorization': 'key ' + sessionToken } })
             .then(res => {
-                navigate('/employee')
+                if(res.data.sucess){
+                    navigate('/customer');
+                    // we want to display sucess message
+                }else if (res.data.isExist){
+                    alert("this nic no has the acount. Please check your nic no");
+                }else if(res.data.isError){
+                    alert("please check your details");
+                }
+                
             })
             .catch(err => console.log(err));
     }
+
     return (
         <div className='d-flex flex-column align-items-center pt-3'>
-            
+
             <div className='white-box'>
-            <div className='d-flex flex-column align-items-center'><h2>New Customer Registration  </h2></div>
+                <div className='d-flex flex-column align-items-center'><h2>New Customer Registration  </h2></div>
                 <form className="row g-3 w-50" onSubmit={handleSubmit}>
-               
+
                     <div className="col-12">
                         <label htmlFor="inputCustomerName" className="form-label">Customer Name</label>
                         <div className="d-flex">
@@ -78,16 +85,18 @@ function AddCustomer() {
                         />
                     </div>
                     <div className="col-12">
-                        <label htmlFor="inputEmail" className="form-label">Email</label>
+                        <label htmlFor="inputAddress" className="form-label">Address</label>
                         <input
-                            type="email"
+                            type="text"
                             className="form-control"
-                            id="inputEmail4"
-                            placeholder='Enter Email'
+                            id="inputAddress"
+                            placeholder="1234 Main St"
                             autoComplete='off'
-                            onChange={e => setData({ ...data, email: e.target.value })}
+                            onChange={e => setData({ ...data, adress: e.target.value })}
                         />
                     </div>
+
+
                     <div className="col-12">
                         <label htmlFor="inputMobile" className="form-label">Mobile</label>
                         <input
@@ -100,14 +109,14 @@ function AddCustomer() {
                         />
                     </div>
                     <div className="col-12">
-                        <label htmlFor="inputTelephone" className="form-label">Telephone</label>
+                        <label htmlFor="inputLandLine" className="form-label">LandLine</label>
                         <input
                             type="tel"
                             className="form-control"
-                            id="inputTelephone"
-                            placeholder='Enter Telephone Number'
+                            id="inputLandLine"
+                            placeholder='Enter Landline Number'
                             autoComplete='off'
-                            onChange={e => setData({ ...data, telephone: e.target.value })}
+                            onChange={e => setData({ ...data, lan_line: e.target.value })}
                         />
                     </div>
                     <div className="col-12">
@@ -118,7 +127,7 @@ function AddCustomer() {
                             id="inputWhatsApp"
                             placeholder='Enter WhatsApp Number'
                             autoComplete='off'
-                            onChange={e => setData({ ...data, whatsappNo: e.target.value })}
+                            onChange={e => setData({ ...data, w_app_no: e.target.value })}
                         />
                     </div>
                     <div className="col-12">
@@ -133,6 +142,17 @@ function AddCustomer() {
                         />
                     </div>
                     <div className="col-12">
+                        <label htmlFor="inputEmail" className="form-label">Email</label>
+                        <input
+                            type="email"
+                            className="form-control"
+                            id="inputEmail4"
+                            placeholder='Enter Email'
+                            autoComplete='off'
+                            onChange={e => setData({ ...data, email_id: e.target.value })}
+                        />
+                    </div>
+                    <div className="col-12">
                         <label htmlFor="inputNIC" className="form-label">NIC Number</label>
                         <input
                             type="text"
@@ -140,29 +160,47 @@ function AddCustomer() {
                             id="inputNIC"
                             placeholder='Enter NIC Number'
                             autoComplete='off'
-                            onChange={e => setData({ ...data, nicNo: e.target.value })}
+                            onChange={e => setData({ ...data, nic_no: e.target.value })}
                         />
                     </div>
+
                     <div className="col-12">
-                        <label htmlFor="inputAddress" className="form-label">Address</label>
+                        <label htmlFor="inputEmployeeID" className="form-label">Employee ID</label>
                         <input
                             type="text"
                             className="form-control"
-                            id="inputAddress"
-                            placeholder="1234 Main St"
-                            autoComplete='off'
-                            onChange={e => setData({ ...data, address: e.target.value })}
+                            id="inputEmployeeID"
+                            placeholder="Enter Employee ID"
+                            autoComplete="off"
+                            onChange={e => setData({ ...data, employee_id: e.target.value })}
                         />
                     </div>
+
+                    <div className="col-12">
+                        <label htmlFor="inputCreditLimit" className="form-label">Credit Limit</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="inputCreditLimit"
+                            placeholder="Enter Credit Limit"
+                            autoComplete="off"
+                            onChange={e => setData({ ...data, credit_limit: e.target.value })}
+                        />
+                    </div>
+
+
+
                     <div className="col-12">
                         <button type="submit" className="btn btn-primary">Create</button>
-                        <button type="button" className="btn btn-secondary">Cancel</button>
-                        </div>
-                     
+                        <button type="submit" className="btn btn-primary" onClick={handleClose}>
+                            Cancel
+                        </button>
+                    </div>
+
                 </form>
             </div>
-            </div>
-        
+        </div>
+
     )
 }
 

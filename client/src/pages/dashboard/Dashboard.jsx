@@ -1,52 +1,89 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { Modal, Button } from "react-bootstrap";
 import axios from "axios";
+import { useLocation } from 'react-router-dom';
+import CustomModel from "../../model";
 
 function Dashboard() {
+  const { state } = useLocation();
+  const show = state?.show | false
+  const onHide = state?.onHide | false
   // get the session token on the local storage
   const sessionToken = localStorage.getItem('sessionToken');
-  const [totalCredit, setTotalCredit] = useState('');
-  const [data, setData] = useState({ totalCashsales: "000.00" });
-  const [showTransaction, setShowTransaction] = useState(false);
+
+  const [data, setData] = useState({ totalCashSales: "N/A", totalCreditSales: "N/A", totalSales: "00.00" });
+
+  //table content
+  const [creditSaleData, setCreditSaleData] = useState([]);
+  const [advanceSaleAPData, setAdvanceSaleAPData] = useState([]);
+  const [advanceSaleBPData, setAdvanceSaleBPData] = useState([]);
 
   // get the current date in yyyy-mm-dd this format
   const currentDate = new Date();
   const date = currentDate.getFullYear() + '-0' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
 
-  const handleClose = () => setShowTransaction(false);
-  const handleShow = () => setShowTransaction(true);
-
   useEffect(() => {
 
-    axios.post("http://localhost:5000/dashboard/totalCreditSales",  {date :date}, {headers: {'Authorization': 'key ' + sessionToken}} )
-    .then((res) => {
-      console.log(res.data.result[0].total_credit);
-      setData({...data, totalCredit : res.data.result[0]} );
-      console.log(data);
-    });
+    axios.post(import.meta.env.VITE_API_URL + "/dashboard/totalCreditSales", { date: date }, { headers: { 'Authorization': 'key ' + sessionToken } })
+      .then((res) => {
+        console.log(res.data.result);
+        setData({ ...data, totalCreditSales: res.data.result });
+      });
+
+    axios.post(import.meta.env.VITE_API_URL + "/dashboard/totalCashSales", { date: date }, { headers: { 'Authorization': 'key ' + sessionToken } })
+      .then((res) => {
+        console.log(res.data.result);
+        setData({ ...data, totalCashSales: res.data.result });
+      });
+
+    setData({ ...data, totalSales: data.totalCashSales + data.totalCreditSales });
+    // console.log(data);
+
+
+    axios
+      .get(import.meta.env.VITE_API_URL + "/creditSale/creditNotSettle")
+      .then((res) => {
+        setCreditSaleData(res.data.result);
+      })
+      .catch((error) => {
+        console.log("Error fetching creditSale data:", error);
+      });
+
+    axios.get(import.meta.env.VITE_API_URL + "/advanceSaleAP/creditNotSettle")
+      .then((res) => {
+        console.log(res.data.result);
+      });
+
+    axios.get(import.meta.env.VITE_API_URL + "/advanceSaleBP/creditNotSettle")
+      .then((res) => {
+        console.log(res.data.result);
+      });
   }, []);
   // console.log(data)
 
   return (
+
     <div>
+      <CustomModel show={show} onHide={onHide} />
+
       <div className="p-3 d-flex justify-content-around mt-3">
         <div className="px-3 pt-2 pb-3 border shadow-sm w-25  square-decoration">
           <div className="text-center pb-1">
             <h4>Total Cash Sales</h4>
             <hr />
             <div>
-              <h5>{data.totalCashsales}</h5>
+              <h5>{data.totalCashSales}</h5>
             </div>
           </div>
         </div>
 
         <div className="px-3 pt-2 pb-3 border shadow-sm w-25  square-decoration">
           <div className="text-center pb-1">
-            <h4>Total Cridit Sales</h4>
+            <h4>Total Credit Sales</h4>
             <hr />
             <div>
-              <h5>2456.7$</h5>
+              <h5>{data.totalCreditSales}</h5>
             </div>
           </div>
         </div>
@@ -56,16 +93,18 @@ function Dashboard() {
             <h4>Total Sales</h4>
             <hr />
             <div>
-              <h5>12341$</h5>
+              <h5>{data.totalSales}</h5>
             </div>
           </div>
         </div>
       </div>
 
+
+
       <div className="d-flex justify-content-between px-5 py-5">
-        <Button className="nextButton" onClick={handleShow}>
+        <Link to="/transaction" className="btn btn-primary">
           Add Transaction
-        </Button>
+        </Link>
         <Link to="/addcustomer" className="btn btn-primary">
           Add Customer
         </Link>
@@ -74,35 +113,10 @@ function Dashboard() {
         </Link>
       </div>
 
-      <Modal show={showTransaction} onHide={handleClose} size="lg">
-        <Modal.Body>
-          <div className="p-3 d-flex justify-content-around mt-3">
-            <Button variant="primary" onClick={handleClose}>
-              <Link to="/cashtransaction" className="btn btn-primary">
-                CashTransaction
-              </Link>
-            </Button>
-            <Button variant="primary" onClick={handleClose}>
-              <Link to="/credittransaction" className="btn btn-primary">
-                CreditTransaction
-              </Link>
-            </Button>
-            <Button variant="primary" onClick={handleClose}>
-              <Link to="/advanceonly" className="btn btn-primary">
-                AdvanceOnly
-              </Link>
-            </Button>
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+
 
       <div className="mt-4 px-4 pt-3">
-        <h3>Total Cridit Sales</h3>
+        <h3> Cridit Sales</h3>
         <table className="table table-bordered">
           <thead>
             <tr>
@@ -120,21 +134,23 @@ function Dashboard() {
           </thead>
           <tbody>
             {/* Table rows with data */}
-            <tr>
-              <td>John Doe</td>
-              <td>Business</td>
-              <td>1st,street</td>
-              <td>123-456-7890</td>
-              <td>763456742</td>
-              <td>342$</td>
-              <td>100$</td>
-              <td>function or database</td>
-              <td>somedate</td>
-              <td>
-                {/* Action buttons */}
-                <button>Paid</button>
-              </td>
-            </tr>
+            {creditSaleData.map((sale) => (
+              <tr key={sale.invoice_id}>
+                <td>{sale.customer_name}</td>
+                <td>{sale.business_name}</td>
+                <td>{sale.address}</td>
+                <td>{sale.office_num}</td>
+                <td>{sale.mobile}</td>
+                <td>{sale.amount}</td>
+                <td>{sale.settle_amount}</td>
+                <td>{sale.balance}</td>
+                <td>{sale.date}</td>
+                <td>
+                  {/* Action buttons */}
+                  <button onClick={() => handleHistory(sale.invoice_id)}>History</button>
+                </td>
+              </tr>
+            ))}
 
             {/* Add more rows as needed */}
           </tbody>

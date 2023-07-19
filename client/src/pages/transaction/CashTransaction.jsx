@@ -14,6 +14,8 @@ function CashTransaction() {
     billAmount: "",
     discount: "",
     date: "",
+    employeeId: "",
+    type_id :"ca"
   });
 
   const [customerInfo, setCustomerInfo] = useState(null);
@@ -22,11 +24,28 @@ function CashTransaction() {
 
   const navigate = useNavigate();
 
+
   const handleSearch = () => {
     const apiUrl = "http://localhost:5000/customer/filterCustomerNIC";
 
     axios
       .post(apiUrl, { nic: data.nic_no })
+  }
+
+  const sessionToken = localStorage.getItem('sessionToken');
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const formdata = new FormData();
+    formdata.append("customer_id", data.customer_id);
+    formdata.append("description", data.description);
+    formdata.append("billAmount", data.billAmount);
+    formdata.append("discount", data.discount);
+    formdata.append("date", data.date);
+    formdata.append("employeeId", data.employeeId);
+
+    axios
+      .post("http://localhost:5000/cashSale/add", formdata, {headers :{'Authorization' : 'key '+sessionToken}})
       .then((res) => {
         const responseData = res.data;
         if (responseData.success && responseData.data.length > 0) {

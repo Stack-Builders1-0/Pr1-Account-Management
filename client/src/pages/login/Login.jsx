@@ -1,14 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import '../../style.css'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-
+import { UserContext } from "../../UserContext";
 
 function Login() {
+
   const [values, setValues] = useState({
     nic: '',
     password: ''
   })
+  const { setUser } = useContext(UserContext)
 
   const navigate = useNavigate()
 
@@ -17,15 +19,19 @@ function Login() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    axios.post('http://localhost:5000/login', values)
+    axios.post(import.meta.env.VITE_API_URL + '/login', values)
       .then(res => {
         console.log(res.data);
         if (res.data.sucess) {
           // store the session token in the local storage
-          localStorage.setItem('sessionToken',res.data.sessionToken);
-          navigate('/')
+          localStorage.setItem('sessionToken', res.data.sessionToken);
+          setUser(res.data.sessionToken)
+
+          navigate('/', { state: { show: true, onHide: true } })
         } else {
-          alert("Incorrect Username pasword");
+          alert("Incorrect Username or pasword");
+
+
           setError(res.data.Error);
         }
       })
@@ -63,6 +69,7 @@ function Login() {
 
 
       </div>
+
     </div>
 
 
@@ -70,4 +77,4 @@ function Login() {
   )
 }
 
-export default Login
+export default Login
