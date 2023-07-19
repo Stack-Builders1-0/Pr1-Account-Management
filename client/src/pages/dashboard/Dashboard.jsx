@@ -2,9 +2,13 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { Modal, Button } from "react-bootstrap";
 import axios from "axios";
+import { useLocation } from 'react-router-dom';
+import CustomModel from "../../model";
 
 function Dashboard() {
-
+  const { state } = useLocation();
+  const show = state?.show | false
+  const onHide = state?.onHide | false
   // get the session token on the local storage
   const sessionToken = localStorage.getItem('sessionToken');
 
@@ -21,23 +25,23 @@ function Dashboard() {
 
   useEffect(() => {
 
-    axios.post(import.meta.env.VITE_API_URL +"/dashboard/totalCreditSales", { date: date }, { headers: { 'Authorization': 'key ' + sessionToken } })
-    .then((res) => {
-      console.log(res.data.result);
-      setData({ ...data, totalCreditSales: res.data.result });
-    });
+    axios.post(import.meta.env.VITE_API_URL + "/dashboard/totalCreditSales", { date: date }, { headers: { 'Authorization': 'key ' + sessionToken } })
+      .then((res) => {
+        console.log(res.data.result);
+        setData({ ...data, totalCreditSales: res.data.result });
+      });
 
-    axios.post(import.meta.env.VITE_API_URL +"/dashboard/totalCashSales", { date: date }, { headers: { 'Authorization': 'key ' + sessionToken } })
-    .then((res) => {
-      console.log(res.data.result);
-      setData({ ...data, totalCashSales: res.data.result });
-    });
+    axios.post(import.meta.env.VITE_API_URL + "/dashboard/totalCashSales", { date: date }, { headers: { 'Authorization': 'key ' + sessionToken } })
+      .then((res) => {
+        console.log(res.data.result);
+        setData({ ...data, totalCashSales: res.data.result });
+      });
 
-      setData({ ...data, totalSales: data.totalCashSales + data.totalCreditSales });
-      // console.log(data);
+    setData({ ...data, totalSales: data.totalCashSales + data.totalCreditSales });
+    // console.log(data);
 
 
-      axios
+    axios
       .get(import.meta.env.VITE_API_URL + "/creditSale/creditNotSettle")
       .then((res) => {
         setCreditSaleData(res.data.result);
@@ -46,21 +50,23 @@ function Dashboard() {
         console.log("Error fetching creditSale data:", error);
       });
 
-    axios.get(import.meta.env.VITE_API_URL +"/advanceSaleAP/creditNotSettle")
-    .then((res) => {
-      console.log(res.data.result);
-    });
+    axios.get(import.meta.env.VITE_API_URL + "/advanceSaleAP/creditNotSettle")
+      .then((res) => {
+        console.log(res.data.result);
+      });
 
-    axios.get(import.meta.env.VITE_API_URL +"/advanceSaleBP/creditNotSettle")
-    .then((res) => {
-      console.log(res.data.result);
-    });
+    axios.get(import.meta.env.VITE_API_URL + "/advanceSaleBP/creditNotSettle")
+      .then((res) => {
+        console.log(res.data.result);
+      });
   }, []);
   // console.log(data)
 
   return (
 
     <div>
+      <CustomModel show={show} onHide={onHide} />
+
       <div className="p-3 d-flex justify-content-around mt-3">
         <div className="px-3 pt-2 pb-3 border shadow-sm w-25  square-decoration">
           <div className="text-center pb-1">

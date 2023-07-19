@@ -18,9 +18,11 @@ import EditCreditTransaction from "./pages/transaction/EditCreditForm";
 import EditAdvanceTransaction from "./pages/transaction/EditAdvanceForm";
 import { UserContext } from "./UserContext";
 
+
+
 function App() {
   const [user, setUser] = useState(null);
-
+  
   useEffect(() => {
 
     const sessionToken = localStorage.getItem('sessionToken');
@@ -31,6 +33,7 @@ function App() {
 
   return (
     <BrowserRouter>
+
       <UserContext.Provider value={{ user, setUser }}>
         {
           !user ? (
@@ -77,11 +80,11 @@ function App() {
 
                 <Route path="*" element={<p>This page isn't available. Sorry about that.</p>}></Route>
               </Route>
-              
+
             </Routes>
           )
         }
-       
+
       </UserContext.Provider>
     </BrowserRouter>
   );
