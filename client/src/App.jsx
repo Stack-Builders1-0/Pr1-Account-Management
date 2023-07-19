@@ -21,23 +21,11 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/login" element={<Login />} />
         <Route path="/" element={<NavAndHeder />}>
           <Route path="" element={<Dashboard />}></Route>
           <Route path="/employee" element={<Employee />}></Route>
           <Route path="/transaction" element={<AddTransaction />}></Route>
-          <Route path="/edittransaction" element={<EditTransaction />}></Route>
-          <Route
-            path="/editcashtransaction"
-            element={<EditCashTransaction />}
-          ></Route>
-          <Route
-            path="/editcredittransaction"
-            element={<EditCreditTransaction />}
-          ></Route>
-          <Route
-            path="/editadvancetransaction"
-            element={<EditAdvanceTransaction />}
-          ></Route>
           <Route path="/profile" element={<Profile />}></Route>
           <Route path="/customer" element={<Customer />}></Route>
           <Route path="/addemployee" element={<AddEmployee />}></Route>
@@ -54,8 +42,26 @@ function App() {
             path="/transaction/advanceonly"
             element={<AdvanceOnly />}
           ></Route>
+
+          <Route path="/edittransaction" element={<EditTransaction />}></Route>
+          <Route
+            path="/editcashtransaction"
+            element={<EditCashTransaction />}
+          ></Route>
+          <Route
+            path="/editcredittransaction"
+            element={<EditCreditTransaction />}
+          ></Route>
+          <Route
+            path="/editadvancetransaction"
+            element={<EditAdvanceTransaction />}
+          ></Route>
+
+          <Route
+            path="*"
+            element={<p>This page isn't available. Sorry about that.</p>}
+          ></Route>
         </Route>
-        <Route path="/login" element={<Login />}></Route>
       </Routes>
     </BrowserRouter>
   );
