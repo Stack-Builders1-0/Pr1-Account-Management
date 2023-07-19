@@ -67,10 +67,16 @@ function AddTransaction() {
           <Link to="/transaction/credittransaction" className="btn btn-primary">
             Credit
           </Link>
-          <Link to="/transaction/advanceonly" className="btn btn-primary">
+          <Link
+            to="/transaction/advancebptransaction"
+            className="btn btn-primary"
+          >
             AdvancedBP
           </Link>
-          <Link to="/transaction/advanceonly" className="btn btn-primary">
+          <Link
+            to="/transaction/advanceaptransaction"
+            className="btn btn-primary"
+          >
             AdvancedAP
           </Link>
         </div>

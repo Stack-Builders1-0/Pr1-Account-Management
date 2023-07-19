@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import Alert from "react-bootstrap/Alert";
 
 function CashTransaction() {
   const [data, setData] = useState({
-    customer_id: "",
+    nic_no: "",
+    customer_name: "",
+    manual_invoice_id: "",
     description: "",
     billAmount: "",
     discount: "",
@@ -15,7 +18,19 @@ function CashTransaction() {
     type_id :"ca"
   });
 
+  const [customerInfo, setCustomerInfo] = useState(null);
+  const [showAlert, setShowAlert] = useState(false);
+  const [searchedNic, setSearchedNic] = useState(false);
+
   const navigate = useNavigate();
+
+
+  const handleSearch = () => {
+    const apiUrl = "http://localhost:5000/customer/filterCustomerNIC";
+
+    axios
+      .post(apiUrl, { nic: data.nic_no })
+  }
 
   const sessionToken = localStorage.getItem('sessionToken');
 
@@ -32,10 +47,54 @@ function CashTransaction() {
     axios
       .post("http://localhost:5000/cashSale/add", formdata, {headers :{'Authorization' : 'key '+sessionToken}})
       .then((res) => {
-        console.log(res);
-        navigate("/transaction");
+        const responseData = res.data;
+        if (responseData.success && responseData.data.length > 0) {
+          // NIC number is valid and customer information is found
+          const customerData = responseData.data[0];
+          setCustomerInfo({
+            customerName: customerData.customer_name,
+            businessName: customerData.business_name,
+          });
+          setShowAlert(false);
+          setData({ ...data, customer_name: customerData.customer_name });
+          setSearchedNic(true);
+        } else {
+          // NIC number is invalid or no customer found
+          setCustomerInfo(null);
+          setShowAlert(true);
+          setSearchedNic(false);
+        }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    if (searchedNic) {
+      // Only allow form submission if NIC has been searched
+      const formdata = new FormData();
+      formdata.append("customer_name", data.customer_name);
+      formdata.append("manual_invoice_id", data.manual_invoice_id);
+      formdata.append("description", data.description);
+      formdata.append("billAmount", data.billAmount);
+      formdata.append("discount", data.discount);
+      formdata.append("date", data.date);
+
+      axios
+        .post("http://localhost:5000/cashtransaction/add", formdata)
+        .then((res) => {
+          console.log(res);
+          navigate("/transaction");
+        })
+        .catch((err) => console.log(err));
+    } else {
+      alert(
+        "Please search for a valid NIC first before submitting the form or you have to register first"
+      );
+    }
   };
 
   return (
@@ -44,15 +103,70 @@ function CashTransaction() {
         <div className="d-flex flex-column align-items-center">
           <h2>Cash Payment</h2>
         </div>
+
+        {/* Search for customer by NIC */}
+        <Form.Group className="mb-3" controlId="formBasicNicNo">
+          <Form.Label>Search Customer by NIC</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter NIC"
+            value={data.nic_no}
+            onChange={(e) => setData({ ...data, nic_no: e.target.value })}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault(); // Prevent form submission
+                handleSearch(); // Perform the search operation
+              }
+            }}
+          />
+          <Button variant="primary" onClick={handleSearch}>
+            Search
+          </Button>
+        </Form.Group>
+
+        {/* Alert for invalid NIC */}
+        {showAlert && (
+          <Alert variant="danger">
+            No customer found with the provided NIC. Do you want to register?
+            <Link to="/addcustomer" className="btn btn-primary">
+              Add Customer
+            </Link>
+          </Alert>
+        )}
+
+        {customerInfo && (
+          <div className="customer-info-box">
+            <h3>Customer Information</h3>
+            <p>
+              <strong>Customer Name:</strong> {customerInfo.customerName}
+            </p>
+            <p>
+              <strong>Business Name:</strong> {customerInfo.businessName}
+            </p>
+          </div>
+        )}
+
         <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3" controlId="formBasicCustomerId">
+          <Form.Group className="mb-3" controlId="formBasicCustomerName">
             <Form.Label>Customer name</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Enter customer id"
-              value={data.customer_id}
+              placeholder="Enter customer name"
+              value={data.customer_name}
               onChange={(e) =>
-                setData({ ...data, customer_id: e.target.value })
+                setData({ ...data, customer_name: e.target.value })
+              }
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicManualInvoiceId">
+            <Form.Label>Bill number</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter bill number"
+              value={data.manual_invoice_id}
+              onChange={(e) =>
+                setData({ ...data, manual_invoice_id: e.target.value })
               }
             />
           </Form.Group>
@@ -96,16 +210,6 @@ function CashTransaction() {
               placeholder="Enter date"
               value={data.date}
               onChange={(e) => setData({ ...data, date: e.target.value })}
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formBasicEmployeeId">
-            <Form.Label>Employee ID</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter employee ID"
-              value={data.employeeId}
-              onChange={(e) => setData({ ...data, employeeId: e.target.value })}
             />
           </Form.Group>
 
