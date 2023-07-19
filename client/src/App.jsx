@@ -16,72 +16,79 @@ import EditTransaction from "./pages/transaction/EditTransaction";
 import EditCashTransaction from "./pages/transaction/EditCashForm";
 import EditCreditTransaction from "./pages/transaction/EditCreditForm";
 import EditAdvanceTransaction from "./pages/transaction/EditAdvanceForm";
+import Expenses from "./pages/expenses/Expenses";
+import AddExpense from "./pages/expenses/AddExpense";
 import { UserContext } from "./UserContext";
 
 function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-
-    const sessionToken = localStorage.getItem('sessionToken');
+    const sessionToken = localStorage.getItem("sessionToken");
     setUser(sessionToken);
   });
   // fetchUser();
 
-
   return (
     <BrowserRouter>
       <UserContext.Provider value={{ user, setUser }}>
-        {
-          !user ? (
-            <Routes>
-              <Route path="/login" element={<Login />} />
-              <Route path="*" element={<p>This page isn't available. Sorry about that.</p>}></Route>
-            </Routes>
-          ) : (
-            <Routes>
-              <Route path="/" element={<NavAndHeder />}>
-                <Route path="" element={<Dashboard />}></Route>
-                <Route path="/employee" element={<Employee />}></Route>
-                <Route path="/transaction" element={<AddTransaction />}></Route>
-                <Route path="/profile" element={<Profile />}></Route>
-                <Route path="/customer" element={<Customer />}></Route>
-                <Route path="/addemployee" element={<AddEmployee />}></Route>
-                <Route path="/addcustomer" element={<AddCustomer />}></Route>
-                <Route
-                  path="/transaction/cashtransaction"
-                  element={<CashTransaction />}
-                ></Route>
-                <Route
-                  path="/transaction/credittransaction"
-                  element={<CreditTransaction />}
-                ></Route>
-                <Route
-                  path="/transaction/advanceonly"
-                  element={<AdvanceOnly />}
-                ></Route>
+        {!user ? (
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route
+              path="*"
+              element={<p>This page isn't available. Sorry about that.</p>}
+            ></Route>
+          </Routes>
+        ) : (
+          <Routes>
+            <Route path="/" element={<NavAndHeder />}>
+              <Route path="" element={<Dashboard />}></Route>
+              <Route path="/employee" element={<Employee />}></Route>
+              <Route path="/expenses" element={<Expenses />}></Route>
+              <Route path="/addexpense" element={<AddExpense />}></Route>
+              <Route path="/transaction" element={<AddTransaction />}></Route>
+              <Route path="/profile" element={<Profile />}></Route>
+              <Route path="/customer" element={<Customer />}></Route>
+              <Route path="/addemployee" element={<AddEmployee />}></Route>
+              <Route path="/addcustomer" element={<AddCustomer />}></Route>
+              <Route
+                path="/transaction/cashtransaction"
+                element={<CashTransaction />}
+              ></Route>
+              <Route
+                path="/transaction/credittransaction"
+                element={<CreditTransaction />}
+              ></Route>
+              <Route
+                path="/transaction/advanceonly"
+                element={<AdvanceOnly />}
+              ></Route>
 
-                <Route path="/edittransaction" element={<EditTransaction />}></Route>
-                <Route
-                  path="/editcashtransaction"
-                  element={<EditCashTransaction />}
-                ></Route>
-                <Route
-                  path="/editcredittransaction"
-                  element={<EditCreditTransaction />}
-                ></Route>
-                <Route
-                  path="/editadvancetransaction"
-                  element={<EditAdvanceTransaction />}
-                ></Route>
+              <Route
+                path="/edittransaction"
+                element={<EditTransaction />}
+              ></Route>
+              <Route
+                path="/editcashtransaction"
+                element={<EditCashTransaction />}
+              ></Route>
+              <Route
+                path="/editcredittransaction"
+                element={<EditCreditTransaction />}
+              ></Route>
+              <Route
+                path="/editadvancetransaction"
+                element={<EditAdvanceTransaction />}
+              ></Route>
 
-                <Route path="*" element={<p>This page isn't available. Sorry about that.</p>}></Route>
-              </Route>
-              
-            </Routes>
-          )
-        }
-       
+              <Route
+                path="*"
+                element={<p>This page isn't available. Sorry about that.</p>}
+              ></Route>
+            </Route>
+          </Routes>
+        )}
       </UserContext.Provider>
     </BrowserRouter>
   );
