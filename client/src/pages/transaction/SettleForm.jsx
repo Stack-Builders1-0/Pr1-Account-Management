@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Form, Button, Table } from "react-bootstrap";
+import axios from "axios";
 
 function SettleForm() {
   const [searchInvoiceNumber, setSearchInvoiceNumber] = useState("");
@@ -10,51 +11,64 @@ function SettleForm() {
   const [isSearchPerformed, setIsSearchPerformed] = useState(false);
 
   // Sample data for demonstration purposes
-  const records = [
-    {
-      invoiceNumber: "INV-001",
-      customerID: "CUST-001",
-      amount: 100,
-      employeeID: "EMP-001",
-    },
-    {
-      invoiceNumber: "INV-002",
-      customerID: "CUST-002",
-      amount: 150,
-      employeeID: "EMP-002",
-    },
-    {
-      invoiceNumber: "INV-004",
-      customerID: "CUST-001",
-      amount: 50,
-      employeeID: "EMP-003",
-    },
-    {
-      invoiceNumber: "INV-003",
-      customerID: "CUST-003",
-      amount: 200,
-      employeeID: "EMP-001",
-    },
-  ];
+  // const records = [
+  //   {
+  //     invoiceNumber: "INV-001",
+  //     customerID: "CUST-001",
+  //     amount: 100,
+  //     employeeID: "EMP-001",
+  //   },
+  //   {
+  //     invoiceNumber: "INV-002",
+  //     customerID: "CUST-002",
+  //     amount: 150,
+  //     employeeID: "EMP-002",
+  //   },
+  //   {
+  //     invoiceNumber: "INV-004",
+  //     customerID: "CUST-001",
+  //     amount: 50,
+  //     employeeID: "EMP-003",
+  //   },
+  //   {
+  //     invoiceNumber: "INV-003",
+  //     customerID: "CUST-003",
+  //     amount: 200,
+  //     employeeID: "EMP-001",
+  //   },
+  // ];
 
-  const fetchData = async (invoiceNumber) => {
-    try {
-      const response = await axios.get(
-        `/api/records?invoiceNumber=${invoiceNumber}`
-      );
-      if (response.status === 200) {
-        const data = response.data;
-        setFilteredRecords(data);
-      } else {
-        console.error("Failed to fetch records:", response.status);
-      }
-    } catch (error) {
-      console.error("Error occurred while fetching records:", error);
-    }
-  };
+  // const fetchData = async (invoiceNumber) => {
+  //   try {
+  //     const response = await axios.get(
+  //       `/api/records?invoiceNumber=${invoiceNumber}`
+  //     );
+  //     if (response.status === 200) {
+  //       const data = response.data;
+  //       setFilteredRecords(data);
+  //     } else {
+  //       console.error("Failed to fetch records:", response.status);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error occurred while fetching records:", error);
+  //   }
+  // };
 
   const handleSearch = (e) => {
     e.preventDefault();
+    axios
+      .post('http://localhost:5000/creditSale/filterManualInvoice', {manual_invoice_id : searchInvoiceNumber})
+      .then((res) => {
+        // console.log(res.data.sucess);
+        if (res.data.sucess) {
+          const data = res.data.result[0];
+          setFilteredRecords(data);
+        } else {
+          console.error("Failed to fetch records:", response.status);
+        }
+      });
+    
+
     const inputValue = searchInvoiceNumber.trim();
     setSearchInvoiceNumber(inputValue);
 
