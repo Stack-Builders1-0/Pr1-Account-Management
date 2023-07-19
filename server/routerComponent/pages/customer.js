@@ -27,7 +27,6 @@ router.post("/add", (req, res) => {
 
   const employee_id = decodeUserId(sessionToken);
 
-
   const insertQuery =
     "insert into accountmanagement.customers (customer_name, business_name, adress, mobile, lan_line, w_app_no, office_num, email_id, nic_no, employee_id, credit_limit ) values (?,?,?,?,?,?,?,?,?,?,?);";
 
@@ -52,16 +51,21 @@ router.post("/add", (req, res) => {
     ],
     (err, result) => {
       if (err) {
+        console.log(err)
         res.send({
           sucess: false,
-          error: true,
-          exist: false,
+          isError: true,
+          isExist: false,
+          error : err,
+          result : result
         });
       } else {
         res.send({
           sucess: true,
-          error: false,
-          exist: false,
+          isError: false,
+          isExist: false,
+          error : null,
+          result : result
         });
       }
     }

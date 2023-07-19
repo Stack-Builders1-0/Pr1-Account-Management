@@ -1,5 +1,8 @@
 -- create database acountmanagement
 
+
+
+
 CREATE TABLE `accountmanagement`.`employee_type` (
   `type_id` CHAR(3) NOT NULL,
   `type` VARCHAR(45) NOT NULL,
@@ -445,6 +448,11 @@ ADD FOREIGN KEY (`return_update_by`)
   ON DELETE CASCADE
   ON UPDATE CASCADE;
 
+
+
+
+ALTER TABLE customers
+MODIFY COLUMN adress VARCHAR(400) NOT NULL;
 
 
 
