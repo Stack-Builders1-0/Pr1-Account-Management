@@ -43,6 +43,7 @@ router.post('/add', (req, res) => {
     // employee regeister is sucess then sucess=true
     connection.query(checkQuery, [body.nic], (err,result) => {
         if(err){
+            console.log(err);
             res.send({
                 sucess : false,
                 isError : true,
@@ -184,7 +185,6 @@ router.post('/showCurrent', (req,res) => {
 
 
 router.post('/count', (req,res) => {
-    console.log(req.body.date);
     try{
         const sessionToken = req.headers.authorization.replace('key ','');
         const employee_id = decodedUserId(sessionToken);

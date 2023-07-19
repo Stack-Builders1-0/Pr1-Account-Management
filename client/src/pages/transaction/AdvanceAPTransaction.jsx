@@ -4,9 +4,10 @@ import { useNavigate } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
-function AdvancsOnly() {
+function AdvanceAPTransaction() {
   const [data, setData] = useState({
     customer_id: "",
+    manual_invoice_id: "",
     description: "",
     billAmount: "",
     advanceAmount: "",
@@ -21,6 +22,7 @@ function AdvancsOnly() {
     event.preventDefault();
     const formdata = new FormData();
     formdata.append("customer_id", data.customer_id);
+    formdata.append("manual_invoice_id", data.manual_invoice_id);
     formdata.append("description", data.description);
     formdata.append("billAmount", data.billAmount);
     formdata.append("advanceAmount", data.advanceAmount);
@@ -29,7 +31,7 @@ function AdvancsOnly() {
     formdata.append("employeeId", data.employeeId);
 
     axios
-      .post("http://localhost:5000/advancepayment/add", formdata)
+      .post("http://localhost:5000/advancebppayment/add", formdata)
       .then((res) => {
         console.log(res);
         navigate("/transaction");
@@ -41,7 +43,7 @@ function AdvancsOnly() {
     <div className="d-flex flex-column align-items-center pt-4">
       <div className="white-box">
         <div className="d-flex flex-column align-items-center">
-          <h2>Advance Payment Only</h2>
+          <h2>AdvanceAP Payment Only</h2>
         </div>
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicCustomerId">
@@ -52,6 +54,18 @@ function AdvancsOnly() {
               value={data.customer_id}
               onChange={(e) =>
                 setData({ ...data, customer_id: e.target.value })
+              }
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicManualInvoiceId">
+            <Form.Label>Bill number</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter bill number"
+              value={data.manual_invoice_id}
+              onChange={(e) =>
+                setData({ ...data, manual_invoice_id: e.target.value })
               }
             />
           </Form.Group>
@@ -129,4 +143,4 @@ function AdvancsOnly() {
   );
 }
 
-export default AdvancsOnly;
+export default AdvanceAPTransaction;
