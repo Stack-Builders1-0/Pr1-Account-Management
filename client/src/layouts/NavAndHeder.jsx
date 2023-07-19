@@ -165,9 +165,9 @@ function NavAndHeder() {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/logout" className="dropdown-item">
+                  
                     <button onClickCapture={logout}> logout </button>
-                  </Link>
+                  
                 </li>
               </ul>
             </div>
