@@ -17,6 +17,8 @@ import EditTransaction from "./pages/transaction/EditTransaction";
 import EditCashTransaction from "./pages/transaction/EditCashForm";
 import EditCreditTransaction from "./pages/transaction/EditCreditForm";
 import EditAdvanceTransaction from "./pages/transaction/EditAdvanceForm";
+import Expenses from "./pages/expenses/Expenses";
+import AddExpense from "./pages/expenses/AddExpense";
 import { UserContext } from "./UserContext";
 
 
@@ -51,6 +53,8 @@ function App() {
                 <Route path="/customer" element={<Customer />}></Route>
                 <Route path="/addemployee" element={<AddEmployee />}></Route>
                 <Route path="/addcustomer" element={<AddCustomer />}></Route>
+                <Route path="/expenses" element={<Expenses />}></Route>
+                <Route path="/addexpense" element={<AddExpense/>}></Route>
                 <Route
                   path="/transaction/cashtransaction"
                   element={<CashTransaction />}
