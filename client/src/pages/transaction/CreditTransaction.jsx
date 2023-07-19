@@ -4,10 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Button, Form, Navbar, Container, Nav } from "react-bootstrap";
 import SettleForm from "./SettleForm";
+import Alert from "react-bootstrap/Alert";
 
 function CreditTransaction() {
   const [data, setData] = useState({
-    customer_id: "",
+    nic_no: "",
+    customer_name: "",
     manual_invoice_id: "",
     description: "",
     billAmount: "",
@@ -15,6 +17,9 @@ function CreditTransaction() {
     date: "",
   });
 
+  const [customerInfo, setCustomerInfo] = useState(null);
+  const [showAlert, setShowAlert] = useState(false);
+  const [searchedNic, setSearchedNic] = useState(false);
   const [showAddForm, setShowAddForm] = useState(true);
 
   const handleShowAddForm = () => {
@@ -27,23 +32,71 @@ function CreditTransaction() {
 
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const formdata = new FormData();
-    formdata.append("customer_id", data.customer_id);
-    formdata.append("manual_invoice_id", data.manual_invoice_id);
-    formdata.append("description", data.description);
-    formdata.append("billAmount", data.billAmount);
-    formdata.append("discount", data.discount);
-    formdata.append("date", data.date);
+  const handleSearch = () => {
+    const apiUrl = "http://localhost:5000/customer/filterCustomerNIC";
 
     axios
-      .post("http://localhost:5000/credittransaction/add", formdata)
+      .post(apiUrl, { nic: data.nic_no })
       .then((res) => {
-        console.log(res);
-        navigate("/transaction");
+        const responseData = res.data;
+        if (responseData.success && responseData.data.length > 0) {
+          // NIC number is valid and customer information is found
+          const customerData = responseData.data[0];
+          setCustomerInfo({
+            customerName: customerData.customer_name,
+            businessName: customerData.business_name,
+            creditLimit: customerData.credit_limit,
+          });
+          setShowAlert(false);
+          setData({ ...data, customer_name: customerData.customer_name });
+          setSearchedNic(true);
+        } else {
+          // NIC number is invalid or no customer found
+          setCustomerInfo(null);
+          setShowAlert(true);
+          setSearchedNic(false);
+        }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    if (searchedNic) {
+      // Only allow form submission if NIC has been searched
+      const billAmount = parseFloat(data.billAmount);
+      const creditLimit = parseFloat(customerInfo.creditLimit);
+
+      if (billAmount <= creditLimit) {
+        const formdata = new FormData();
+        formdata.append("customer_name", data.customer_name);
+        formdata.append("manual_invoice_id", data.manual_invoice_id);
+        formdata.append("description", data.description);
+        formdata.append("billAmount", data.billAmount);
+        formdata.append("discount", data.discount);
+        formdata.append("date", data.date);
+
+        axios
+          .post("http://localhost:5000/cashtransaction/add", formdata)
+          .then((res) => {
+            console.log(res);
+            navigate("/transaction");
+          })
+          .catch((err) => console.log(err));
+      } else {
+        // Bill amount exceeds the credit limit, display error message
+        alert(
+          "Bill amount exceeds the credit limit. Please adjust the bill amount."
+        );
+      }
+    } else {
+      alert(
+        "Please search for a valid NIC first before submitting the form or you have to register first"
+      );
+    }
   };
 
   return (
@@ -75,80 +128,127 @@ function CreditTransaction() {
         </Navbar>
 
         {showAddForm && (
-          <Form onSubmit={handleSubmit}>
-            <h3 className="text-center">Add Payment</h3>
-            <Form.Group className="mb-3" controlId="formBasicCustomerId">
-              <Form.Label>Customer_name</Form.Label>
+          <>
+            <Form.Group className="mb-3" controlId="formBasicNicNo">
+              <Form.Label>Search Customer by NIC</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Enter customer name"
-                value={data.customer_id}
-                onChange={(e) =>
-                  setData({ ...data, customer_id: e.target.value })
-                }
+                placeholder="Enter NIC"
+                value={data.nic_no}
+                onChange={(e) => setData({ ...data, nic_no: e.target.value })}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault(); // Prevent form submission
+                    handleSearch(); // Perform the search operation
+                  }
+                }}
               />
+              <Button variant="primary" onClick={handleSearch}>
+                Search
+              </Button>
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicManualInvoiceId">
-              <Form.Label>Bill number</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter bill number"
-                value={data.manual_invoice_id}
-                onChange={(e) =>
-                  setData({ ...data, manual_invoice_id: e.target.value })
-                }
-              />
-            </Form.Group>
+            {showAlert && (
+              <Alert variant="danger">
+                No customer found with the provided NIC. Do you want to
+                register?{" "}
+                <Link to="/addcustomer" className="btn btn-primary">
+                  Add Customer
+                </Link>
+              </Alert>
+            )}
 
-            <Form.Group className="mb-3" controlId="formBasicDescription">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter description"
-                value={data.description}
-                onChange={(e) =>
-                  setData({ ...data, description: e.target.value })
-                }
-              />
-            </Form.Group>
+            {customerInfo && (
+              <div className="customer-info-box">
+                <h3>Customer Information</h3>
+                <p>
+                  <strong>Customer Name:</strong> {customerInfo.customerName}
+                </p>
+                <p>
+                  <strong>Business Name:</strong> {customerInfo.businessName}
+                </p>
+                <p>
+                  <strong>Credit Limit:</strong> {customerInfo.creditLimit}
+                </p>
+              </div>
+            )}
 
-            <Form.Group className="mb-3" controlId="formBasicBillAmount">
-              <Form.Label>Bill Amount</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="Enter bill amount"
-                value={data.billAmount}
-                onChange={(e) =>
-                  setData({ ...data, billAmount: e.target.value })
-                }
-              />
-            </Form.Group>
+            <Form onSubmit={handleSubmit}>
+              <Form.Group className="mb-3" controlId="formBasicCustomerName">
+                <Form.Label>Customer name</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter customer name"
+                  value={data.customer_name}
+                  onChange={(e) =>
+                    setData({ ...data, customer_name: e.target.value })
+                  }
+                />
+              </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicDiscount">
-              <Form.Label>Discount</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="Enter discount"
-                value={data.discount}
-                onChange={(e) => setData({ ...data, discount: e.target.value })}
-              />
-            </Form.Group>
+              <Form.Group className="mb-3" controlId="formBasicManualInvoiceId">
+                <Form.Label>Bill number</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter bill number"
+                  value={data.manual_invoice_id}
+                  onChange={(e) =>
+                    setData({ ...data, manual_invoice_id: e.target.value })
+                  }
+                />
+              </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicDate">
-              <Form.Label>Date</Form.Label>
-              <Form.Control
-                type="date"
-                placeholder="Enter date"
-                value={data.date}
-                onChange={(e) => setData({ ...data, date: e.target.value })}
-              />
-            </Form.Group>
+              <Form.Group className="mb-3" controlId="formBasicDescription">
+                <Form.Label>Description</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter description"
+                  value={data.description}
+                  onChange={(e) =>
+                    setData({ ...data, description: e.target.value })
+                  }
+                />
+              </Form.Group>
 
-            <Button variant="primary" type="submit">
-              Submit
-            </Button>
-          </Form>
+              <Form.Group className="mb-3" controlId="formBasicBillAmount">
+                <Form.Label>Bill Amount</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="Enter bill amount"
+                  value={data.billAmount}
+                  onChange={(e) =>
+                    setData({ ...data, billAmount: e.target.value })
+                  }
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="formBasicDiscount">
+                <Form.Label>Discount</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="Enter discount"
+                  value={data.discount}
+                  onChange={(e) =>
+                    setData({ ...data, discount: e.target.value })
+                  }
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="formBasicDate">
+                <Form.Label>Date</Form.Label>
+                <Form.Control
+                  type="date"
+                  placeholder="Enter date"
+                  value={data.date}
+                  onChange={(e) => setData({ ...data, date: e.target.value })}
+                />
+              </Form.Group>
+
+              <Button variant="primary" type="submit">
+                Submit
+              </Button>
+            </Form>
+          </>
         )}
 
         {!showAddForm && <SettleForm />}
