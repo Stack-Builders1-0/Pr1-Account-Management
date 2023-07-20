@@ -13,10 +13,11 @@ function AddAdvanceBPForm() {
     customer_id: "",
     manual_invoice_id: "",
     description: "",
-    billAmount: "",
-    advanceAmount: "",
+    bill_amount: "",
+    advance_amount: "",
     discount: "",
     date: "",
+    nic_no: "",
   });
 
   const navigate = useNavigate();
@@ -68,9 +69,9 @@ function AddAdvanceBPForm() {
         date: data.date,
         customer_id: data.customer_id,
         description: data.description,
-        bill_amount: data.billAmount,
+        bill_amount: data.bill_amount,
         discount: data.discount,
-        advanceAmount: data.advanceAmount,
+        advance_amount: data.advance_amount,
       };
 
       axios
@@ -173,8 +174,10 @@ function AddAdvanceBPForm() {
             <Form.Control
               type="number"
               placeholder="Enter bill amount"
-              value={data.billAmount}
-              onChange={(e) => setData({ ...data, billAmount: e.target.value })}
+              value={data.bill_amount}
+              onChange={(e) =>
+                setData({ ...data, bill_amount: e.target.value })
+              }
             />
           </Form.Group>
 
@@ -183,9 +186,9 @@ function AddAdvanceBPForm() {
             <Form.Control
               type="number"
               placeholder="Enter advance amount"
-              value={data.advanceAmount}
+              value={data.advance_amount}
               onChange={(e) =>
-                setData({ ...data, advanceAmount: e.target.value })
+                setData({ ...data, advance_amount: e.target.value })
               }
             />
           </Form.Group>
