@@ -11,13 +11,14 @@ function SettleForm() {
   const [balance, setBalance] = useState("");
   const [filteredRecords, setFilteredRecords] = useState([]);
   const [selectedInvoiceNumber, setSelectedInvoiceNumber] = useState("");
+  const [selectedBillNumber, setSelectedBillNumber] = useState("");
   const [settleAmount, setSettleAmount] = useState("");
   const [isSearchPerformed, setIsSearchPerformed] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [description, setDescription] = useState("");
 
   const navigate = useNavigate();
-  const sessionToken = localStorage.getItem('sessionToken');
+  const sessionToken = localStorage.getItem("sessionToken");
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -27,7 +28,6 @@ function SettleForm() {
         manual_invoice_id: searchInvoiceNumber,
       })
       .then((res) => {
-        // console.log(res.data.sucess);
         if (res.data.sucess) {
           const data = res.data.result[0];
           if (data) {
@@ -37,6 +37,7 @@ function SettleForm() {
             setSelectedInvoiceNumber(data.manual_invoice_id);
             setCustomerID(data.customer_id);
             setBalance(data.balance);
+            setSelectedBillNumber(data.invoice_id);
           } else {
             setShowAlert(true);
             console.log("No records found for the provided invoice number.");
@@ -72,25 +73,25 @@ function SettleForm() {
     setDescription(value);
   };
 
- 
-
   const handleSettle = (e) => {
     e.preventDefault();
 
-    if (selectedInvoiceNumber && settleAmount && customerID) {
+    if (selectedBillNumber && settleAmount && customerID) {
       const settleData = {
-        invoice_id: selectedInvoiceNumber,
+        invoice_id: selectedBillNumber,
         settle_amount: settleAmount,
         balance: balance,
         customer_id: customerID,
         description: description,
       };
 
-      console.log(settleData);
       axios
-        .post("http://localhost:5000/creditSettle/settle", settleData, {headers: { 'Authorization': 'key '+sessionToken },})
+        .post(
+          "http://localhost:5000/creditSale/settle",
+          { data: settleData },
+          { headers: { Authorization: "key " + sessionToken } }
+        )
         .then((response) => {
-          console.log("Settle API response:", response.data);
 
           setSettleAmount("");
           setCustomerID("");

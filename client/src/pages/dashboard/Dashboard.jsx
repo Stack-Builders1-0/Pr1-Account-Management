@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
 import { Modal, Button } from "react-bootstrap";
 import axios from "axios";
-import { useLocation } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import CustomModel from "../../CustomModel";
+
+import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 function Dashboard() {
   const { state } = useLocation();
@@ -11,6 +13,14 @@ function Dashboard() {
   const onHide = state?.onHide | false
   // get the session token on the local storage
   const sessionToken = localStorage.getItem('sessionToken');
+
+  const navigate = useNavigate()
+  
+  const handleHistory = (invoice_id) => {
+    
+    localStorage.setItem('invoice_id', invoice_id);
+    navigate('/history');
+  };
 
   const [data, setData] = useState({ totalCashSales: "N/A", totalCreditSales: "N/A", totalSales: "00.00" });
 
@@ -56,6 +66,8 @@ function Dashboard() {
       .then((res) => {
         // console.log(res.data.result);
       });
+    
+      
   }, []);
 
   return (
@@ -152,6 +164,8 @@ function Dashboard() {
           </tbody>
         </table>
       </div>
+      
+      
     </div>
   );
 }
