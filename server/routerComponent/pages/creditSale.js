@@ -175,7 +175,6 @@ router.post('/settle', (req, res) => {
   body  = req.body.data;
   const balance = body.balance -body.settle_amount;
 
-
   try{
     const sessionToken = req.headers.authorization.replace('key ','');
     const employee_id = decodedUserId(sessionToken);
