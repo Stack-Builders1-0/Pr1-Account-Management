@@ -2,16 +2,16 @@ import React, { useState, useContext } from "react";
 import "bootstrap-icons/font/bootstrap-icons.min.css";
 import { Link, Outlet, NavLink } from "react-router-dom";
 import { UserContext } from "../UserContext";
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 
 function NavAndHeder() {
-  const navigate = useNavigate()
-  const { setUser } = useContext(UserContext)
+  const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem("sessionToken");
-    navigate('/login');
+    navigate("/login");
     setIsLoggedin(false);
   };
 
@@ -38,7 +38,7 @@ function NavAndHeder() {
   const setStyle = ({ isActive, isPending }) => {
     return {
       fontWeight: isActive ? "bold" : "",
-      color: isActive ?   "#fff": "#f9f6f6",
+      color: isActive ? "#fff" : "#f9f6f6",
       textDecoration: "none",
     };
   };
@@ -64,21 +64,20 @@ function NavAndHeder() {
                 </NavLink>
               </li>
 
-              
               <li>
                 <NavLink to="/transaction" style={setStyle}>
                   <div
-                    className={`nav-link px-0 align-middle  ${dropdownOpen ? "active" : ""
-                      }`}
+                    className={`px-0 align-middle  ${
+                      dropdownOpen ? "active" : ""
+                    }`}
                     onClick={toggleDropdown}
-
                   >
-                    <i className="fs-4 bi-cash-coin "></i>{" "}
-                    <span className="ms-1 d-none d-sm-inline  ">Transaction</span>{" "}
+                    <i className="fs-4 bi-cash-coin"></i>{" "}
+                    <span className="ms-1 d-none d-sm-inline">Transaction</span>{" "}
                     <i
-                      className={`bi bi-chevron-${dropdownOpen ? "up" : "down"
-                        } toggle-btn `}
-
+                      className={`bi bi-chevron-${
+                        dropdownOpen ? "up" : "down"
+                      } toggle-btn `}
                     ></i>
                   </div>
                 </NavLink>
@@ -106,7 +105,6 @@ function NavAndHeder() {
                 </ul>
               </li>
 
-
               <li>
                 <NavLink to="/customer" style={setStyle}>
                   <i class="fs-4 bi-people"></i>{" "}
@@ -114,30 +112,22 @@ function NavAndHeder() {
                 </NavLink>
               </li>
               <li>
-                <NavLink
-                  to="/employee"
-                  style={setStyle}
-                >
+                <NavLink to="/employee" style={setStyle}>
                   <i class="fs-4 bi-people"></i>{" "}
                   <span class="ms-1 d-none d-sm-inline">Employee</span>
                 </NavLink>
               </li>
 
               <li>
-                <NavLink to="/expenses" 
-                style={setStyle}>
+                <NavLink to="/expenses" style={setStyle}>
                   <i class="fs-4 bi-cash"></i>{" "}
                   <span class="ms-1 d-none d-sm-inline">Expenses</span>
                 </NavLink>
               </li>
 
-
               <li>
-              <NavLink
-                  to="/report"
-                  style={setStyle}
-                >
-                  <i class="fs-4 bi-people"></i>{" "}
+                <NavLink to="/report" style={setStyle}>
+                  <i class="fs-4 bi-coin"></i>{" "}
                   <span class="ms-1 d-none d-sm-inline">Report</span>
                 </NavLink>
               </li>
@@ -145,12 +135,11 @@ function NavAndHeder() {
           </div>
         </div>
 
-
-        <div class="col p-0 m-0 "  >
+        <div class="col p-0 m-0 ">
           <div className="p-2 d-flex justify-content-between shadow navstyle ">
             <div></div>
-              <h4 className="text" >Account Management System</h4>
-              
+            <h4 className="text">Account Management System</h4>
+
             <div className="dropdown ml-auto">
               <button
                 className="btn btn-secondary dropdown-toggle"
@@ -174,9 +163,10 @@ function NavAndHeder() {
                   </Link>
                 </li>
                 <li>
-                  
-                    <button className="btn btn-primary" onClickCapture={logout}> logout </button>
-                  
+                  <button className="btn btn-primary" onClickCapture={logout}>
+                    {" "}
+                    logout{" "}
+                  </button>
                 </li>
               </ul>
             </div>
