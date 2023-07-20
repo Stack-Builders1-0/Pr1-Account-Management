@@ -82,12 +82,12 @@ function NavAndHeder() {
                 </NavLink>
               </li>
 
+              
               <li>
                 <NavLink to="/transaction" style={setStyle}>
                   <div
-                    className={`px-0 align-middle  ${
-                      dropdownOpen ? "active" : ""
-                    }`}
+                    className={`nav-link px-0 align-middle  ${dropdownOpen ? "active" : ""
+                      }`}
                     onClick={toggleDropdown}
                   >
                     <i className="fs-4 bi-cash-coin "></i>{" "}
@@ -131,8 +131,8 @@ function NavAndHeder() {
               </li>
 
               <li>
-                <NavLink to="/expenses" 
-                style={setStyle}>
+                <NavLink to="/expenses"
+                  style={setStyle}>
                   <i class="fs-4 bi-cash"></i>{" "}
                   <span class="ms-1 d-none d-sm-inline">Expenses</span>
                 </NavLink>
@@ -140,7 +140,7 @@ function NavAndHeder() {
 
 
               <li>
-              <NavLink
+                <NavLink
                   to="/report"
                   style={setStyle}
                 >
@@ -156,8 +156,8 @@ function NavAndHeder() {
           <div className="p-2 d-flex justify-content-between shadow navstyle sticky-top">
 
             <div></div>
-            <h4 className="text">Account Management System</h4>
-
+              <h4 className="text" >Account Management System</h4>
+              
             <div className="dropdown ml-auto">
               <button
                 className="btn btn-secondary dropdown-toggle"
@@ -176,16 +176,14 @@ function NavAndHeder() {
                 style={{ marginLeft: "-100px" }}
               >
                 <li>
-                  <Link to="/profile" >
+                  <Link to="/profile" className="dropdown-item" onClick={closedropdown}>
                     <i className="bi bi-person-fill"></i> Profile
                   </Link>
                 </li>
                 <li>
-                  
-                <button onClickCapture={logout} className="logout-button">
-      <FaSignOutAlt className="logout-icon" /> Logout
-    </button>
-                  
+                  <button onClickCapture={logout} className="btn btn-light dropdown-item">
+                    <i className="bi bi-box-arrow-right"></i> Log out
+                  </button>
                 </li>
               </ul>
             </div>
