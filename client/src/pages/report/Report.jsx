@@ -150,7 +150,7 @@ function Report() {
             <tr>
               <td>#</td>
               <td colSpan={2}>Total</td>
-              <td>{totCredit}</td>
+              <td></td>
               <td>@twitter</td>
 
               <td>{balance}</td>
