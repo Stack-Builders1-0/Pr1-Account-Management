@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import Alert from "react-bootstrap/Alert";
 
+
 function SettleForm() {
   const [searchInvoiceNumber, setSearchInvoiceNumber] = useState("");
   const [customerID, setCustomerID] = useState("");
@@ -15,6 +16,7 @@ function SettleForm() {
   const [showAlert, setShowAlert] = useState(false);
   const [description, setDescription] = useState("");
 
+  
   const navigate = useNavigate();
 
   const handleSearch = (e) => {
@@ -237,3 +239,4 @@ export default SettleForm;
 //     console.error("Error occurred while fetching records:", error);
 //   }
 // };
+
