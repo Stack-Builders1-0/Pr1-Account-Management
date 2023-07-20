@@ -45,9 +45,9 @@ function NavAndHeder() {
   };
 
   return (
-    <div className="container-fluid dashboard ">
-      <div class="row flex-nowrap">
-        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+    <div className=" ">
+      <div class="row flex-nowrap w-100 m-0">
+        <div class="col-auto col-md-3 col-xl-2 px-sm-0 px-0 bg-dark h-100 sticky-top">
           <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100  navstyle">
             <a href="/" class="d-flex align-items-center py-0 ">
               <div className="row  logoContainer px-1 ">
@@ -148,7 +148,7 @@ function NavAndHeder() {
 
 
         <div class="col p-0 m-0 "  >
-          <div className="p-2 d-flex justify-content-between shadow navstyle ">
+          <div className="p-2 d-flex justify-content-between shadow navstyle sticky-top">
             <div></div>
               <h4 className="text" >Account Management System</h4>
               
