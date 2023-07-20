@@ -69,7 +69,7 @@ function NavAndHeder() {
               <li>
                 <NavLink to="/transaction" style={setStyle}>
                   <div
-                    className={`nav-link px-0 align-middle  ${
+                    className={`px-0 align-middle  ${
                       dropdownOpen ? "active" : ""
                     }`}
                     onClick={toggleDropdown}

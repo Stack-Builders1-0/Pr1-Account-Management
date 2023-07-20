@@ -82,10 +82,9 @@ function SettleForm() {
         description: description,
       };
 
+      console.log(settleData)
       axios
-        .post("http://localhost:5000/creditsale/settleInvoice", settleData, {
-          headers: { Authorization: "key " + sessionToken },
-        })
+        .post("http://localhost:5000/creditSettle/settle", settleData, {headers: { Authorization: "key " + sessionToken },})
         .then((response) => {
           console.log("Settle API response:", response.data);
 
