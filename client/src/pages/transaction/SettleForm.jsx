@@ -74,13 +74,14 @@ function SettleForm() {
 
     if (selectedInvoiceNumber && settleAmount && customerID) {
       const settleData = {
-        invoiceNumber: selectedInvoiceNumber,
-        settleAmount: settleAmount,
-        customerID: customerID,
+        invoice_id: selectedInvoiceNumber,
+        settle_amount: settleAmount,
+        customer_id: customerID,
+        description: description,
       };
 
       axios
-        .post("http://localhost:5000/settleInvoice", settleData, {
+        .post("http://localhost:5000/creditsale/settleInvoice", settleData, {
           headers: { Authorization: "key " + sessionToken },
         })
         .then((response) => {
@@ -109,7 +110,7 @@ function SettleForm() {
   return (
     <>
       <Form onSubmit={handleSearch}>
-        <h3 className="text-center">Settle Payment</h3>
+        <h4 className="text-center">Settle Payment</h4>
         <Form.Group className="mb-3" controlId="formBasicSearchInvoiceNumber">
           <Form.Label>Search by Bill Number</Form.Label>
           <Form.Control
