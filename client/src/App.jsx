@@ -96,13 +96,9 @@ function App() {
             </Routes>
           )
         }
-              <Route
-                path="*"
-                element={<p>This page isn't available. Sorry about that.</p>}
-              ></Route>
-            </Route>
-          </Routes>
-        )}
+              
+         
+        
       </UserContext.Provider>
     </BrowserRouter>
   );
