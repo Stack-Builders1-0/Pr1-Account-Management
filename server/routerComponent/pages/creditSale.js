@@ -1,7 +1,6 @@
 const mysql = require("mysql");
 const express = require("express");
 const decodedUserId = require('../Authentication/decodedToken');
-
 const router = express.Router();
 
 const connection = mysql.createConnection({
@@ -241,16 +240,16 @@ router.get('/creditNotSettle', (req, res) => {
 // this show the history of the specific transection 
 router.post('/histoyCreditTransection', (req, res) =>{
   const body = req.body;
-
+  console.log(req.body);
   const selectQuery = "select invoice_id,type_id, date, settle_amount, balance, customer_id,customer_name, business_name from credit_partial_settle left join customers using (customer_id) where invoice_id = "+ mysql.escape(body.invoice_id) +"  order by date;";
-
+  console.log(selectQuery);
   connection.query(selectQuery, (err, result) => {
     if (err) {
       console.log(err)
       res.send({
           sucess : false,
           error : true,
-          result : result
+          result : null
       })
     }
     else{

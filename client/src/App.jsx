@@ -20,6 +20,7 @@ import EditAdvanceTransaction from "./pages/transaction/EditAdvanceForm";
 import Expenses from "./pages/expenses/Expenses";
 import AddExpense from "./pages/expenses/AddExpense";
 import { UserContext } from "./UserContext";
+import History from "./Histoty";
 
 
 
@@ -55,7 +56,10 @@ function App() {
                 <Route path="/addemployee" element={<AddEmployee />}></Route>
                 <Route path="/addcustomer" element={<AddCustomer />}></Route>
                 <Route path="/expenses" element={<Expenses />}></Route>
-                <Route path="/addexpense" element={<AddExpense />}></Route>
+                  <Route path="/addexpense" element={<AddExpense />}></Route>
+                  <Route
+                    path="/history" element={<History/>}>
+                </Route>
                 <Route
                   path="/transaction/cashtransaction"
                   element={<CashTransaction />}
@@ -87,10 +91,10 @@ function App() {
                   path="/editadvancetransaction"
                   element={<EditAdvanceTransaction />}
                 ></Route>
-
+                  
                 <Route path="*" element={<p>This page isn't available. Sorry about that.</p>}></Route>
               </Route>
-
+             
             </Routes>
           )
         }
