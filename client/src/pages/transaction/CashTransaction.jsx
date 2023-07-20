@@ -86,6 +86,10 @@ function CashTransaction() {
     }
   };
 
+  const handleCancel = () => {
+    navigate("/transaction");
+  };
+
   return (
     <div className="d-flex flex-column align-items-center pt-4">
       <div className="white-box">
@@ -192,6 +196,9 @@ function CashTransaction() {
 
           <Button variant="primary" type="submit">
             Submit
+          </Button>
+          <Button variant="danger" onClick={handleCancel} className="mx-2">
+            Cancel
           </Button>
         </Form>
       </div>

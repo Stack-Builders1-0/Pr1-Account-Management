@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { Form, Button, Table } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
+import Alert from "react-bootstrap/Alert";
+
 
 function SettleForm() {
   const [searchInvoiceNumber, setSearchInvoiceNumber] = useState("");
@@ -9,137 +13,110 @@ function SettleForm() {
   const [selectedInvoiceNumber, setSelectedInvoiceNumber] = useState("");
   const [settleAmount, setSettleAmount] = useState("");
   const [isSearchPerformed, setIsSearchPerformed] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [description, setDescription] = useState("");
 
-  // Sample data for demonstration purposes
-  // const records = [
-  //   {
-  //     invoiceNumber: "INV-001",
-  //     customerID: "CUST-001",
-  //     amount: 100,
-  //     employeeID: "EMP-001",
-  //   },
-  //   {
-  //     invoiceNumber: "INV-002",
-  //     customerID: "CUST-002",
-  //     amount: 150,
-  //     employeeID: "EMP-002",
-  //   },
-  //   {
-  //     invoiceNumber: "INV-004",
-  //     customerID: "CUST-001",
-  //     amount: 50,
-  //     employeeID: "EMP-003",
-  //   },
-  //   {
-  //     invoiceNumber: "INV-003",
-  //     customerID: "CUST-003",
-  //     amount: 200,
-  //     employeeID: "EMP-001",
-  //   },
-  // ];
-
-  // const fetchData = async (invoiceNumber) => {
-  //   try {
-  //     const response = await axios.get(
-  //       `/api/records?invoiceNumber=${invoiceNumber}`
-  //     );
-  //     if (response.status === 200) {
-  //       const data = response.data;
-  //       setFilteredRecords(data);
-  //     } else {
-  //       console.error("Failed to fetch records:", response.status);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error occurred while fetching records:", error);
-  //   }
-  // };
+  
+  const navigate = useNavigate();
 
   const handleSearch = (e) => {
     e.preventDefault();
+    setIsSearchPerformed(false);
+    axios
+      .post("http://localhost:5000/creditSale/filterManualInvoice", {
+        manual_invoice_id: searchInvoiceNumber,
+      })
+      .then((res) => {
+        // console.log(res.data.sucess);
+        if (res.data.sucess) {
+          const data = res.data.result[0];
+          if (data) {
+            setFilteredRecords(data);
+            setIsSearchPerformed(true);
+            setShowAlert(false);
+            setSelectedInvoiceNumber(data.manual_invoice_id);
+            setCustomerID(data.customer_id);
+          } else {
+            setShowAlert(true);
+            console.log("No records found for the provided invoice number.");
+            setFilteredRecords([]);
+          }
+        } else {
+          setShowAlert(true);
+          console.error("Failed to fetch records:", response.status);
+        }
+      })
 
-    // // this is the backend connection of serch bar 
-    // axios
-    //   .post('http://localhost:5000/creditSale/filterManualInvoice', {manual_invoice_id : searchInvoiceNumber})
-    //   .then((res) => {
-    //     if (res.data.sucess) {
-    //       const data = res.data.result[0];
-    //       setFilteredRecords(data);
-    //     } else {
-    //       console.error("Failed to fetch records:", response.status);
-    //     }
-    //   });
-    
+      .catch((error) => {
+        console.error("Error occurred while fetching records:", error);
+        setShowAlert(true);
+        setFilteredRecords([]);
+      });
 
     const inputValue = searchInvoiceNumber.trim();
     setSearchInvoiceNumber(inputValue);
 
     if (inputValue === "") {
       setFilteredRecords([]);
-    } else {
-      fetchData(inputValue);
     }
-
-    // Set the flag to indicate that search has been performed.
-    setIsSearchPerformed(true);
   };
 
   const handleSettleAmountChange = (e) => {
-    const { name, value } = e.target;
-    if (name === "settleAmount") {
-      setSettleAmount(value);
-    } else if (name === "customerID") {
-      setCustomerID(value);
-    }
+    const { value } = e.target;
+    setSettleAmount(value);
+  };
+
+  const handleDescriptionChange = (e) => {
+    const { value } = e.target;
+    setDescription(value);
   };
 
   const handleSettle = (e) => {
     e.preventDefault();
 
-    // Extract the required data from the state
-    const settleData = {
-      invoiceNumber: selectedInvoiceNumber,
-      settleAmount: settleAmount,
-      customerID: customerID,
-    };
+    if (selectedInvoiceNumber && settleAmount && customerID) {
+      const settleData = {
+        invoice_id: selectedInvoiceNumber,
+        settle_amount: settleAmount,
+        customer_id: customerID,
+        description: description,
+      };
 
-    // Make the API call to update the settlement amount
-    axios
-      .post("http://localhost:5000/settleInvoice", settleData)
-      .then((response) => {
-        // Handle the API response, if needed
-        console.log("Settle API response:", response.data);
+      console.log(settleData)
+      axios
+        .post("http://localhost:5000/creditSettle/settle", settleData, {headers: { Authorization: "key " + sessionToken },})
+        .then((response) => {
+          console.log("Settle API response:", response.data);
 
-        // After a successful settle action, reset the state
-        setSettleAmount("");
-        setCustomerID("");
-        setSelectedInvoiceNumber("");
-      })
-      .catch((error) => {
-        // Handle any errors that occur during the API call
-        console.error("Error occurred during settle API call:", error);
+          setSettleAmount("");
+          setCustomerID("");
+          setSelectedInvoiceNumber("");
+        })
+        .catch((error) => {
+          console.error("Error occurred during settle API call:", error);
 
-        // Reset the state even if the API call fails
-        setSettleAmount("");
-        setCustomerID("");
-        setSelectedInvoiceNumber("");
-      });
+          setSettleAmount("");
+          setCustomerID("");
+          setSelectedInvoiceNumber("");
+        });
+    } else {
+      alert("Please fill all the required fields before settling the payment.");
+    }
   };
 
   const handleCancel = () => {
-    setSettleAmount("");
-    setSelectedInvoiceNumber("");
-    setCustomerID("");
+    navigate("/transaction");
   };
 
   return (
     <>
       <Form onSubmit={handleSearch}>
-        <h3 className="text-center">Settle Payment</h3>
+        <h4 className="text-center">Settle Payment</h4>
         <Form.Group className="mb-3" controlId="formBasicSearchInvoiceNumber">
-          <Form.Label>Search by Invoice Number</Form.Label>
+          <Form.Label>Search by Bill Number</Form.Label>
           <Form.Control
             type="text"
-            placeholder="Enter invoice number"
+            placeholder="Enter Bill number (without space)"
             value={searchInvoiceNumber}
             onChange={(e) => setSearchInvoiceNumber(e.target.value)}
           />
@@ -150,27 +127,24 @@ function SettleForm() {
         </Button>
       </Form>
 
-      {isSearchPerformed && filteredRecords.length > 0 && (
-        <Table striped bordered>
-          <thead>
-            <tr>
-              <th>Invoice Number</th>
-              <th>Customer ID</th>
-              <th>Settle Amount</th>
-              <th>Employee ID</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredRecords.map((record, index) => (
-              <tr key={index}>
-                <td>{record.invoiceNumber}</td>
-                <td>{record.customerID}</td>
-                <td>{record.amount}</td>
-                <td>{record.employeeID}</td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+      {showAlert && (
+        <Alert variant="danger">
+          <strong>
+            No sales found with the provided bill number. Please provide valid
+            bill number
+          </strong>
+        </Alert>
+      )}
+
+      {isSearchPerformed && filteredRecords && (
+        <>
+          <h4 className="text-center">Credit Sales Information</h4>
+          <p>Customer ID: {filteredRecords.customer_id}</p>
+          <p>Description: {filteredRecords.description}</p>
+          <p>Bill Amount: {filteredRecords.bill_amount}</p>
+          <p>Discount: {filteredRecords.discount}</p>
+          <p>Date: {filteredRecords.date}</p>
+        </>
       )}
 
       {isSearchPerformed && (
@@ -179,7 +153,9 @@ function SettleForm() {
             Settle Payment for Invoice: {selectedInvoiceNumber}
           </h3>
           <Form.Group className="mb-3" controlId="formBasicSettleAmount">
-            <Form.Label>Enter Settle Amount</Form.Label>
+            <Form.Label>
+              Enter Settle Amount <span style={{ color: "red" }}>*</span>
+            </Form.Label>
             <Form.Control
               type="text"
               name="settleAmount"
@@ -189,14 +165,14 @@ function SettleForm() {
             />
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicCustomerID">
-            <Form.Label>Enter Customer ID</Form.Label>
+          <Form.Group className="mb-3" controlId="formBasicDescription">
+            <Form.Label>Enter Description (Optional)</Form.Label>
             <Form.Control
               type="text"
-              name="customerID"
-              placeholder="Enter customer ID"
-              value={customerID}
-              onChange={handleSettleAmountChange}
+              name="description"
+              placeholder="Enter description"
+              value={description}
+              onChange={handleDescriptionChange}
             />
           </Form.Group>
 
@@ -212,4 +188,54 @@ function SettleForm() {
   );
 }
 
-export default SettleForm;
+export default SettleForm;
+
+// const handleSearch = (e) => {
+//   e.preventDefault();
+
+//   const inputValue = searchInvoiceNumber.trim();
+
+//   if (inputValue === "") {
+//     setFilteredRecords([]);
+//     return;
+//   }
+
+//   axios
+//     .post("http://localhost:5000/creditSale/filterManualInvoice", {
+//       manual_invoice_id: inputValue,
+//     })
+//     .then((res) => {
+//       if (res.data.success) {
+//         const data = res.data.result[0];
+//         setFilteredRecords(data);
+//       } else {
+//         console.error("Failed to fetch records:", res.data);
+//         setFilteredRecords([]);
+//       }
+//       setIsSearchPerformed(true);
+//       setSearchInvoiceNumber(inputValue);
+//     })
+//     .catch((error) => {
+//       console.error("Error occurred while fetching records:", error);
+//       setFilteredRecords([]);
+//       setIsSearchPerformed(true);
+//       setSearchInvoiceNumber(inputValue);
+//     });
+// };
+
+// const fetchData = async (invoiceNumber) => {
+//   try {
+//     const response = await axios.get(
+//       `/api/records?invoiceNumber=${invoiceNumber}`
+//     );
+//     if (response.status === 200) {
+//       const data = response.data;
+//       setFilteredRecords(data);
+//     } else {
+//       console.error("Failed to fetch records:", response.status);
+//     }
+//   } catch (error) {
+//     console.error("Error occurred while fetching records:", error);
+//   }
+// };
+

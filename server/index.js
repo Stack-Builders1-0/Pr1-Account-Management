@@ -13,6 +13,7 @@ const advanceSaleBeforProduct = require("./routerComponent/pages/advanceSaleBefo
 const dashboard = require("./routerComponent//pages/dashboard");
 const login = require("./routerComponent/Authentication/login");
 const expenses = require("./routerComponent/pages/expenses");
+const report = require("./routerComponent/pages/report");
 
 server = http.createServer((req, res) => {
   res.setHeader("Content-Type", "text/plain");
@@ -30,6 +31,7 @@ app.use("/advanceSaleBP", advanceSaleBeforProduct);
 app.use("/dashboard", dashboard);
 app.use("/login", login);
 app.use("/expenses", expenses);
+app.use("/report", report);
 
 app.listen(5000, () => {
   console.log("Listen port 5000");

@@ -18,9 +18,7 @@
   color: white;
 }
 
-.dashboard {
-  background-color: hsl(330, 14%, 97%);
-}
+
 
 .square-decoration {
   background-color: hsl(0, 0%, 98%);
@@ -42,10 +40,6 @@
   width: 50%;
 }
 
-/* .nav-link.active {
-  background-color: transparent !important;
-} */
-
 .employee-info {
   background-color: #fff;
   border: 1px solid #f9f6f6;
@@ -59,5 +53,4 @@
 
 .navstyle{
   background-color: #2b80eb;
-  
 }

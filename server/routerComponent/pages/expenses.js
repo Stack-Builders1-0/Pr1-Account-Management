@@ -15,10 +15,10 @@ const connection = mysql.createConnection({
 
 connection.connect((err) => {
   if (err) {
-    console.log("employee error database connection");
+    console.log("expenses error database connection");
     console.log(err);
   } else {
-    console.log("employee connected");
+    console.log("expenses connected");
   }
 });
 
