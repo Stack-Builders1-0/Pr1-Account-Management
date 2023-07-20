@@ -5,10 +5,10 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import Alert from "react-bootstrap/Alert";
 
-
 function SettleForm() {
   const [searchInvoiceNumber, setSearchInvoiceNumber] = useState("");
   const [customerID, setCustomerID] = useState("");
+  const [balance, setBalance] = useState("");
   const [filteredRecords, setFilteredRecords] = useState([]);
   const [selectedInvoiceNumber, setSelectedInvoiceNumber] = useState("");
   const [settleAmount, setSettleAmount] = useState("");
@@ -16,8 +16,8 @@ function SettleForm() {
   const [showAlert, setShowAlert] = useState(false);
   const [description, setDescription] = useState("");
 
-  
   const navigate = useNavigate();
+  const sessionToken = localStorage.getItem('sessionToken');
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -36,6 +36,7 @@ function SettleForm() {
             setShowAlert(false);
             setSelectedInvoiceNumber(data.manual_invoice_id);
             setCustomerID(data.customer_id);
+            setBalance(data.balance);
           } else {
             setShowAlert(true);
             console.log("No records found for the provided invoice number.");
@@ -71,6 +72,8 @@ function SettleForm() {
     setDescription(value);
   };
 
+ 
+
   const handleSettle = (e) => {
     e.preventDefault();
 
@@ -78,13 +81,14 @@ function SettleForm() {
       const settleData = {
         invoice_id: selectedInvoiceNumber,
         settle_amount: settleAmount,
+        balance: balance,
         customer_id: customerID,
         description: description,
       };
 
-      console.log(settleData)
+      console.log(settleData);
       axios
-        .post("http://localhost:5000/creditSettle/settle", settleData, {headers: { Authorization: "key " + sessionToken },})
+        .post("http://localhost:5000/creditSettle/settle", settleData, {headers: { 'Authorization': 'key '+sessionToken },})
         .then((response) => {
           console.log("Settle API response:", response.data);
 
@@ -143,6 +147,7 @@ function SettleForm() {
           <p>Description: {filteredRecords.description}</p>
           <p>Bill Amount: {filteredRecords.bill_amount}</p>
           <p>Discount: {filteredRecords.discount}</p>
+          <p>Balance: {filteredRecords.balance}</p>
           <p>Date: {filteredRecords.date}</p>
         </>
       )}
@@ -238,4 +243,3 @@ export default SettleForm;
 //     console.error("Error occurred while fetching records:", error);
 //   }
 // };
-
