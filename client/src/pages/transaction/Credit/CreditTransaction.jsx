@@ -131,7 +131,7 @@ function CreditTransaction() {
 
                 <Nav.Link
                   as={Link}
-                  to={"/transaction/credittransaction"}
+                  to={"/transaction/credittransaction/settlepayment"}
                   onClick={handleShowSettleForm}
                 >
                   Settle

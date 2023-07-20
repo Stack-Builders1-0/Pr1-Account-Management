@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import CommonTable from "./Table";
+import CommonTable from "../Table";
 
 const columns = [
   "Bill Number",
