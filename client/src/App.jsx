@@ -11,11 +11,14 @@ import AddTransaction from "./pages/transaction/AddTransaction";
 import AddCustomer from "./pages/customer/AddCustomer";
 import CashTransaction from "./pages/transaction/CashTransaction";
 import CreditTransaction from "./pages/transaction/CreditTransaction";
-import AdvanceOnly from "./pages/transaction/AdvanceOnly";
+import AdvanceBPTransaction from "./pages/transaction/AdvanceBPTransaction";
+import AdvanceAPTransaction from "./pages/transaction/AdvanceAPTransaction";
 import EditTransaction from "./pages/transaction/EditTransaction";
 import EditCashTransaction from "./pages/transaction/EditCashForm";
 import EditCreditTransaction from "./pages/transaction/EditCreditForm";
 import EditAdvanceTransaction from "./pages/transaction/EditAdvanceForm";
+import Expenses from "./pages/expenses/Expenses";
+import AddExpense from "./pages/expenses/AddExpense";
 import { UserContext } from "./UserContext";
 
 
@@ -33,7 +36,6 @@ function App() {
 
   return (
     <BrowserRouter>
-
       <UserContext.Provider value={{ user, setUser }}>
         {
           !user ? (
@@ -51,6 +53,8 @@ function App() {
                 <Route path="/customer" element={<Customer />}></Route>
                 <Route path="/addemployee" element={<AddEmployee />}></Route>
                 <Route path="/addcustomer" element={<AddCustomer />}></Route>
+                <Route path="/expenses" element={<Expenses />}></Route>
+                <Route path="/addexpense" element={<AddExpense/>}></Route>
                 <Route
                   path="/transaction/cashtransaction"
                   element={<CashTransaction />}
@@ -60,8 +64,13 @@ function App() {
                   element={<CreditTransaction />}
                 ></Route>
                 <Route
-                  path="/transaction/advanceonly"
-                  element={<AdvanceOnly />}
+                  path="/transaction/advancebptransaction"
+                  element={<AdvanceBPTransaction />}
+                ></Route>
+
+                <Route
+                  path="/transaction/advanceaptransaction"
+                  element={<AdvanceAPTransaction />}
                 ></Route>
 
                 <Route path="/edittransaction" element={<EditTransaction />}></Route>
