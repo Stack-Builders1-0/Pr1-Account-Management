@@ -138,9 +138,10 @@ router.post("/edit", (req, res) => {
 router.post("/settle", (req, res) => {
   body = req.body;
   const balance = body.balance - body.settle_amount;
+  const total_settle_amount = parseFloat(body.amount)-parseFloat(body.balance) + parseFloat(body.settle_amount)
 
   const settleQuery =
-    "insert into accountmanagement.advance_bp_partial_settle (type_id,invoice_id, customer_id, description, settle_amount, balance, employee_id ) values (?,?,?,?,?,?,?);";
+    "insert into accountmanagement.advance_bp_partial_settle (type_id,invoice_id, customer_id, description, settle_amount, balance, employee_id, total_settle_amount ) values (?,?,?,?,?,?,?,?);";
 
   // response has 3 field
   // error occur then error = true , otherwise error = false
@@ -156,6 +157,7 @@ router.post("/settle", (req, res) => {
       body.settle_amount,
       balance,
       body.employee_id,
+      total_settle_amount
     ],
     (err, result) => {
       if (err) {
