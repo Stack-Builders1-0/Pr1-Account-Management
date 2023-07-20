@@ -64,8 +64,7 @@ function CreditTransaction() {
       });
   };
 
-
-  const sessionToken = localStorage.getItem('sessionToken');
+  const sessionToken = localStorage.getItem("sessionToken");
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -76,7 +75,6 @@ function CreditTransaction() {
       const creditLimit = parseFloat(customerInfo.creditLimit);
 
       if (billAmount <= creditLimit) {
-        
         const formdata = {
           type_id: "cr", // we manually set the type id of tha credit sale
           manual_invoice_id: data.manual_invoice_id,
@@ -88,7 +86,9 @@ function CreditTransaction() {
         };
 
         axios
-          .post("http://localhost:5000/creditSale/add", formdata, {headers : {'Authorization' : 'key '+sessionToken}})
+          .post("http://localhost:5000/creditSale/add", formdata, {
+            headers: { Authorization: "key " + sessionToken },
+          })
           .then((res) => {
             navigate("/transaction");
           })
@@ -106,9 +106,16 @@ function CreditTransaction() {
     }
   };
 
+  const handleCancel = () => {
+    navigate("/transaction");
+  };
+
   return (
     <div className="d-flex flex-column align-items-center pt-4">
       <div className="white-box">
+        <div className="d-flex flex-column align-items-center">
+          <h2>Credit Payment</h2>
+        </div>
         <Navbar sticky="top" bg="light" expand="md">
           <Container>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -136,6 +143,7 @@ function CreditTransaction() {
 
         {showAddForm && (
           <>
+            <h4 className="text-center">Add Payment</h4>
             <Form.Group className="mb-3" controlId="formBasicNicNo">
               <Form.Label>Search Customer by NIC</Form.Label>
               <Form.Control
@@ -241,6 +249,9 @@ function CreditTransaction() {
 
               <Button variant="primary" type="submit">
                 Submit
+              </Button>
+              <Button variant="danger" onClick={handleCancel} className="mx-2">
+                Cancel
               </Button>
             </Form>
           </>
