@@ -27,9 +27,6 @@ function AddCustomer() {
 
     const sessionToken = localStorage.getItem('sessionToken');
 
-    const handleCancel = () => {
-		navigate("/customer");
-	  };
     const handleSubmit = (event) => {
         event.preventDefault();
 
@@ -57,9 +54,9 @@ function AddCustomer() {
                     
                 <div className='d-flex flex-column align-items-center'><h2>New Customer Registration  </h2></div>
                         
-                <form  onSubmit={handleSubmit}>
+                <form className="row g-3 w-50" onSubmit={handleSubmit}>
 
-                    <div className="mb-3">
+                    <div className="col-12">
                         <label htmlFor="inputCustomerName" className="form-label">Customer Name</label>
                         <div className="d-flex">
                             <input
@@ -80,7 +77,7 @@ function AddCustomer() {
                             />
                         </div>
                     </div>
-                    <div className="mb-3">
+                    <div className="col-12">
                         <label htmlFor="inputBusinessName" className="form-label">BusinessName</label>
                         <input
                             type="text"
@@ -91,7 +88,7 @@ function AddCustomer() {
                             onChange={e => setData({ ...data, BusinessName: e.target.value })}
                         />
                     </div>
-                    <div className="mb-3">
+                    <div className="col-12">
                         <label htmlFor="inputAddress" className="form-label">Address</label>
                         <input
                             type="text"
@@ -104,7 +101,7 @@ function AddCustomer() {
                     </div>
 
 
-                    <div className="mb-3">
+                    <div className="col-12">
                         <label htmlFor="inputMobile" className="form-label">Mobile</label>
                         <input
                             type="tel"
@@ -115,7 +112,7 @@ function AddCustomer() {
                             onChange={e => setData({ ...data, mobile: e.target.value })}
                         />
                     </div>
-                    <div className="mb-3">
+                    <div className="col-12">
                         <label htmlFor="inputLandLine" className="form-label">LandLine</label>
                         <input
                             type="tel"
@@ -126,7 +123,7 @@ function AddCustomer() {
                             onChange={e => setData({ ...data, lan_line: e.target.value })}
                         />
                     </div>
-                    <div className="mb-3">
+                    <div className="col-12">
                         <label htmlFor="inputWhatsApp" className="form-label">WhatsApp Number</label>
                         <input
                             type="tel"
@@ -137,7 +134,7 @@ function AddCustomer() {
                             onChange={e => setData({ ...data, w_app_no: e.target.value })}
                         />
                     </div>
-                    <div className="mb-3">
+                    <div className="col-12">
                         <label htmlFor="inputOffice" className="form-label">Office Number</label>
                         <input
                             type="tel"
@@ -148,7 +145,7 @@ function AddCustomer() {
                             onChange={e => setData({ ...data, officeNo: e.target.value })}
                         />
                     </div>
-                    <div className="mb-3">
+                    <div className="col-12">
                         <label htmlFor="inputEmail" className="form-label">Email</label>
                         <input
                             type="email"
@@ -159,7 +156,7 @@ function AddCustomer() {
                             onChange={e => setData({ ...data, email_id: e.target.value })}
                         />
                     </div>
-                    <div className="mb-3">
+                    <div className="col-12">
                         <label htmlFor="inputNIC" className="form-label">NIC Number</label>
                         <input
                             type="text"
@@ -171,7 +168,7 @@ function AddCustomer() {
                         />
                     </div>
 
-                    <div className="mb-3">
+                    <div className="col-12">
                         <label htmlFor="inputEmployeeID" className="form-label">Employee ID</label>
                         <input
                             type="text"
@@ -183,7 +180,7 @@ function AddCustomer() {
                         />
                     </div>
 
-                    <div className="mb-3">
+                    <div className="col-12">
                         <label htmlFor="inputCreditLimit" className="form-label">Credit Limit</label>
                         <input
                             type="text"
@@ -197,10 +194,10 @@ function AddCustomer() {
 
 
 
-                    <div className="mb-3 d-flex justify-content-between">							
-                        <Button variant="secondary" onClick={handleCancel} className="mx-2"> Cancel</Button>
-                        <Button variant="primary" className="btn btn-primary">Register</Button>
-						</div>
+                    <div className="col-12">
+                        <button type="submit" className="btn btn-primary">Create</button>
+                        
+                    </div>
 
                 </form>
                     
