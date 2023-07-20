@@ -1,8 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import Button from 'react-bootstrap/Button';
-import Form from "react-bootstrap/Form";
+
 
 function AddEmployee() {
 	const [data, setData] = useState({
@@ -17,9 +16,6 @@ function AddEmployee() {
 		image: ''
 	})
 	const navigate = useNavigate()
-	const handleCancel = () => {
-		navigate("/employee");
-	};
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
@@ -27,12 +23,12 @@ function AddEmployee() {
 		axios.post('http://localhost:5000/employee/add', data)
 			.then(res => {
 				console.log(res.data);
-				if (res.data.sucess) {
+				if(res.data.sucess){
 					// we want to diply sucess message 
 					navigate('/employee');
-				} else if (res.data.isExist) {
+				}else if (res.data.isExist){
 					alert("NIC already exist. Please check your NIC!!!")
-				} else if (res.data.isError) {
+				}else if (res.data.isError){
 					alert("Please check your details!!!")
 				}
 			})
@@ -40,122 +36,61 @@ function AddEmployee() {
 	}
 	return (
 		<div className='d-flex flex-column align-items-center pt-4'>
-			<div className='d-flex flex-column align-items-center pt-4 w-100'>
-				<div className='white-box '>
+			<div className='d-flex flex-column align-items-center pt-4 '>
+				<div className='white-box'>
 					<div className='d-flex flex-column align-items-center'><h2>Register New Employee </h2></div>
 
-					<Form onSubmit={handleSubmit}>
-						<Form.Group className="mb-3" >
-							<Form.Label >Name</Form.Label>
-							<Form.Control
-								type="text"
-								id="inputName"
-								placeholder="Enter Name"
-								autoComplete="off"
-								onChange={(e) =>
-									setData({ ...data, employee_name: e.target.value })
-								}
-							/>
-						</Form.Group>
-
-						<Form.Group className="mb-3">
-							<Form.Label htmlFor="inputEmail4">Email</Form.Label>
-							<Form.Control
-								type="email"
-								id="inputEmail4"
-								placeholder="Enter Email"
-								autoComplete="off"
-								onChange={(e) => setData({ ...data, email: e.target.value })}
-							/>
-						</Form.Group>
-
-						<Form.Group className="mb-3">
-							<Form.Label htmlFor="inputPassword4">Password</Form.Label>
-							<Form.Control
-								type="password"
-								id="inputPassword4"
-								placeholder="Enter Password"
-								onChange={(e) => setData({ ...data, password: e.target.value })}
-							/>
-						</Form.Group>
-
-						<Form.Group className="mb-3">
-							<Form.Label htmlFor="inputAddress">Address</Form.Label>
-							<Form.Control
-								type="text"
-								id="inputAddress"
-								placeholder="1234 Main St"
-								autoComplete="off"
-								onChange={(e) => setData({ ...data, address: e.target.value })}
-							/>
-						</Form.Group>
-
-						<Form.Group className="mb-3">
-							<Form.Label htmlFor="inputMobile">Mobile</Form.Label>
-							<Form.Control
-								type="text"
-								id="inputMobile"
-								placeholder="Enter Mobile"
-								autoComplete="off"
-								onChange={(e) => setData({ ...data, mobile: e.target.value })}
-							/>
-						</Form.Group>
-
-						<Form.Group className="mb-3">
-							<Form.Label htmlFor="inputNic">NIC</Form.Label>
-							<Form.Control
-								type="text"
-								id="inputNic"
-								placeholder="Enter NIC"
-								autoComplete="off"
-								onChange={(e) => setData({ ...data, nic: e.target.value })}
-							/>
-						</Form.Group>
-
-						<Form.Group className="mb-3">
-							<Form.Label htmlFor="inputType">Type ID</Form.Label>
-							<Form.Select aria-label="Default select example">
-								<option>select type id</option>
-								<option value="cas">cashier</option>
-								<option value="sca">Special cashier</option>
-								autoComplete="off"
-								onChange={(e) => setData({ ...data, type_id: e.target.value })}
-							</Form.Select>
-
-						</Form.Group>
-
-						<Form.Group className="mb-3">
-							<Form.Label htmlFor="inputAge">Age</Form.Label>
-							<Form.Control
-								type="text"
-								id="inputAge"
-								placeholder="Enter Age"
-								autoComplete="off"
-								onChange={(e) => setData({ ...data, age: e.target.value })}
-							/>
-						</Form.Group>
-
-						<Form.Group className="mb-3">
-							<Form.Label className="form-label" htmlFor="inputGroupFile01">
-								Employee Photo
-							</Form.Label>
-							<Form.Control
-								type="file"
-								id="inputGroupFile01"
-								onChange={(e) => setData({ ...data, image: e.target.files[0] })}
-							/>
-						</Form.Group>
-
-						<div className="col-12 d-flex justify-content-between">
-							<Button variant="secondary" onClick={handleCancel} className="mx-2">
-								Cancel
-							</Button>
-							<Button variant="primary" type="submit">
-								Create
-							</Button>
-
+					<form className="row g-3 w-50" onSubmit={handleSubmit}>
+						<div className="col-12">
+							<label htmlFor="inputName" className="form-label">Name</label>
+							<input type="text" className="form-control" id="inputName" placeholder="Enter Name" autoComplete="off"
+								onChange={e => setData({ ...data, employee_name: e.target.value })} />
 						</div>
-					</Form>
+						<div className="col-12">
+							<label htmlFor="inputEmail4" className="form-label">Email</label>
+							<input type="email" className="form-control" id="inputEmail4" placeholder="Enter Email" autoComplete="off"
+								onChange={e => setData({ ...data, email: e.target.value })} />
+						</div>
+						<div className="col-12">
+							<label htmlFor="inputPassword4" className="form-label">Password</label>
+							<input type="password" className="form-control" id="inputPassword4" placeholder="Enter Password"
+								onChange={e => setData({ ...data, password: e.target.value })} />
+						</div>
+						
+						<div className="col-12">
+							<label htmlFor="inputAddress" className="form-label">Address</label>
+							<input type="text" className="form-control" id="inputAddress" placeholder="1234 Main St" autoComplete="off"
+								onChange={e => setData({ ...data, address: e.target.value })} />
+						</div>
+						<div className="col-12">
+							<label htmlFor="inputMobile" className="form-label">Mobile</label>
+							<input type="text" className="form-control" id="inputMobile" placeholder="Enter Mobile" autoComplete="off"
+								onChange={e => setData({ ...data, mobile: e.target.value })} />
+						</div>
+						<div className="col-12">
+							<label htmlFor="inputNic" className="form-label">NIC</label>
+							<input type="text" className="form-control" id="inputNic" placeholder="Enter NIC" autoComplete="off"
+								onChange={e => setData({ ...data, nic: e.target.value })} />
+						</div>
+						<div className="col-12">
+							<label htmlFor="inputType" className="form-label">Type ID</label>
+							<input type="text" className="form-control" id="inputType" placeholder="Enter Type ID" autoComplete="off"
+								onChange={e => setData({ ...data, type_id: e.target.value })} />
+						</div>
+						<div className="col-12">
+							<label htmlFor="inputAge" className="form-label">Age</label>
+							<input type="text" className="form-control" id="inputAge" placeholder="Enter Age" autoComplete="off"
+								onChange={e => setData({ ...data, age: e.target.value })} />
+						</div>
+						<div className="col-12 mb-3">
+							<label className="form-label" htmlFor="inputGroupFile01">Employee Photo</label>
+							<input type="file" className="form-control" id="inputGroupFile01"
+								onChange={e => setData({ ...data, image: e.target.files[0] })} />
+						</div>
+						<div className="col-12">
+							<button type="submit" className="btn btn-primary">Create</button>
+						</div>
+					</form>
 
 				</div>
 			</div></div>)
