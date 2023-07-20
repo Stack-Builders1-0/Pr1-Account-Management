@@ -99,25 +99,28 @@ function Report() {
   return (
     <div>
       <div>
-        <label>
-          Date:
-          <input
-            // className="form-control"
-            type="date"
-            value={date}
-            onChange={handleDateChange}
-          />
-        </label>
+        <div className="mt-3 px-2 pt-2">
+          <table className="table table-bordered">
+            {/* ... Table header and rows ... */}
+          </table>
+        </div>
 
-        <ul>
-          {filteredData.map((item) => (
-            <li key={item.id}>{item.name}</li>
-          ))}
-        </ul>
+        <div>
+          <label>
+            Date:
+            <input type="date" value={date} onChange={handleDateChange} />
+          </label>
+
+          <ul>
+            {filteredData.map((item) => (
+              <li key={item.id}>{item.name}</li>
+            ))}
+          </ul>
+        </div>
       </div>
 
       <div></div>
-      <div className="mt-4 px-2 pt-5">
+      <div className="mt-4 px-2 pt-3">
         <h3>Transaction List</h3>
         <table className="table table-bordered">
           <thead>
