@@ -5,14 +5,15 @@ import { UserContext } from "../UserContext";
 import { useNavigate } from 'react-router-dom';
 import { FaSignOutAlt } from 'react-icons/fa';
 
+
 function NavAndHeder() {
-  const navigate = useNavigate()
-  const { setUser } = useContext(UserContext)
+  const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem("sessionToken");
-    navigate('/login');
+    navigate("/login");
     setIsLoggedin(false);
   };
 
@@ -39,7 +40,7 @@ function NavAndHeder() {
   const setStyle = ({ isActive, isPending }) => {
     return {
       fontWeight: isActive ? "bold" : "",
-      color: isActive ?   "#fff": "#f9f6f6",
+      color: isActive ? "#fff" : "#f9f6f6",
       textDecoration: "none",
     };
   };
@@ -65,48 +66,40 @@ function NavAndHeder() {
                 </NavLink>
               </li>
 
-              
               <li>
                 <NavLink to="/transaction" style={setStyle}>
                   <div
-                    className={`nav-link px-0 align-middle  ${dropdownOpen ? "active" : ""
-                      }`}
+                    className={`nav-link px-0 align-middle  ${
+                      dropdownOpen ? "active" : ""
+                    }`}
                     onClick={toggleDropdown}
-
                   >
                     <i className="fs-4 bi-cash-coin "></i>{" "}
-                    <span className="ms-1 d-none d-sm-inline  ">Transaction</span>{" "}
+                    <span className="ms-1 d-none d-sm-inline  ">
+                      Transaction
+                    </span>{" "}
                     <i
-                      className={`bi bi-chevron-${dropdownOpen ? "up" : "down"
-                        } toggle-btn `}
-
+                      className={`bi bi-chevron-${
+                        dropdownOpen ? "up" : "down"
+                      } toggle-btn `}
                     ></i>
                   </div>
                 </NavLink>
                 <ul className={`collapse ${dropdownOpen ? "show" : ""} `}>
                   <li>
-                    <NavLink
-                      to="/transaction"
-                      style={setStyle}
-                      onClick={closeDropdown}
-                    >
+                    <NavLink to="/transaction" style={setStyle}>
                       <i className="fs-5 bi-plus-circle"></i>{" "}
                       <span className="ms-3 d-none d-sm-inline">Add</span>{" "}
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink
-                      to="/edittransaction"
-                      style={setStyle}
-                      onClick={closeDropdown}
-                    >
+                    <NavLink to="/edittransaction" style={setStyle}>
                       <i className="fs-5 bi-pencil"></i>{" "}
                       <span className="ms-3 d-none d-sm-inline">Edit</span>{" "}
                     </NavLink>
                   </li>
                 </ul>
               </li>
-
 
               <li>
                 <NavLink to="/customer" style={setStyle}>
@@ -115,10 +108,7 @@ function NavAndHeder() {
                 </NavLink>
               </li>
               <li>
-                <NavLink
-                  to="/employee"
-                  style={setStyle}
-                >
+                <NavLink to="/employee" style={setStyle}>
                   <i class="fs-4 bi-people"></i>{" "}
                   <span class="ms-1 d-none d-sm-inline">Employee</span>
                 </NavLink>
@@ -146,12 +136,12 @@ function NavAndHeder() {
           </div>
         </div>
 
-
         <div class="col p-0 m-0 "  >
           <div className="p-2 d-flex justify-content-between shadow navstyle sticky-top">
+
             <div></div>
-              <h4 className="text" >Account Management System</h4>
-              
+            <h4 className="text">Account Management System</h4>
+
             <div className="dropdown ml-auto">
               <button
                 className="btn btn-secondary dropdown-toggle"
