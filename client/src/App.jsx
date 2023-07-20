@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Login from "./pages/login/Login";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import NavAndHeder from "./layouts/NavAndHeder";
 import Employee from "./pages/employee/Employee";
 import Profile from "./pages/employee/Profile";
@@ -17,13 +17,15 @@ import EditTransaction from "./pages/transaction/EditTransaction";
 import EditCashTransaction from "./pages/transaction/EditCashForm";
 import EditCreditTransaction from "./pages/transaction/EditCreditForm";
 import EditAdvanceTransaction from "./pages/transaction/EditAdvanceForm";
+import Expenses from "./pages/expenses/Expenses";
+import AddExpense from "./pages/expenses/AddExpense";
 import { UserContext } from "./UserContext";
 
 
 
 function App() {
   const [user, setUser] = useState(null);
-  
+
   useEffect(() => {
 
     const sessionToken = localStorage.getItem('sessionToken');
@@ -39,6 +41,7 @@ function App() {
           !user ? (
             <Routes>
               <Route path="/login" element={<Login />} />
+              {/* <Route path="/" element={<Navigate to="/login" replace />} /> */}
               <Route path="*" element={<p>This page isn't available. Sorry about that.</p>}></Route>
             </Routes>
           ) : (
@@ -51,6 +54,8 @@ function App() {
                 <Route path="/customer" element={<Customer />}></Route>
                 <Route path="/addemployee" element={<AddEmployee />}></Route>
                 <Route path="/addcustomer" element={<AddCustomer />}></Route>
+                <Route path="/expenses" element={<Expenses />}></Route>
+                <Route path="/addexpense" element={<AddExpense />}></Route>
                 <Route
                   path="/transaction/cashtransaction"
                   element={<CashTransaction />}
