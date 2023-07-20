@@ -24,7 +24,9 @@ import Expenses from "./pages/expenses/Expenses";
 import AddExpense from "./pages/expenses/AddExpense";
 import { UserContext } from "./UserContext";
 import SettleForm from "./pages/transaction/Credit/SettleForm";
-import History from "./Histoty";
+import History from "./History";
+import Report from "./pages/report/Report";
+
 
 
 
@@ -63,6 +65,7 @@ function App() {
                   <Route
                     path="/history" element={<History/>}>
                 </Route>
+                <Route path="/report" element={<Report />}></Route>
                 <Route
                   path="/transaction/cashtransaction"
                   element={<CashTransaction />}
