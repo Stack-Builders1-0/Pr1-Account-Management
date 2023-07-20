@@ -3,8 +3,9 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 
+
 function AddCustomer() {
-    const handleClose = () => setShow(false);
+    
     const [data, setData] = useState({
         customer_name: 'set defult',
         firstName:'',
@@ -49,7 +50,10 @@ function AddCustomer() {
         <div className='d-flex flex-column align-items-center pt-3'>
 
             <div className='white-box'>
+        
+                    
                 <div className='d-flex flex-column align-items-center'><h2>New Customer Registration  </h2></div>
+                        
                 <form className="row g-3 w-50" onSubmit={handleSubmit}>
 
                     <div className="col-12">
@@ -192,12 +196,11 @@ function AddCustomer() {
 
                     <div className="col-12">
                         <button type="submit" className="btn btn-primary">Create</button>
-                        <button type="submit" className="btn btn-primary" onClick={handleClose}>
-                            Cancel
-                        </button>
+                        
                     </div>
 
                 </form>
+                    
             </div>
         </div>
 

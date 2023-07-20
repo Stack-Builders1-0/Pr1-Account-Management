@@ -2,7 +2,8 @@ import React, { useState, useContext } from "react";
 import "bootstrap-icons/font/bootstrap-icons.min.css";
 import { Link, Outlet, NavLink } from "react-router-dom";
 import { UserContext } from "../UserContext";
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+import { FaSignOutAlt } from 'react-icons/fa';
 
 function NavAndHeder() {
   const navigate = useNavigate()
@@ -160,13 +161,15 @@ function NavAndHeder() {
                 style={{ marginLeft: "-100px" }}
               >
                 <li>
-                  <Link to="/profile" className="btn btn-primary">
+                  <Link to="/profile" >
                     <i className="bi bi-person-fill"></i> Profile
                   </Link>
                 </li>
                 <li>
                   
-                    <button className="btn btn-primary" onClickCapture={logout}> logout </button>
+                <button onClickCapture={logout} className="logout-button">
+      <FaSignOutAlt className="logout-icon" /> Logout
+    </button>
                   
                 </li>
               </ul>

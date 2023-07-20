@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Modal, Button } from "react-bootstrap";
 import axios from "axios";
 import { useLocation } from 'react-router-dom';
-import CustomModel from "../../model";
+import CustomModel from "../../CustomModel";
 
 function Dashboard() {
   const { state } = useLocation();
