@@ -172,10 +172,9 @@ router.post("/edit", (req, res) => {
 
 
 router.post('/settle', (req, res) => {
-  body  = req.body;
+  body  = req.body.data;
   const balance = body.balance -body.settle_amount;
 
-  console.log(req.body);
 
   try{
     const sessionToken = req.headers.authorization.replace('key ','');
@@ -189,7 +188,7 @@ router.post('/settle', (req, res) => {
     // error occur then error = true , otherwise error = false
     // exist => if the employee nic alredy regiterd exist = true else exist = false
     // employee regeister is sucess then sucess=true
-    connection.query(settleQuery, [body.type_id, body.invoice_id, body.customer_id, body.description, body.settle_amount, balance, employee_id ], (err, result) => {
+    connection.query(settleQuery, ["cr", body.invoice_id, body.customer_id, body.description, body.settle_amount, balance, employee_id ], (err, result) => {
         if (err) {
             console.log(err)
             res.send({
