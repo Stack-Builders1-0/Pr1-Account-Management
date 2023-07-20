@@ -1,0 +1,26 @@
+database
+	income type
+ 		type id length not enough
+
+
+cashSale
+	addCashSales
+		dwt => are we want to check the manual invoice id?  because sometime cashier enter same bill repeately 
+		if the date format is incorrect sql send error so discuss about that 
+		insert time stamp field not in the cashsales table so, we want to add that field
+
+
+customer 
+	discuss about filter customer
+
+credit_partial_settle 
+	if insert recored , forigen key issue occur. we want to discuss that
+
+employee
+	this table haven't update by we want to add this
+
+i assume discount is enter by the cash not a persentage  => i calculate the amount in backend 
+
+how to filter using multi filed value
+
+
