@@ -112,9 +112,11 @@ function CashTransaction() {
               }
             }}
           />
-          <Button variant="primary" onClick={handleSearch}>
-            Search
-          </Button>
+          <div className="d-flex justify-content-end mt-3">
+            <Button variant="primary " onClick={handleSearch} className="ms-auto">
+              Search
+            </Button>
+          </div>
         </Form.Group>
 
         {/* Alert for invalid NIC */}
@@ -193,13 +195,14 @@ function CashTransaction() {
               onChange={(e) => setData({ ...data, date: e.target.value })}
             />
           </Form.Group>
-
-          <Button variant="primary" type="submit">
-            Submit
-          </Button>
-          <Button variant="danger" onClick={handleCancel} className="mx-2">
-            Cancel
-          </Button>
+          <div className="mb-3 d-flex justify-content-between">
+            <Button variant="secondary" onClick={handleCancel} className="mx-2">
+              Cancel
+            </Button>
+            <Button variant="primary" type="submit">
+              Submit
+            </Button>
+          </div>
         </Form>
       </div>
     </div>
