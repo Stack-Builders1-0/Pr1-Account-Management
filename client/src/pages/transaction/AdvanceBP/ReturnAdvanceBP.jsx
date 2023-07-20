@@ -14,6 +14,7 @@ function ReturnAdvanceBP() {
   const [selectedInvoiceNumber, setSelectedInvoiceNumber] = useState("");
   const [selectedBillNumber, setSelectedBillNumber] = useState("");
   const [returnAmount, setReturnAmount] = useState("");
+  const [amount, setAmount] = useState("");
   const [isSearchPerformed, setIsSearchPerformed] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [description, setDescription] = useState("");
@@ -41,6 +42,7 @@ function ReturnAdvanceBP() {
             setCustomerID(data.customer_id);
             setBalance(data.balance);
             setSelectedBillNumber(data.invoice_id);
+            setAmount(data.amount);
           } else {
             setShowAlert(true);
             console.log("No records found for the provided invoice number.");
@@ -82,6 +84,7 @@ function ReturnAdvanceBP() {
     if (selectedBillNumber && returnAmount && customerID) {
       const settleData = {
         invoice_id: selectedBillNumber,
+        amount: amount,
         return_payment: returnAmount,
         balance: balance,
         customer_id: customerID,
