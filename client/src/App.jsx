@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Login from "./pages/login/Login";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NavAndHeder from "./layouts/NavAndHeder";
 import Employee from "./pages/employee/Employee";
 import Profile from "./pages/employee/Profile";
@@ -22,18 +22,17 @@ import ReturnAdvanceBP from "./pages/transaction/AdvanceBP/ReturnAdvanceBP";
 import SettleAdvancedBP from "./pages/transaction/AdvanceBP/SettleAdvancedBP";
 import Expenses from "./pages/expenses/Expenses";
 import AddExpense from "./pages/expenses/AddExpense";
+import Report from "./pages/report/Report";
 import { UserContext } from "./UserContext";
 import SettleForm from "./pages/transaction/Credit/SettleForm";
 import History from "./Histoty";
-
-
-
 
 function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
     const sessionToken = localStorage.getItem("sessionToken");
+    
     setUser(sessionToken);
   });
   // fetchUser();
@@ -59,6 +58,7 @@ function App() {
                 <Route path="/addemployee" element={<AddEmployee />}></Route>
                 <Route path="/addcustomer" element={<AddCustomer />}></Route>
                 <Route path="/expenses" element={<Expenses />}></Route>
+                <Route path="/report" element={<Report />}></Route>
                   <Route path="/addexpense" element={<AddExpense />}></Route>
                   <Route
                     path="/history" element={<History/>}>
@@ -100,30 +100,27 @@ function App() {
                 element={<ReturnAdvanceBP />}
               ></Route>
 
-              {/* <Route
-                path="/edittransaction"
-                element={<EditTransaction />}
-              ></Route>
-              <Route
-                path="/editcashtransaction"
-                element={<EditCashTransaction />}
-              ></Route>
-              <Route
-                path="/editcredittransaction"
-                element={<EditCreditTransaction />}
-              ></Route>
-              <Route
-                path="/editadvancetransaction"
-                element={<EditAdvanceTransaction />}
-              ></Route> */}
+                <Route path="/edittransaction" element={<EditTransaction />}></Route>
+                <Route
+                  path="/editcashtransaction"
+                  element={<EditCashTransaction />}
+                ></Route>
+                <Route
+                  path="/editcredittransaction"
+                  element={<EditCreditTransaction />}
+                ></Route>
+                <Route
+                  path="/editadvancetransaction"
+                  element={<EditAdvanceTransaction />}
+                ></Route>
+                  
+                <Route path="*" element={<p>This page isn't available. Sorry about that.</p>}></Route>
+              </Route>
+             
+            </Routes>
+          )
+        }
 
-              <Route
-                path="*"
-                element={<p>This page isn't available. Sorry about that.</p>}
-              ></Route>
-            </Route>
-          </Routes>
-        )}
       </UserContext.Provider>
     </BrowserRouter>
   );

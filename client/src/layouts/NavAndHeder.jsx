@@ -2,9 +2,8 @@ import React, { useState, useContext } from "react";
 import "bootstrap-icons/font/bootstrap-icons.min.css";
 import { Link, Outlet, NavLink } from "react-router-dom";
 import { UserContext } from "../UserContext";
-import { useNavigate } from 'react-router-dom';
-import { FaSignOutAlt } from 'react-icons/fa';
-
+import { useNavigate } from "react-router-dom";
+import { FaSignOutAlt } from "react-icons/fa";
 
 function NavAndHeder() {
   const navigate = useNavigate();
@@ -86,7 +85,7 @@ function NavAndHeder() {
               <li>
                 <NavLink to="/transaction" style={setStyle}>
                   <div
-                    className={`nav-link px-0 align-middle  ${dropdownOpen ? "active" : ""
+                    className={` px-0 align-middle  ${dropdownOpen ? "active" : ""
                       }`}
                     onClick={toggleDropdown}
                   >
@@ -133,11 +132,11 @@ function NavAndHeder() {
               <li>
                 <NavLink to="/expenses"
                   style={setStyle}>
+
                   <i class="fs-4 bi-cash"></i>{" "}
                   <span class="ms-1 d-none d-sm-inline">Expenses</span>
                 </NavLink>
               </li>
-
 
               <li>
                 <NavLink
@@ -145,6 +144,7 @@ function NavAndHeder() {
                   style={setStyle}
                 >
                   <i class="fs-4 bi-people"></i>{" "}
+
                   <span class="ms-1 d-none d-sm-inline">Report</span>
                 </NavLink>
               </li>
@@ -152,9 +152,8 @@ function NavAndHeder() {
           </div>
         </div>
 
-        <div class="col p-0 m-0 "  >
+        <div class="col p-0 m-0 ">
           <div className="p-2 d-flex justify-content-between shadow navstyle sticky-top">
-
             <div></div>
               <h4 className="text" >Account Management System</h4>
               
@@ -183,6 +182,7 @@ function NavAndHeder() {
                 <li>
                   <button onClickCapture={logout} className="btn btn-light dropdown-item">
                     <i className="bi bi-box-arrow-right"></i> Log out
+
                   </button>
                 </li>
               </ul>
