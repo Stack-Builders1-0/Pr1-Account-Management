@@ -4,28 +4,30 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Alert from "react-bootstrap/Alert";
-//settle form of advancebp
-function SettleFormSettleAdvancedBP() {
+
+function SettleForm() {
   const [searchInvoiceNumber, setSearchInvoiceNumber] = useState("");
   const [customerID, setCustomerID] = useState("");
+  const [balance, setBalance] = useState("");
   const [filteredRecords, setFilteredRecords] = useState([]);
   const [selectedInvoiceNumber, setSelectedInvoiceNumber] = useState("");
+  const [selectedBillNumber, setSelectedBillNumber] = useState("");
   const [settleAmount, setSettleAmount] = useState("");
   const [isSearchPerformed, setIsSearchPerformed] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [description, setDescription] = useState("");
 
   const navigate = useNavigate();
+  const sessionToken = localStorage.getItem("sessionToken");
 
   const handleSearch = (e) => {
     e.preventDefault();
     setIsSearchPerformed(false);
     axios
-      .post("http://localhost:5000/advancebpsale/filterManualInvoice", {
+      .post("http://localhost:5000/creditSale/filterManualInvoice", {
         manual_invoice_id: searchInvoiceNumber,
       })
       .then((res) => {
-        // console.log(res.data.sucess);
         if (res.data.sucess) {
           const data = res.data.result[0];
           if (data) {
@@ -34,6 +36,8 @@ function SettleFormSettleAdvancedBP() {
             setShowAlert(false);
             setSelectedInvoiceNumber(data.manual_invoice_id);
             setCustomerID(data.customer_id);
+            setBalance(data.balance);
+            setSelectedBillNumber(data.invoice_id);
           } else {
             setShowAlert(true);
             console.log("No records found for the provided invoice number.");
@@ -72,25 +76,22 @@ function SettleFormSettleAdvancedBP() {
   const handleSettle = (e) => {
     e.preventDefault();
 
-    if (selectedInvoiceNumber && settleAmount && customerID) {
+    if (selectedBillNumber && settleAmount && customerID) {
       const settleData = {
-        invoice_id: selectedInvoiceNumber,
+        invoice_id: selectedBillNumber,
         settle_amount: settleAmount,
+        balance: balance,
         customer_id: customerID,
         description: description,
       };
 
       axios
         .post(
-          "http://localhost:5000/advancedbpsale/settleInvoice",
-          settleData,
-          {
-            headers: { Authorization: "key " + sessionToken },
-          }
+          "http://localhost:5000/creditSale/settle",
+          { data: settleData },
+          { headers: { Authorization: "key " + sessionToken } }
         )
         .then((response) => {
-          console.log("Settle API response:", response.data);
-
           setSettleAmount("");
           setCustomerID("");
           setSelectedInvoiceNumber("");
@@ -114,7 +115,7 @@ function SettleFormSettleAdvancedBP() {
   return (
     <>
       <Form onSubmit={handleSearch}>
-        <h3 className="text-center">Settle Payment</h3>
+        <h4 className="text-center">Settle Payment</h4>
         <Form.Group className="mb-3" controlId="formBasicSearchInvoiceNumber">
           <Form.Label>Search by Bill Number</Form.Label>
           <Form.Control
@@ -141,12 +142,12 @@ function SettleFormSettleAdvancedBP() {
 
       {isSearchPerformed && filteredRecords && (
         <>
-          <h4 className="text-center">AdvanceBP Sales Information</h4>
+          <h4 className="text-center">Credit Sales Information</h4>
           <p>Customer ID: {filteredRecords.customer_id}</p>
           <p>Description: {filteredRecords.description}</p>
           <p>Bill Amount: {filteredRecords.bill_amount}</p>
-          <p>Advance amount: {filteredRecords.advance_amount}</p>
           <p>Discount: {filteredRecords.discount}</p>
+          <p>Balance: {filteredRecords.balance}</p>
           <p>Date: {filteredRecords.date}</p>
         </>
       )}
@@ -192,4 +193,53 @@ function SettleFormSettleAdvancedBP() {
   );
 }
 
-export default SettleAdvancedBP;
+export default SettleForm;
+
+// const handleSearch = (e) => {
+//   e.preventDefault();
+
+//   const inputValue = searchInvoiceNumber.trim();
+
+//   if (inputValue === "") {
+//     setFilteredRecords([]);
+//     return;
+//   }
+
+//   axios
+//     .post("http://localhost:5000/creditSale/filterManualInvoice", {
+//       manual_invoice_id: inputValue,
+//     })
+//     .then((res) => {
+//       if (res.data.success) {
+//         const data = res.data.result[0];
+//         setFilteredRecords(data);
+//       } else {
+//         console.error("Failed to fetch records:", res.data);
+//         setFilteredRecords([]);
+//       }
+//       setIsSearchPerformed(true);
+//       setSearchInvoiceNumber(inputValue);
+//     })
+//     .catch((error) => {
+//       console.error("Error occurred while fetching records:", error);
+//       setFilteredRecords([]);
+//       setIsSearchPerformed(true);
+//       setSearchInvoiceNumber(inputValue);
+//     });
+// };
+
+// const fetchData = async (invoiceNumber) => {
+//   try {
+//     const response = await axios.get(
+//       `/api/records?invoiceNumber=${invoiceNumber}`
+//     );
+//     if (response.status === 200) {
+//       const data = response.data;
+//       setFilteredRecords(data);
+//     } else {
+//       console.error("Failed to fetch records:", response.status);
+//     }
+//   } catch (error) {
+//     console.error("Error occurred while fetching records:", error);
+//   }
+// };

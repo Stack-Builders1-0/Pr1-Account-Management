@@ -3,16 +3,16 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Button, Form, Navbar, Container, Nav } from "react-bootstrap";
-import SettleAdvancedBP from "./SettleAdvancedBP";
+import SettleForm from "./SettleForm";
 import Alert from "react-bootstrap/Alert";
 
-function AdvanceBPTransaction() {
+function CreditTransaction() {
   const [data, setData] = useState({
+    nic_no: "",
     customer_id: "",
     manual_invoice_id: "",
     description: "",
     billAmount: "",
-    advanceAmount: "",
     discount: "",
     date: "",
   });
@@ -46,6 +46,7 @@ function AdvanceBPTransaction() {
           setCustomerInfo({
             customerName: customerData.customer_name,
             businessName: customerData.business_name,
+            creditLimit: customerData.credit_limit,
           });
           setShowAlert(false);
           setData({ ...data, customer_name: customerData.customer_name });
@@ -69,25 +70,35 @@ function AdvanceBPTransaction() {
     event.preventDefault();
 
     if (searchedNic) {
-      const formdata = {
-        type_id: "as", // we manually set the type id of tha advancebp sale
-        manual_invoice_id: data.manual_invoice_id,
-        date: data.date,
-        customer_id: data.customer_id,
-        description: data.description,
-        bill_amount: data.billAmount,
-        discount: data.discount,
-        advanceAmount: data.advanceAmount,
-      };
+      // Only allow form submission if NIC has been searched
+      const billAmount = parseFloat(data.billAmount);
+      const creditLimit = parseFloat(customerInfo.creditLimit);
 
-      axios
-        .post("http://localhost:5000/advancesalebp/add", formdata, {
-          headers: { Authorization: "key " + sessionToken },
-        })
-        .then((res) => {
-          navigate("/transaction");
-        })
-        .catch((err) => console.log(err));
+      if (billAmount <= creditLimit) {
+        const formdata = {
+          type_id: "cr", // we manually set the type id of tha credit sale
+          manual_invoice_id: data.manual_invoice_id,
+          date: data.date,
+          customer_id: data.customer_id,
+          description: data.description,
+          bill_amount: data.billAmount,
+          discount: data.discount,
+        };
+
+        axios
+          .post("http://localhost:5000/creditSale/add", formdata, {
+            headers: { Authorization: "key " + sessionToken },
+          })
+          .then((res) => {
+            navigate("/transaction");
+          })
+          .catch((err) => console.log(err));
+      } else {
+        // Bill amount exceeds the credit limit, display error message
+        alert(
+          "Bill amount exceeds the credit limit. Please adjust the bill amount."
+        );
+      }
     } else {
       alert(
         "Please search for a valid NIC first before submitting the form or you have to register first"
@@ -103,7 +114,7 @@ function AdvanceBPTransaction() {
     <div className="d-flex flex-column align-items-center pt-4">
       <div className="white-box">
         <div className="d-flex flex-column align-items-center">
-          <h2>AdvanceBP Payment Only</h2>
+          <h2>Credit Payment</h2>
         </div>
         <Navbar sticky="top" bg="light" expand="md">
           <Container>
@@ -112,7 +123,7 @@ function AdvanceBPTransaction() {
               <Nav className="me-auto">
                 <Nav.Link
                   as={Link}
-                  to={"/transaction/advancebptransaction"}
+                  to={"/transaction/credittransaction"}
                   onClick={handleShowAddForm}
                 >
                   Add
@@ -120,7 +131,7 @@ function AdvanceBPTransaction() {
 
                 <Nav.Link
                   as={Link}
-                  to={"/transaction/advancebptransaction"}
+                  to={"/transaction/credittransaction/settlepayment"}
                   onClick={handleShowSettleForm}
                 >
                   Settle
@@ -171,6 +182,9 @@ function AdvanceBPTransaction() {
                 <p>
                   <strong>Business Name:</strong> {customerInfo.businessName}
                 </p>
+                <p>
+                  <strong>Credit Limit:</strong> {customerInfo.creditLimit}
+                </p>
               </div>
             )}
 
@@ -211,18 +225,6 @@ function AdvanceBPTransaction() {
                 />
               </Form.Group>
 
-              <Form.Group className="mb-3" controlId="formBasicAdvanceAmount">
-                <Form.Label>Advance Amount</Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder="Enter advance amount"
-                  value={data.advanceAmount}
-                  onChange={(e) =>
-                    setData({ ...data, advanceAmount: e.target.value })
-                  }
-                />
-              </Form.Group>
-
               <Form.Group className="mb-3" controlId="formBasicDiscount">
                 <Form.Label>Discount</Form.Label>
                 <Form.Control
@@ -255,10 +257,10 @@ function AdvanceBPTransaction() {
           </>
         )}
 
-        {!showAddForm && <SettleAdvancedBP />}
+        {!showAddForm && <SettleForm />}
       </div>
     </div>
   );
 }
-//advancebp
-export default AdvanceBPTransaction;
+
+export default CreditTransaction;
