@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import CommonTable from "./Table";
+import React, { useState, useEffect } from "react";
+import CommonTable from "../Table";
 
 const columns = [
   "Bill Number",
@@ -7,28 +7,26 @@ const columns = [
   "Customer name",
   "Description",
   "Bill_amount",
+  "Advance_Amount",
   "Discount",
-  "Amount",
-  "Settle_amount",
   "Balance",
-  "Updated_at",
-  "Updated_by",
+  "Updated Time",
+  "Updated By",
 ];
 
-const CreditSales = () => {
-  const [creditSalesData, setCreditSalesData] = useState([
+const AdvancedAPSales = () => {
+  const [advancedAPSalesData, setAdvancedAPSalesData] = useState([
     {
       "Bill Number": "BILL-001",
       Date: "2023-07-18",
       "Customer name": "John Doe",
       Description: "Product ABC",
       Bill_amount: 500,
+      Advance_Amount: 200,
       Discount: 50,
-      Amount: 450,
-      Settle_amount: 200,
-      Balance: 250,
-      Updated_at: "2023-07-18 14:30:00",
-      Updated_by: "User123",
+      Balance: 400,
+      "Updated Time": "2023-07-18 14:30:00",
+      "Updated By": "User123",
     },
     {
       "Bill Number": "BILL-002",
@@ -36,21 +34,19 @@ const CreditSales = () => {
       "Customer name": "Jane Smith",
       Description: "Product XYZ",
       Bill_amount: 800,
+      Advance_Amount: 300,
       Discount: 100,
-      Amount: 700,
-      Settle_amount: 300,
-      Balance: 400,
-      Updated_at: "2023-07-19 10:15:00",
-      Updated_by: "User456",
+      Balance: 700,
+      "Updated Time": "2023-07-19 10:15:00",
+      "Updated By": "User456",
     },
-    // Add more sample data here...
   ]);
 
   // useEffect(() => {
-  //   const fetchCreditSalesData = async () => {
+  //   const fetchAdvancedBPSalesData = async () => {
   //     try {
-  //       // Fetch all credit sales data from the server
-  //       const response = await fetch("/api/cashSales");
+  //       // Fetch all  sales data from the server
+  //       const response = await fetch("/api/advancedAPSales");
   //       const allData = await response.json();
 
   //       // Get today's date in 'YYYY-MM-DD' format
@@ -59,21 +55,21 @@ const CreditSales = () => {
   //       // Filter only today's entries from allData
   //       const todaySales = allData.filter((item) => item.date === today);
 
-  //       setCreditSalesData(todaySales);
+  //       setAdvancedAPSalesData(todaySales);
   //     } catch (error) {
   //       console.error("Error fetching data:", error);
   //     }
   //   };
 
-  //   fetchCreditSalesData();
+  //   fetchAdvancedAPSalesData();
   // }, []);
 
   return (
     <div>
-      {/* <h2>Credit Sales</h2> */}
-      <CommonTable data={creditSalesData} columns={columns} />
+      {/* <h2>AdvancedAP Sales</h2> */}
+      <CommonTable data={advancedAPSalesData} columns={columns} />
     </div>
   );
 };
 
-export default CreditSales;
+export default AdvancedAPSales;

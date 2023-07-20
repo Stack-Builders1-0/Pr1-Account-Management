@@ -9,24 +9,29 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import AddEmployee from "./pages/employee/AddEmployee";
 import AddTransaction from "./pages/transaction/AddTransaction";
 import AddCustomer from "./pages/customer/AddCustomer";
-import CashTransaction from "./pages/transaction/CashTransaction";
-import CreditTransaction from "./pages/transaction/CreditTransaction";
-import AdvanceBPTransaction from "./pages/transaction/AdvanceBPTransaction";
-import AdvanceAPTransaction from "./pages/transaction/AdvanceAPTransaction";
-import EditTransaction from "./pages/transaction/EditTransaction";
-import EditCashTransaction from "./pages/transaction/EditCashForm";
-import EditCreditTransaction from "./pages/transaction/EditCreditForm";
-import EditAdvanceTransaction from "./pages/transaction/EditAdvanceForm";
+import CashTransaction from "./pages/transaction/Cash/CashTransaction";
+import CreditTransaction from "./pages/transaction/Credit/CreditTransaction";
+import AdvanceBPTransaction from "./pages/transaction/AdvanceBP/AdvanceBPTransaction";
+import AddAdvanceBPForm from "./pages/transaction/AdvanceBP/AddAdvancedBP";
+import AdvanceAPTransaction from "./pages/transaction/AdvanceAP/AdvanceAPTransaction";
+// import EditTransaction from "./pages/transaction/EditTransaction";
+// import EditCashTransaction from "./pages/transaction/Cash" "./pages/transaction/Cash/EditCashForm";
+// import EditCreditTransaction from "./pages/transaction/Credit/EditCreditForm";
+// import EditAdvanceTransaction from "./pages/transaction/AdvanceBP/EditAdvanceForm";
+import ReturnAdvanceBP from "./pages/transaction/AdvanceBP/ReturnAdvanceBP";
+import SettleAdvancedBP from "./pages/transaction/AdvanceBP/SettleAdvancedBP";
 import Expenses from "./pages/expenses/Expenses";
 import AddExpense from "./pages/expenses/AddExpense";
 import Report from "./pages/report/Report";
 import { UserContext } from "./UserContext";
+import SettleForm from "./pages/transaction/Credit/SettleForm";
 import History from "./Histoty";
 
 function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    const sessionToken = localStorage.getItem("sessionToken");
     const sessionToken = localStorage.getItem("sessionToken");
     setUser(sessionToken);
   });
@@ -71,10 +76,29 @@ function App() {
                   element={<AdvanceBPTransaction />}
                 ></Route>
 
-                <Route
-                  path="/transaction/advanceaptransaction"
-                  element={<AdvanceAPTransaction />}
-                ></Route>
+              <Route
+                path="/transaction/credittransaction/settlepayment"
+                element={<SettleForm />}
+              ></Route>
+              <Route
+                path="/transaction/advancebptransaction"
+                element={<AdvanceBPTransaction />}
+              ></Route>
+
+              <Route
+                path="/transaction/advancebptransaction/add"
+                element={<AddAdvanceBPForm />}
+              ></Route>
+
+              <Route
+                path="/transaction/advancebptransaction/settletransaction"
+                element={<SettleAdvancedBP />}
+              ></Route>
+
+              <Route
+                path="/transaction/advanceaptransaction/returntransaction"
+                element={<ReturnAdvanceBP />}
+              ></Route>
 
                 <Route path="/edittransaction" element={<EditTransaction />}></Route>
                 <Route
@@ -96,8 +120,7 @@ function App() {
             </Routes>
           )
         }
-           
-        
+
       </UserContext.Provider>
     </BrowserRouter>
   );
