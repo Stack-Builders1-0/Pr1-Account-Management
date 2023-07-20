@@ -32,7 +32,7 @@ function App() {
 
   useEffect(() => {
     const sessionToken = localStorage.getItem("sessionToken");
-    const sessionToken = localStorage.getItem("sessionToken");
+    
     setUser(sessionToken);
   });
   // fetchUser();
