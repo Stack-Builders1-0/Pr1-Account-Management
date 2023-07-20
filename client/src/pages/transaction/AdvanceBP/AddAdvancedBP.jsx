@@ -75,7 +75,7 @@ function AddAdvanceBPForm() {
       };
 
       axios
-        .post("http://localhost:5000/advancesalebp/add", formdata, {
+        .post("http://localhost:5000/advanceSaleBP/add", formdata, {
           headers: { Authorization: "key " + sessionToken },
         })
         .then((res) => {

@@ -3,8 +3,20 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 function CustomModel({ show, onHide }) {
+
+  const sessionToken = localStorage.getItem('sessionToken');
+
+//   // define the handle submit function then use the request
+// axios.post('http://localhost:5000/dashboard/addOpeningBalance', {amount : amount}, {headers : {'Authorization' : 'key '+sessionToken}})
+// .then((res) => {
+//   console.log(res.data);
+// })
+// .catch((err) => {
+//   console.log(err);
+// })
 
 
   return (
