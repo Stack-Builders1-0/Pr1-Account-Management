@@ -34,6 +34,11 @@ function AddExpense() {
 
   const handleSelectChange = (e) => {
     const capitalizedType = capitalize(e.target.value);
+    setselectedType(capitalizedType);
+  };
+
+  const capitalize = (value) => {
+    return value.charAt(0).toUpperCase() + value.slice(1);
   };
 
   return (
@@ -51,6 +56,7 @@ function AddExpense() {
                 size="sm"
                 aria-label="Default select example w-50"
                 name="selectedType"
+                value={selectedType}
                 onChange={handleSelectChange}
               >
                 <option value="">--Select</option>
@@ -58,7 +64,7 @@ function AddExpense() {
                 <option value="travel">Travel</option>
                 <option value="others">Others</option>
               </Form.Select>
-              {/* <div>
+              <div>
                 <input
                   type="text"
                   className="form-control"
@@ -70,7 +76,7 @@ function AddExpense() {
                     setData({ ...data, expense_type: e.target.value })
                   }
                 />
-              </div> */}
+              </div>
             </label>
             <div className="col-12">
               <label htmlFor="inputDescription" className="form-label">

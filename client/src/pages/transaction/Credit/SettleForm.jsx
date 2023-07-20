@@ -92,7 +92,6 @@ function SettleForm() {
           { headers: { Authorization: "key " + sessionToken } }
         )
         .then((response) => {
-
           setSettleAmount("");
           setCustomerID("");
           setSelectedInvoiceNumber("");
