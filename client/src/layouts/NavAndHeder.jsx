@@ -17,6 +17,22 @@ function NavAndHeder() {
     setIsLoggedin(false);
   };
 
+    // Token is not present, consider it expired
+    function isTokenExpired() {
+      const sessionToken = localStorage.getItem('sessionToken');
+      if (!sessionToken) return true; 
+    }
+  
+    
+  
+    // Check token expiration when the app loads at regular intervals
+    // Check every minute
+    setInterval(() => {
+      if (isTokenExpired()) {
+        logout();
+      }
+    }, 60000); 
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {

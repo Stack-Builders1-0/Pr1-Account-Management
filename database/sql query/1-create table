@@ -412,7 +412,7 @@ alter table advance_sales_bp
 add column balance_updated_by int;
 
 ALTER TABLE advance_sales_bp 
-ADD INDEX `advance_sales_bp_ibfk_10_idx` (`balance_updated_by` ASC) VISIBLE;
+ADD INDEX `advance_sales_bp_ibfk_15_idx` (`balance_updated_by` ASC) VISIBLE;
 ;
 ALTER TABLE advance_sales_bp 
 ADD FOREIGN KEY (`balance_updated_by`)
@@ -440,7 +440,7 @@ add column return_update_by int;
 
 
 ALTER TABLE advance_sales_bp 
-ADD INDEX `advance_sales_bp_ibfk_11_idx` (`return_update_by` ASC) VISIBLE;
+ADD INDEX `advance_sales_bp_ibfk_16_idx` (`return_update_by` ASC) VISIBLE;
 ;
 ALTER TABLE advance_sales_bp 
 ADD FOREIGN KEY (`return_update_by`)
