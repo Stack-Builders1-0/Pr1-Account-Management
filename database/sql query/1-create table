@@ -165,18 +165,27 @@ CREATE TABLE accountmanagement.expenses (
   expense_id INT NOT NULL AUTO_INCREMENT,
   type varchar(255) NOT NULL,
   manual_expense_id VARCHAR(45) NULL,
-  date DATETIME NULL,
+  date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   description VARCHAR(255) NULL,
-  net_total float not null,
+  amount float not null,
   employee_id int not null,
+  updated_by int DEFAULT null,
+  updated_at TIMESTAMP DEFAULT null ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (expense_id),
  
 
  FOREIGN KEY (employee_id)
 REFERENCES accountmanagement.employees(employee_id)
 ON DELETE CASCADE
-ON UPDATE CASCADE
+ON UPDATE CASCADE,
+
+FOREIGN KEY (`updated_by`)
+  REFERENCES `accountmanagement`.`employees` (`employee_id`)
+  ON DELETE NO ACTION
+  ON UPDATE cascade
 );
+
+  
 
 
 
@@ -485,3 +494,18 @@ ADD COLUMN date TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 ALTER TABLE advance_ap_partial_settle 
 drop column date,
 add COLUMN date TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+
+CREATE TABLE opening_balance (
+	id INT NOT NULL AUTO_INCREMENT,
+  date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
+  employee_id int NOT NULL,
+  amount FLOAT NOT NULL,
+  closed boolean DEFAULT false,
+  primary key(id),
+    
+ FOREIGN KEY (employee_id)
+REFERENCES employees(employee_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+);

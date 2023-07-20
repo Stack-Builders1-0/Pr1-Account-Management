@@ -5,26 +5,30 @@ import Form from "react-bootstrap/Form";
 
 function AddExpense() {
   const [data, setData] = useState({
-    expense_type: "",
+    manual_expense_id :"",
+    type: "",
     description: "",
     amount: "",
   });
+
+
   const [selectedType, setselectedType] = useState("");
 
   const navigate = useNavigate();
 
+  const sessionToken = localStorage.getItem('sessionToken');
+
   const handleSubmit = (event) => {
     event.preventDefault();
     // formdata.append("image", data.image);
+    console.log(data);
     axios
-      .post("http://localhost:5000/expense/add", data)
+      .post("http://localhost:5000/expenses/add", data, {headers : {'Authorization' : 'key '+sessionToken}})
       .then((res) => {
         console.log(res.data);
         if (res.data.sucess) {
           // we want to diply sucess message
           navigate("/employee");
-        } else if (res.data.isExist) {
-          alert("NIC already exist. Please check your NIC!!!");
         } else if (res.data.isError) {
           alert("Please check your details!!!");
         }
@@ -73,11 +77,26 @@ function AddExpense() {
                   readOnly
                   autoComplete="off"
                   onChange={(e) =>
-                    setData({ ...data, expense_type: e.target.value })
+                    setData({ ...data, type: e.target.value })
                   }
                 />
               </div>
             </label>
+
+            <div className="col-12">
+              <label htmlFor="manualExpenseId" className="form-label">
+              Expense Invoice no
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="manualExpenseId"
+                placeholder="Expense Invoice no"
+                onChange={(e) => setData({ ...data, manual_expense_id: e.target.value })}
+              />
+            </div>
+
+
             <div className="col-12">
               <label htmlFor="inputDescription" className="form-label">
                 Description

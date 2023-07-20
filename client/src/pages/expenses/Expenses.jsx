@@ -28,7 +28,8 @@ function Expenses() {
         <table className="table table-bordered">
           <thead>
             <tr>
-              <th>Expense ID</th>
+              <th>Date</th>
+              <th>Invoice ID</th>
               <th>Expense Type</th>
               <th>Description</th>
               <th>Amount</th>
@@ -38,10 +39,11 @@ function Expenses() {
             {/* Table rows with data */}
             {expenseData.map((data) => (
               <tr key={data.expense_id}>
-                <td>{data.expense_id}</td>
+                <td>{data.date}</td>
+                <td>{data.manual_expense_id}</td>
                 <td>{data.type}</td>
                 <td>{data.description}</td>
-                <td>{data.net_total}</td>
+                <td>{data.amount}</td>
               </tr>
             ))}
           </tbody>

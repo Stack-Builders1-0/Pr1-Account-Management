@@ -62,6 +62,11 @@ CREATE TRIGGER after_insert_advance_bp_partial_settle_update_balance
 AFTER INSERT ON advance_bp_partial_settle FOR EACH ROW
 BEGIN
 	if  (select count(id) from advance_bp_partial_settle where invoice_id = new.invoice_id) > 1 then
-		UPDATE advance_sales_bp SET balance = new.balance , balance_updated_by = new.employee_id, update_at = update_at WHERE (invoice_id = new.invoice_id);
+		if (new.settle_amount > 0) then
+			UPDATE advance_sales_bp SET balance = new.balance , balance_updated_by = new.employee_id WHERE (invoice_id = new.invoice_id);
+		end if;
+        if (new.return_payment > 0) then
+			UPDATE advance_sales_bp SET balance = new.balance , return_update_by = new.employee_id,return_payment = return_payment + new.return_payment WHERE (invoice_id = new.invoice_id);
+		end if;
     end if;
 END //
