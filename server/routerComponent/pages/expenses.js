@@ -27,9 +27,8 @@ router.post("/add", (req, res) => {
   const employee_id = decodedUserId(sessionToken);
 
   const insertQuery =
-    "insert into expenses (type,manual_expense_id, description, amount, employee_id ) values (?,?,?,?,?);";
+    "insert into expenses (type,manual_expense_id, description, net_total, employee_id ) values (?,?,?,?,?);";
 
-  
   connection.query(
     insertQuery,
     [
@@ -37,7 +36,7 @@ router.post("/add", (req, res) => {
       body.manual_expense_id,
       body.description,
       body.amount,
-      employee_id
+      employee_id,
     ],
     (err, result) => {
       if (err) {
@@ -46,7 +45,7 @@ router.post("/add", (req, res) => {
           sucess: false,
           isError: true,
           error: err,
-          result: null
+          result: null,
         });
       } else {
         res.send({
@@ -82,6 +81,5 @@ router.get("/showAll", (req, res) => {
     }
   });
 });
-
 
 module.exports = router;

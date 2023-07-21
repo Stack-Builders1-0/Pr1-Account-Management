@@ -5,25 +5,23 @@ import axios from "axios";
 
 function Report() {
   const [transactionData, setTransactionData] = useState([]);
-  const [date, setDate] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
   // const [endDate, setEndDate] = useState("");
   // Your data array
   const data = [];
 
-  // const handleDateChange = (e) => {
-  //   setDate(e.target.value);
-  // };
+  const handleStartDateChange = (e) => {
+    const selectedDate = e.target.value;
+    const startDateWithTime = `${selectedDate} 00:00:00`;
+    setStartDate(startDateWithTime);
+  };
 
-  const handleDateChange = (e) => {
-    const selectedDate = new Date(e.target.value);
-
-    const year = selectedDate.getFullYear();
-    const month = String(selectedDate.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
-    const day = String(selectedDate.getDate()).padStart(2, "0");
-
-    const formattedDate = `${year}-${month}-${day}`;
-
-    setDate(formattedDate);
+  const handleEndDateChange = (e) => {
+    const selectedDate = e.target.value;
+    const endDateWithTime = `${selectedDate} 23:59:59`;
+    setEndDate(endDateWithTime);
   };
 
   useEffect(() => {
@@ -31,10 +29,14 @@ function Report() {
 
     // Make the API call here using the updated 'date' value
     axios
-      .post("http://localhost:5000/report/getSales", { date: date })
+      .post("http://localhost:5000/report/getSalesBetweenDate", {
+        startDate: startDate,
+        endDate: endDate,
+      })
       .then((res) => {
         // Handle the API response here
         setTransactionData(res.data.result);
+        console.log(endDate);
       })
       .catch((err) => {
         // Handle errors
@@ -81,20 +83,20 @@ function Report() {
   const capitalize = (value) => {
     return value.charAt(0).toUpperCase() + value.slice(1);
   };
-  const getDateFromTimestamp = (data) => {
-    const dateObj = new Date(data.date);
+  // const getDateFromTimestamp = (data) => {
+  //   const dateObj = new Date(data.date);
 
-    const year = dateObj.getFullYear();
-    const month = String(dateObj.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed, so add 1 and pad with '0'
-    const day = String(dateObj.getDate()).padStart(2, "0");
+  //   const year = dateObj.getFullYear();
+  //   const month = String(dateObj.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed, so add 1 and pad with '0'
+  //   const day = String(dateObj.getDate()).padStart(2, "0");
 
-    return `${year}-${month}-${day}`;
-  };
+  //   return `${year}-${month}-${day}`;
+  // };
 
-  const bgChanger = (data) => {
-    const bg = data.balance > 0 ? "bg-danger" : "bg-success";
-    return bg;
-  };
+  // const bgChanger = (data) => {
+  //   const bg = data.balance > 0 ? "bg-danger" : "bg-success";
+  //   return bg;
+  // };
 
   return (
     <div>
@@ -107,8 +109,21 @@ function Report() {
 
         <div>
           <label>
-            Date:
-            <input type="date" value={date} onChange={handleDateChange} />
+            Start Date:
+            <input
+              type="date"
+              value={startDate.slice(0, 10)}
+              onChange={handleStartDateChange}
+            />
+          </label>
+
+          <label>
+            End Date:
+            <input
+              type="date"
+              value={endDate.slice(0, 10)}
+              onChange={handleEndDateChange}
+            />
           </label>
 
           <ul>
@@ -138,11 +153,12 @@ function Report() {
             {/* Table rows with data */}
             {transactionData.map((data) => (
               <tr
-                className={bgChanger(data)}
-                key={data.invoice_id + data.type_id}
+              // className={bgChanger(data)}
+              // key={data.invoice_id + data.type_id}
               >
                 <td>{data.manual_invoice_id}</td>
-                <td>{getDateFromTimestamp(data)}</td>
+                {/* <td>{getDateFromTimestamp(data)}</td> */}
+                <td>{data.date}</td>
                 <td>{capitalize(data.type)}</td>
                 {/* <td>{data.cutomername}</td> */}
                 <td>{data.amount - data.balance}</td>
