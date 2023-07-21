@@ -16,9 +16,10 @@ function Dashboard() {
 
   const navigate = useNavigate()
   
-  const handleHistory = (invoice_id) => {
+  const handleHistory = (invoice_id, type_id) => {
     
     localStorage.setItem('invoice_id', invoice_id);
+    localStorage.setItem('type_id', type_id);
     navigate('/history');
   };
 
@@ -49,7 +50,7 @@ function Dashboard() {
 
 
     axios
-      .get(import.meta.env.VITE_API_URL + "/creditSale/creditNotSettle")
+      .get('http://localhost:5000/dashboard/creditNotSettle')
       .then((res) => {
         setCreditSaleData(res.data.result);
       })
@@ -57,15 +58,15 @@ function Dashboard() {
         console.log("Error fetching creditSale data:", error);
       });
 
-    axios.get(import.meta.env.VITE_API_URL + "/advanceSaleAP/creditNotSettle")
-      .then((res) => {
-        // console.log(res.data.result);
-      });
+    // axios.get(import.meta.env.VITE_API_URL + "/advanceSaleAP/creditNotSettle")
+    //   .then((res) => {
+    //     // console.log(res.data.result);
+    //   });
 
-    axios.get(import.meta.env.VITE_API_URL + "/advanceSaleBP/creditNotSettle")
-      .then((res) => {
-        // console.log(res.data.result);
-      });
+    // axios.get(import.meta.env.VITE_API_URL + "/advanceSaleBP/creditNotSettle")
+    //   .then((res) => {
+    //     // console.log(res.data.result);
+    //   });
     
       
   }, []);
@@ -128,34 +129,34 @@ function Dashboard() {
         <table className="table table-bordered">
           <thead>
             <tr>
-              <th>Name</th>
+              <th>StartedDate</th>
+              <th>InvoiceNo</th>
+              <th>Type</th>
+              <th>CustomerName</th>
               <th>BusinessName</th>
-              <th>Address</th>
-              <th>Telephone</th>
               <th>Mobile</th>
               <th>TotalAmount</th>
               <th>AmountSettled</th>
               <th>Balance</th>
-              <th>StartedDate</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {/* Table rows with data */}
             {creditSaleData.map((sale) => (
-              <tr key={sale.invoice_id}>
+              <tr key={sale.invoice_id + sale.type_id}>
+                <td>{sale.date}</td>
+                <td>{sale.manual_invoice_id}</td>
+                <td>{sale.type}</td>
                 <td>{sale.customer_name}</td>
                 <td>{sale.business_name}</td>
-                <td>{sale.address}</td>
-                <td>{sale.office_num}</td>
                 <td>{sale.mobile}</td>
                 <td>{sale.amount}</td>
-                <td>{sale.settle_amount}</td>
+                <td>{sale.amount - sale.balance}</td>
                 <td>{sale.balance}</td>
-                <td>{sale.date}</td>
                 <td>
                   {/* Action buttons */}
-                  <button onClick={() => handleHistory(sale.invoice_id)}>History</button>
+                  <button onClick={() => handleHistory(sale.invoice_id,sale.type_id)}>History</button>
                 </td>
               </tr>
             ))}
