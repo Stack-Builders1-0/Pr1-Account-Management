@@ -242,7 +242,7 @@ router.post('/histoyCreditTransection', (req, res) =>{
 router.post("/filterManualInvoice", (req, res) => {
 
   const selectQuery =
-    "SELECT invoice_id, income_type.type_id, type, type_id, manual_invoice_id,customer_id, description, bill_amount, discount, amount, balance, date , customer_name, business_name, credit_limit, nic_no, mobile FROM advance_sales_ap join accountmanagement.income_type using (type_id)  join customers using (customer_id) where manual_invoice_id = "+ mysql.escape(req.body.manual_invoice_id);
+    "SELECT * from amount_details_on_date_ap where manual_invoice_id = "+ mysql.escape(req.body.manual_invoice_id);
 
   connection.query(selectQuery, (err, result) => {
     if (err) {
