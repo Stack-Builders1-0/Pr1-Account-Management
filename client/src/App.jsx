@@ -26,7 +26,9 @@ import Expenses from "./pages/expenses/Expenses";
 import AddExpense from "./pages/expenses/AddExpense";
 import { UserContext } from "./UserContext";
 import SettleForm from "./pages/transaction/Credit/SettleForm";
-import History from "./Histoty";
+import History from "./History";
+import Report from "./pages/report/Report";
+
 
 function App() {
   const [user, setUser] = useState(null);
@@ -40,40 +42,41 @@ function App() {
   return (
     <BrowserRouter>
       <UserContext.Provider value={{ user, setUser }}>
-        {!user ? (
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            {/* <Route path="/" element={<Navigate to="/login" replace />} /> */}
-            <Route
-              path="*"
-              element={<p>This page isn't available. Sorry about that.</p>}
-            ></Route>
-          </Routes>
-        ) : (
-          <Routes>
-            <Route path="/" element={<NavAndHeder />}>
-              <Route path="" element={<Dashboard />}></Route>
-              <Route path="/employee" element={<Employee />}></Route>
-              <Route path="/transaction" element={<AddTransaction />}></Route>
-              <Route path="/profile" element={<Profile />}></Route>
-              <Route path="/customer" element={<Customer />}></Route>
-              <Route path="/addemployee" element={<AddEmployee />}></Route>
-              <Route path="/addcustomer" element={<AddCustomer />}></Route>
-              <Route path="/expenses" element={<Expenses />}></Route>
-              <Route path="/addexpense" element={<AddExpense />}></Route>
-              <Route path="/history" element={<History />}></Route>
-              <Route
-                path="/transaction/cashtransaction"
-                element={<CashTransaction />}
-              ></Route>
-              <Route
-                path="/transaction/credittransaction"
-                element={<CreditTransaction />}
-              ></Route>
-              <Route
-                path="/transaction/advancebptransaction"
-                element={<AdvanceBPTransaction />}
-              ></Route>
+        {
+          !user ? (
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              {/* <Route path="/" element={<Navigate to="/login" replace />} /> */}
+              <Route path="*" element={<p>This page isn't available. Sorry about that.</p>}></Route>
+            </Routes>
+          ) : (
+            <Routes>
+              <Route path="/" element={<NavAndHeder />}>
+                <Route path="" element={<Dashboard />}></Route>
+                <Route path="/employee" element={<Employee />}></Route>
+                <Route path="/transaction" element={<AddTransaction />}></Route>
+                <Route path="/profile" element={<Profile />}></Route>
+                <Route path="/customer" element={<Customer />}></Route>
+                <Route path="/addemployee" element={<AddEmployee />}></Route>
+                <Route path="/addcustomer" element={<AddCustomer />}></Route>
+                <Route path="/expenses" element={<Expenses />}></Route>
+                  <Route path="/addexpense" element={<AddExpense />}></Route>
+                  <Route
+                    path="/history" element={<History/>}>
+                </Route>
+                <Route path="/report" element={<Report />}></Route>
+                <Route
+                  path="/transaction/cashtransaction"
+                  element={<CashTransaction />}
+                ></Route>
+                <Route
+                  path="/transaction/credittransaction"
+                  element={<CreditTransaction />}
+                ></Route>
+                <Route
+                  path="/transaction/advancebptransaction"
+                  element={<AdvanceBPTransaction />}
+                ></Route>
 
               <Route
                 path="/transaction/credittransaction/settlepayment"

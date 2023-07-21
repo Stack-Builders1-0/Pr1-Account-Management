@@ -92,14 +92,12 @@ function SettleAdvancedBP() {
       };
 
       axios
-        .post(
-          "http://localhost:5000/advanceSaleBP/settle",
+        .post("http://localhost:5000/advanceSaleBP/settle",
           { data: settleData },
           { headers: { Authorization: "key " + sessionToken } }
         )
         .then((response) => {
-          console.log("Settle API response:", response.data);
-
+          navigate("/transaction");
           setSettleAmount("");
           setCustomerID("");
           setSelectedInvoiceNumber("");
