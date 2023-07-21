@@ -127,9 +127,47 @@ router.post("/totalCreditSales", (req, res) => {
   catch(err){
     res.send({tokenValied: false})
   }
-  
-
-  
 });
+
+
+
+router.post('/addOpeningBalance', (req, res) => {
+  const amount  = req.body.amount;
+
+  try{
+    const sessionToken = req.headers.authorization.replace('key ','');
+    const employee_id = decodedUserId(sessionToken);
+// const employee_id = req.body.employee_id;
+
+    const settleQuery = "insert into opening_balance (employee_id, amount) values (?,?);";
+
+    // response has 3 field 
+    // error occur then error = true , otherwise error = false
+    // exist => if the employee nic alredy regiterd exist = true else exist = false
+    // employee regeister is sucess then sucess=true
+    connection.query(settleQuery, [employee_id, amount ], (err, result) => {
+        if (err) {
+            console.log(err)
+            res.send({
+                sucess : false,
+                isError : true
+            })
+        }
+        else{
+            res.send({
+                sucess : true,
+                isError : false
+            })
+        }
+    });
+  }catch(err){
+    res.send({
+      isTokenValied : false
+    });
+  }
+
+});
+
+
 
 module.exports = router;

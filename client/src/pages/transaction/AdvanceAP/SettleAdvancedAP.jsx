@@ -7,7 +7,7 @@ import Alert from "react-bootstrap/Alert";
 import CommonNavbar from "./CommonNavbar";
 
 //settle form of advancebp
-function SettleAdvancedBP() {
+function SettleAdvancedAP() {
   const [searchInvoiceNumber, setSearchInvoiceNumber] = useState("");
   const [customerID, setCustomerID] = useState("");
   const [balance, setBalance] = useState("");
@@ -27,7 +27,7 @@ function SettleAdvancedBP() {
     e.preventDefault();
     setIsSearchPerformed(false);
     axios
-      .post("http://localhost:5000/advanceSaleBP/filterManualInvoice", {
+      .post("http://localhost:5000/advanceSaleAP/filterManualInvoice", {
         manual_invoice_id: searchInvoiceNumber,
       })
       .then((res) => {
@@ -92,7 +92,8 @@ function SettleAdvancedBP() {
       };
 
       axios
-        .post("http://localhost:5000/advanceSaleBP/settle",
+        .post(
+          "http://localhost:5000/advanceSaleAP/settle",
           { data: settleData },
           { headers: { Authorization: "key " + sessionToken } }
         )
@@ -126,7 +127,7 @@ function SettleAdvancedBP() {
             <CommonNavbar />
           </div>
           <div className="d-flex flex-column align-items-center">
-            <h2>AdvanceBP Payment Only</h2>
+            <h2>AdvanceAP Payment Only</h2>
           </div>
           <Form onSubmit={handleSearch}>
             <h3 className="text-center">Settle Payment</h3>
@@ -159,7 +160,7 @@ function SettleAdvancedBP() {
 
           {isSearchPerformed && filteredRecords && (
             <>
-              <h4 className="text-center">AdvanceBP Sales Information</h4>
+              <h4 className="text-center">AdvanceAP Sales Information</h4>
               <p>Customer ID: {filteredRecords.customer_id}</p>
               <p>Description: {filteredRecords.description}</p>
               <p>Bill Amount: {filteredRecords.bill_amount}</p>
@@ -213,4 +214,4 @@ function SettleAdvancedBP() {
   );
 }
 
-export default SettleAdvancedBP;
+export default SettleAdvancedAP;

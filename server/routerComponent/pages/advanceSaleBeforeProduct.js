@@ -1,5 +1,6 @@
 const mysql = require("mysql");
 const express = require("express");
+const decodeUserId = require('../Authentication/decodedToken');
 
 const router = express.Router();
 
@@ -24,6 +25,10 @@ router.post("/add", (req, res) => {
   const amount = body.bill_amount - body.discount;
   const balance = amount - body.advance_amount;
 
+  const sessionToken = req.headers.authorization.replace('key ','');
+  const employee_id = decodeUserId(sessionToken);
+
+
   const insertQuery =
     "insert into accountmanagement.advance_sales_bp (type_id,manual_invoice_id, customer_id, description, bill_amount,advance_amount, discount, employee_id, amount,balance, balance_updated_by ) values (?,?,?,?,?,?,?,?,?,?,?);";
 
@@ -41,24 +46,26 @@ router.post("/add", (req, res) => {
       body.bill_amount,
       body.advance_amount,
       body.discount,
-      body.employee_id,
+      employee_id,
       amount,
       balance,
-      body.employee_id,
+      employee_id,
     ],
     (err, result) => {
       if (err) {
         console.log(err);
         res.send({
           sucess: false,
-          error: true,
-          exist: false,
+          isError: true,
+          error: err,
+          result:result
         });
       } else {
         res.send({
           sucess: true,
-          error: false,
-          exist: false,
+          isError: false,
+          error :null,
+          result : result
         });
       }
     }
@@ -136,8 +143,11 @@ router.post("/edit", (req, res) => {
 });
 
 router.post("/settle", (req, res) => {
-  body = req.body;
+  body = req.body.data;
   const balance = body.balance - body.settle_amount;
+
+  const sessionToken = req.headers.authorization.replace('key ','');
+  employee_id = decodeUserId(sessionToken);
   const total_settle_amount = parseFloat(body.amount)-parseFloat(body.balance) + parseFloat(body.settle_amount)
 
   const settleQuery =
@@ -156,7 +166,7 @@ router.post("/settle", (req, res) => {
       body.description,
       body.settle_amount,
       balance,
-      body.employee_id,
+      employee_id,
       total_settle_amount
     ],
     (err, result) => {
@@ -164,14 +174,16 @@ router.post("/settle", (req, res) => {
         console.log(err);
         res.send({
           sucess: false,
-          error: true,
-          exist: false,
+          iError: true,
+          error:err,
+          result: null,
         });
       } else {
         res.send({
           sucess: true,
-          error: false,
-          exist: false,
+          isError: false,
+          error: null,
+          result:result
         });
       }
     }
@@ -239,25 +251,82 @@ router.post("/filterManualInvoice", (req, res) => {
       res.send({
         sucess: false,
         isError: true,
-        result: null,
+        error : err,
+        result: null
       });
     } else {
       if (result.length == 0){
         res.send({
           sucess: true,
           isError: false,
-          result: null,
+          error : null,
+          result: null
         });
       }else{
         res.send({
           sucess: true,
           isError: false,
-          result: result,
+          error : null,
+          result: result
         });
       }
     }
   });
 });
+
+
+
+router.post("/return", (req, res) => {
+  body = req.body.data;
+  const balance = parseFloat(body.balance) + parseFloat(body.return_payment);
+
+  const sessionToken = req.headers.authorization.replace('key ','');
+  employee_id = decodeUserId(sessionToken);
+  const total_settle_amount = parseFloat(body.amount)-parseFloat(body.balance) - parseFloat(body.return_payment)
+
+  const settleQuery =
+    "insert into accountmanagement.advance_bp_partial_settle (type_id,invoice_id, customer_id, description, settle_amount, balance, employee_id, total_settle_amount,return_payment ) values (?,?,?,?,?,?,?,?,?);";
+
+  // response has 3 field
+  // error occur then error = true , otherwise error = false
+  // exist => if the employee nic alredy regiterd exist = true else exist = false
+  // employee regeister is sucess then sucess=true
+  connection.query(
+    settleQuery,
+    [
+      // body.type_id,========================================================================================
+      "as",
+      body.invoice_id,
+      body.customer_id,
+      body.description,
+      0,
+      balance,
+      employee_id,
+      total_settle_amount,
+      body.return_payment
+    ],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.send({
+          sucess: false,
+          iError: true,
+          error:err,
+          result: null,
+        });
+      } else {
+        res.send({
+          sucess: true,
+          isError: false,
+          error: null,
+          result:result
+        });
+      }
+    }
+  );
+});
+
+
 
 
 module.exports = router;

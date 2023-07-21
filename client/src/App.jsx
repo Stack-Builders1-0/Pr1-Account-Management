@@ -14,6 +14,8 @@ import CreditTransaction from "./pages/transaction/Credit/CreditTransaction";
 import AdvanceBPTransaction from "./pages/transaction/AdvanceBP/AdvanceBPTransaction";
 import AddAdvanceBPForm from "./pages/transaction/AdvanceBP/AddAdvancedBP";
 import AdvanceAPTransaction from "./pages/transaction/AdvanceAP/AdvanceAPTransaction";
+import AddAdvanceAPForm from "./pages/transaction/AdvanceAP/AdvanceAPForm";
+import SettleAdvancedAP from "./pages/transaction/AdvanceAP/SettleAdvancedAP";
 // import EditTransaction from "./pages/transaction/EditTransaction";
 // import EditCashTransaction from "./pages/transaction/Cash" "./pages/transaction/Cash/EditCashForm";
 // import EditCreditTransaction from "./pages/transaction/Credit/EditCreditForm";
@@ -24,9 +26,8 @@ import Expenses from "./pages/expenses/Expenses";
 import AddExpense from "./pages/expenses/AddExpense";
 import { UserContext } from "./UserContext";
 import SettleForm from "./pages/transaction/Credit/SettleForm";
-import History from "./Histoty";
-
-
+import History from "./History";
+import Report from "./pages/report/Report";
 
 
 function App() {
@@ -63,6 +64,7 @@ function App() {
                   <Route
                     path="/history" element={<History/>}>
                 </Route>
+                <Route path="/report" element={<Report />}></Route>
                 <Route
                   path="/transaction/cashtransaction"
                   element={<CashTransaction />}
@@ -98,6 +100,21 @@ function App() {
               <Route
                 path="/transaction/advanceaptransaction/returntransaction"
                 element={<ReturnAdvanceBP />}
+              ></Route>
+
+              <Route
+                path="/transaction/advanceaptransaction"
+                element={<AdvanceAPTransaction />}
+              ></Route>
+
+              <Route
+                path="/transaction/advanceaptransaction/add"
+                element={<AddAdvanceAPForm />}
+              ></Route>
+
+              <Route
+                path="/transaction/advanceaptransaction/settletransaction"
+                element={<SettleAdvancedAP />}
               ></Route>
 
               {/* <Route
