@@ -24,7 +24,7 @@ function AddEmployee() {
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		// formdata.append("image", data.image);
-		axios.post('http://localhost:5000/employee/add', data)
+		axios.post(import.meta.env.VITE_API_URL +'/employee/add', data)
 			.then(res => {
 				console.log(res.data);
 				if (res.data.sucess) {
@@ -112,12 +112,14 @@ function AddEmployee() {
 							/>
 						</Form.Group>
 
-						<Form.Group className="mb-3">
-							<Form.Label htmlFor="inputType">Type ID</Form.Label>
-							<Form.Select aria-label="Default select example">
+						<Form.Group controlId="select" className="mb-3">
+							
+							<Form.Label >Type ID</Form.Label>
+							<Form.Select type='text'>
 								<option>select type id</option>
 								<option value="cas">cashier</option>
 								<option value="sca">Special cashier</option>
+								
 								autoComplete="off"
 								onChange={(e) => setData({ ...data, type_id: e.target.value })}
 							</Form.Select>

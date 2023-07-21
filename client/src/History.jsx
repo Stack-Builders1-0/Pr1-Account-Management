@@ -13,6 +13,7 @@ function History() {
       .post(
         import.meta.env.VITE_API_URL + "/creditSale/histoyCreditTransection",
         { invoice_id: invoice_id, type_id:type_id}
+
       )
       .then((res) => {
         setInvoiceHistory(res.data.result);

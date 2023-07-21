@@ -31,6 +31,7 @@ import SettleForm from "./pages/transaction/Credit/SettleForm";
 import History from "./History";
 import Report from "./pages/report/Report";
 
+
 function App() {
   const [user, setUser] = useState(null);
 
@@ -43,6 +44,7 @@ function App() {
   return (
     <BrowserRouter>
       <UserContext.Provider value={{ user, setUser }}>
+
         {!user ? (
           <Routes>
             <Route path="/login" element={<Login />} />
