@@ -4,9 +4,24 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 function Report() {
+  const today = new Date();
+
+  const defaultStartDate = `${
+    today.getFullYear
+  }-${today.getMonth()}-${today.getDate()} 00:00:00`;
+  const defaultEndtDate = `${
+    today.getFullYear
+  }-${today.getMonth()}-${today.getDate()} 23:59:59`;
+
+  // Extract the components of the current date and time
+
   const [transactionData, setTransactionData] = useState([]);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(defaultStartDate);
+  const [endDate, setEndDate] = useState(defaultEndtDate);
+  // const [startDate, setStartDate] = useState("13-07-2023 00:00:00");
+  // const [endDate, setEndDate] = useState("13-07-2023 23:59:59");
+
+  const [submitted, setSubmitted] = useState(false);
 
   // const [endDate, setEndDate] = useState("");
   // Your data array
@@ -24,10 +39,13 @@ function Report() {
     setEndDate(endDateWithTime);
   };
 
-  useEffect(() => {
-    // This block will run whenever the 'date' state is updated
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Prevent form submission
 
-    // Make the API call here using the updated 'date' value
+    // You can perform any necessary actions here after clicking the submit button
+    // For example, you can call an API, update the state, etc.
+
+    setSubmitted(true);
     axios
       .post("http://localhost:5000/report/getSalesBetweenDate", {
         startDate: startDate,
@@ -36,38 +54,18 @@ function Report() {
       .then((res) => {
         // Handle the API response here
         setTransactionData(res.data.result);
-        console.log(endDate);
       })
       .catch((err) => {
         // Handle errors
-      });
-  });
-  // Identify the transaction type
-  // const transactionFilter = ({ data }) => {
-  // if(data.type_id==ad)
-  // const handleDateChange = (e) => {
-  //   setDate(e.target.value);
-  //   console.log(date);
-  //   axios
-  //     .post("http://localhost:5000/report/getSale", date)
-  //     .then((res) => {
-  //       // console.log(res.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
-
-  //   const handleEndDateChange = (e) => {
-  //     setEndDate(e.target.value);
-  //   };
+      }); // Set the submitted flag to true to trigger the date filtering
+  };
 
   // Filter the data based on the start and end dates
-  const filteredData = data.filter((item) => {
-    if (!startDate || !endDate) {
-      return true; // If start or end date is not provided, return all items
-    }
-  });
+  // const filteredData = data.filter((item) => {
+  //   if (!startDate || !endDate) {
+  //     return true; // If start or end date is not provided, return all items
+  //   }
+  // });
 
   let balance = 0;
   const calculateBalance = ({ data }) => {
@@ -75,45 +73,44 @@ function Report() {
     return balance;
   };
 
-  // let totCredit = 0;
-  // const calculateTotCreadit = ({ data }) => {
-  //   totCredit += data.balance;
-  // };
-
   const capitalize = (value) => {
     return value.charAt(0).toUpperCase() + value.slice(1);
   };
-  // const getDateFromTimestamp = (data) => {
-  //   const dateObj = new Date(data.date);
+  const getDateFromTimestamp = (data) => {
+    const dateObj = new Date(data.date);
 
-  //   const year = dateObj.getFullYear();
-  //   const month = String(dateObj.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed, so add 1 and pad with '0'
-  //   const day = String(dateObj.getDate()).padStart(2, "0");
+    const year = dateObj.getFullYear();
+    const month = String(dateObj.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed, so add 1 and pad with '0'
+    const day = String(dateObj.getDate()).padStart(2, "0");
 
-  //   return `${year}-${month}-${day}`;
-  // };
+    return `${year}-${month}-${day}`;
+  };
 
-  // const bgChanger = (data) => {
-  //   const bg = data.balance > 0 ? "bg-danger" : "bg-success";
-  //   return bg;
-  // };
+  const cashTextChanger = (data) => {
+    // Your logic to determine the font color based on the data
+    // For example, let's say you want to make the font color red for negative balance and green for positive balance
+    ``;
+    return data.amount - data.balance ? "text-success" : "";
+  };
+
+  const credTextChanger = (data) => {
+    // Your logic to determine the font color based on the data
+    // For example, let's say you want to make the font color red for negative balance and green for positive balance
+
+    return data.balance ? "text-danger" : "";
+  };
 
   return (
     <div>
       <div>
-        <div className="mt-3 px-2 pt-2">
-          <table className="table table-bordered">
-            {/* ... Table header and rows ... */}
-          </table>
-        </div>
-
-        <div>
+        <form onSubmit={handleSubmit}>
           <label>
-            Start Date:
+            Start Date
             <input
               type="date"
-              value={startDate.slice(0, 10)}
+              value={startDate.slice(0, 10)} // Show only the date part
               onChange={handleStartDateChange}
+              className="custom-date-input"
             />
           </label>
 
@@ -121,17 +118,22 @@ function Report() {
             End Date:
             <input
               type="date"
-              value={endDate.slice(0, 10)}
+              value={endDate.slice(0, 10)} // Show only the date part
               onChange={handleEndDateChange}
+              className="custom-date-input"
             />
           </label>
 
-          <ul>
-            {filteredData.map((item) => (
-              <li key={item.id}>{item.name}</li>
-            ))}
-          </ul>
-        </div>
+          <button type="submit" className="btn btn-primary m-2">
+            Show
+          </button>
+        </form>
+
+        {/* <ul>
+          {filteredData.map((item) => (
+            <li key={item.id}>{item.name}</li>
+          ))}
+        </ul> */}
       </div>
 
       <div></div>
@@ -152,17 +154,16 @@ function Report() {
           <tbody>
             {/* Table rows with data */}
             {transactionData.map((data) => (
-              <tr
-              // className={bgChanger(data)}
-              // key={data.invoice_id + data.type_id}
-              >
+              <tr key={data.invoice_id + data.type_id}>
                 <td>{data.manual_invoice_id}</td>
-                {/* <td>{getDateFromTimestamp(data)}</td> */}
-                <td>{data.date}</td>
+                <td>{getDateFromTimestamp(data)}</td>
+                {/* <td>{data.date}</td> */}
                 <td>{capitalize(data.type)}</td>
                 {/* <td>{data.cutomername}</td> */}
-                <td>{data.amount - data.balance}</td>
-                <td>{data.balance}</td>
+                <td className={cashTextChanger(data)}>
+                  {data.amount - data.balance}
+                </td>
+                <td className={credTextChanger(data)}>{data.balance}</td>
                 <td>{calculateBalance({ data })}</td>
               </tr>
             ))}

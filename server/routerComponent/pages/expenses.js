@@ -28,6 +28,7 @@ router.post("/add", (req, res) => {
 
   const insertQuery =
     "insert into expenses (type,manual_expense_id, description, net_total, employee_id ) values (?,?,?,?,?);";
+  // "insert into expenses (type,manual_expense_id, description, net_total ) values (?,?,?,?);";
 
   connection.query(
     insertQuery,
@@ -61,7 +62,7 @@ router.post("/add", (req, res) => {
 
 router.get("/showAll", (req, res) => {
   const selectQuery =
-    "SELECT manual_expense_id, type,date,description, amount FROM expenses;";
+    "SELECT manual_expense_id, type,date,description, net_total FROM expenses;";
   connection.query(selectQuery, (err, result) => {
     if (err) {
       console.log(err);

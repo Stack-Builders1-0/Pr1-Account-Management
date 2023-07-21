@@ -58,7 +58,7 @@ router.post("/getSalesBetweenDate", (req, res) => {
   //   const employee_id = decodeUserId(sessionToken);
 
   const getQuery = "SELECT * FROM combine_sales where date >= ? and date < ?;";
-
+  console.log(req.body);
   connection.query(getQuery, [body.startDate, body.endDate], (err, result) => {
     if (err) {
       console.log(err);

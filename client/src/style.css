@@ -56,3 +56,22 @@
 .navstyle{
   background-color: #2b80eb;
 }
+
+.custom-date-input{
+  background-color: #f9f6f6;
+  color: #000000;
+  margin: 20px;
+  }
+
+  .custom-date-input::-webkit-calendar-picker-indicator {
+    filter: invert(100%);
+    }
+  
+  
+ .text-success{
+font-weight: bold;
+ }   
+
+ .text-danger{
+  font-weight: bold;
+   }   
