@@ -31,6 +31,8 @@ function Report() {
 
     // Make the API call here using the updated 'date' value
     axios
+    // this the date beteen query
+      // .post("http://localhost:5000/report/getSalesBetweenDate", { startDate : startDate,endDate: endDate })  ===================
       .post("http://localhost:5000/report/getSales", { date: date })
       .then((res) => {
         // Handle the API response here
