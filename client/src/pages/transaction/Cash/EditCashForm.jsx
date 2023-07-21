@@ -10,7 +10,8 @@ function EditCashForm() {
     bill_amount: "",
     discount: "",
     date: "",
-    customer_id: "",
+    customer_name: "",
+    business_name: "",
   });
 
   const [searchedTransaction, setSearchedTransaction] = useState(null);
@@ -39,6 +40,8 @@ function EditCashForm() {
             setEditMode(true);
             setFilteredRecords(data);
             setShowAlert(false);
+
+            console.log(data);
           } else {
             setSearchedTransaction(null);
             setEditMode(false);
@@ -77,17 +80,21 @@ function EditCashForm() {
           setCustomerInfo({
             customerName: customerData.customer_name,
             businessName: customerData.business_name,
+            creditLimit: customerData.credit_limit,
           });
           setShowNICAlert(false);
-          setData({ ...data, customer_name: customerData.customer_name });
           setData((prevData) => ({
             ...prevData,
             nic_no: data.nic_no,
             customer_id: customerData.customer_id,
+            customer_name: customerData.customer_name,
+            business_name: customerData.business_name,
           }));
           setFilteredRecords((prevRecords) => ({
             ...prevRecords,
             customer_id: customerData.customer_id,
+            customer_name: customerData.customer_name,
+            business_name: customerData.business_name,
           }));
           setSearchedNic(true);
         } else {
@@ -106,16 +113,17 @@ function EditCashForm() {
     event.preventDefault();
     // Perform validation if needed
 
-    // Bill amount exceeds the credit limit, display error message
     const formdata = {
       type_id: "ca", // we manually set the type id of the credit sale
       manual_invoice_id: filteredRecords.manual_invoice_id,
       date: filteredRecords.date,
-      customer_id: data.customer_id,
+      customer_id: searchedNic ? data.customer_id : filteredRecords.customer_id,
       description: filteredRecords.description,
       bill_amount: filteredRecords.bill_amount,
       discount: filteredRecords.discount,
     };
+
+    console.log(formdata);
 
     axios
       .post(
@@ -124,7 +132,8 @@ function EditCashForm() {
         { headers: { Authorization: "key " + sessionToken } }
       )
       .then((res) => {
-        navigate("/edittransaction");
+        //navigate("/edittransaction");
+        console.log(res.data);
       })
       .catch((err) => console.log(err));
   };
@@ -138,7 +147,7 @@ function EditCashForm() {
       <div className="d-flex flex-column align-items-center pt-4">
         <div className="white-box">
           <div className="d-flex flex-column align-items-center">
-            <h2>{editMode ? "Edit Cash Payment" : "Credit Payment"}</h2>
+            <h2>{editMode ? "Edit Cash Payment" : "Cash Payment"}</h2>
           </div>
 
           {/* Search for credit transaction by bill number */}
@@ -207,14 +216,26 @@ function EditCashForm() {
                 </div>
               )}
 
-              <Form.Group className="mb-3" controlId="formBasicCustomerID">
+              <Form.Group className="mb-3" controlId="formBasicCustomerName">
                 <Form.Label>Customer name</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Enter customer ID (NIC)"
-                  value={filteredRecords.customer_id}
+                  placeholder="Enter customer name"
+                  value={filteredRecords.customer_name}
                   onChange={(e) =>
-                    setData({ ...data, customer_id: e.target.value })
+                    setData({ ...data, customer_name: e.target.value })
+                  }
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="formBasicBusinessName">
+                <Form.Label>Business name</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter business name"
+                  value={filteredRecords.business_name}
+                  onChange={(e) =>
+                    setData({ ...data, business_name: e.target.value })
                   }
                 />
               </Form.Group>
