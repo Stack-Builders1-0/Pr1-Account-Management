@@ -78,12 +78,11 @@ function AddAdvanceAPForm() {
         })
         .then((res) => {
           // Sucess
-          if(res.data.sucess){
+          if (res.data.sucess) {
             navigate("/transaction");
-          }else{
+          } else {
             // we want to disply the alert please check the data value===================================================
           }
-          
         })
         .catch((err) => console.log(err));
     } else {
@@ -205,16 +204,6 @@ function AddAdvanceAPForm() {
               placeholder="Enter discount"
               value={data.discount}
               onChange={(e) => setData({ ...data, discount: e.target.value })}
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formBasicDate">
-            <Form.Label>Date</Form.Label>
-            <Form.Control
-              type="date"
-              placeholder="Enter date"
-              value={data.date}
-              onChange={(e) => setData({ ...data, date: e.target.value })}
             />
           </Form.Group>
 

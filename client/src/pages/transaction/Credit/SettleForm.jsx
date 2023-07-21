@@ -39,6 +39,7 @@ function SettleForm() {
             setCustomerID(data.customer_id);
             setBalance(data.balance);
             setSelectedBillNumber(data.invoice_id);
+            console.log(data);
           } else {
             setShowAlert(true);
             console.log("No records found for the provided invoice number.");
@@ -96,6 +97,7 @@ function SettleForm() {
           setSettleAmount("");
           setCustomerID("");
           setSelectedInvoiceNumber("");
+          console.log(response.data);
         })
         .catch((error) => {
           console.error("Error occurred during settle API call:", error);
@@ -121,7 +123,7 @@ function SettleForm() {
             <CommonNavbar />
           </div>
           <div className="d-flex flex-column align-items-center">
-            <h2>AdvanceBP Payment Only</h2>
+            <h2>Credit Payment Only</h2>
           </div>
           <Form onSubmit={handleSearch}>
             <h4 className="text-center">Settle Payment</h4>

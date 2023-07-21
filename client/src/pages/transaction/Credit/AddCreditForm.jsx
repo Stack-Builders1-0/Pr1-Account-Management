@@ -62,13 +62,10 @@ function AddCreditForm() {
 
     if (searchedNic) {
       // Only allow form submission if NIC has been searched
-      const billAmount = parseFloat(data.billAmount);
+      const billAmount = parseFloat(data.bill_amount);
       const creditLimit = parseFloat(customerInfo.creditLimit);
 
-      if (isNaN(billAmount) || billAmount <= 0) {
-        // Bill amount is not a valid number or is zero/empty
-        alert("Please enter a valid bill amount.");
-      } else if (billAmount <= creditLimit) {
+      if (billAmount <= creditLimit) {
         const formdata = {
           type_id: "cr", // we manually set the type id of the credit sale
           manual_invoice_id: data.manual_invoice_id,
@@ -85,6 +82,7 @@ function AddCreditForm() {
           })
           .then((res) => {
             navigate("/transaction");
+            console.log(res.data);
           })
           .catch((err) => console.log(err));
       } else {
@@ -93,10 +91,6 @@ function AddCreditForm() {
           "Bill amount exceeds the credit limit. Please adjust the bill amount."
         );
       }
-    } else {
-      alert(
-        "Please search for a valid NIC first before submitting the form or you have to register first"
-      );
     }
   };
 
@@ -202,16 +196,6 @@ function AddCreditForm() {
               placeholder="Enter discount"
               value={data.discount}
               onChange={(e) => setData({ ...data, discount: e.target.value })}
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formBasicDate">
-            <Form.Label>Date</Form.Label>
-            <Form.Control
-              type="date"
-              placeholder="Enter date"
-              value={data.date}
-              onChange={(e) => setData({ ...data, date: e.target.value })}
             />
           </Form.Group>
 
