@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Alert from "react-bootstrap/Alert";
+import CommonNavbar from "./CommonNavBar";
 
 function SettleForm() {
   const [searchInvoiceNumber, setSearchInvoiceNumber] = useState("");
@@ -114,81 +115,94 @@ function SettleForm() {
 
   return (
     <>
-      <Form onSubmit={handleSearch}>
-        <h4 className="text-center">Settle Payment</h4>
-        <Form.Group className="mb-3" controlId="formBasicSearchInvoiceNumber">
-          <Form.Label>Search by Bill Number</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter Bill number (without space)"
-            value={searchInvoiceNumber}
-            onChange={(e) => setSearchInvoiceNumber(e.target.value)}
-          />
-        </Form.Group>
+      <div className="d-flex flex-column align-items-center pt-4">
+        <div className="white-box">
+          <div>
+            <CommonNavbar />
+          </div>
+          <div className="d-flex flex-column align-items-center">
+            <h2>AdvanceBP Payment Only</h2>
+          </div>
+          <Form onSubmit={handleSearch}>
+            <h4 className="text-center">Settle Payment</h4>
+            <Form.Group
+              className="mb-3"
+              controlId="formBasicSearchInvoiceNumber"
+            >
+              <Form.Label>Search by Bill Number</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter Bill number (without space)"
+                value={searchInvoiceNumber}
+                onChange={(e) => setSearchInvoiceNumber(e.target.value)}
+              />
+            </Form.Group>
 
-        <Button variant="primary" type="submit">
-          Search
-        </Button>
-      </Form>
+            <Button variant="primary" type="submit">
+              Search
+            </Button>
+          </Form>
 
-      {showAlert && (
-        <Alert variant="danger">
-          <strong>
-            No sales found with the provided bill number. Please provide valid
-            bill number
-          </strong>
-        </Alert>
-      )}
+          {showAlert && (
+            <Alert variant="danger">
+              <strong>
+                No sales found with the provided bill number. Please provide
+                valid bill number
+              </strong>
+            </Alert>
+          )}
 
-      {isSearchPerformed && filteredRecords && (
-        <>
-          <h4 className="text-center">Credit Sales Information</h4>
-          <p>Customer ID: {filteredRecords.customer_id}</p>
-          <p>Description: {filteredRecords.description}</p>
-          <p>Bill Amount: {filteredRecords.bill_amount}</p>
-          <p>Discount: {filteredRecords.discount}</p>
-          <p>Balance: {filteredRecords.balance}</p>
-          <p>Date: {filteredRecords.date}</p>
-        </>
-      )}
+          {isSearchPerformed && filteredRecords && (
+            <>
+              <h4 className="text-center">Credit Sales Information</h4>
+              <p>Customer ID: {filteredRecords.customer_id}</p>
+              <p>Description: {filteredRecords.description}</p>
+              <p>Bill Amount: {filteredRecords.bill_amount}</p>
+              <p>Discount: {filteredRecords.discount}</p>
+              <p>Balance: {filteredRecords.balance}</p>
+              <p>Date: {filteredRecords.date}</p>
+            </>
+          )}
 
-      {isSearchPerformed && (
-        <Form onSubmit={handleSettle}>
-          <h3 className="text-center">
-            Settle Payment for Invoice: {selectedInvoiceNumber}
-          </h3>
-          <Form.Group className="mb-3" controlId="formBasicSettleAmount">
-            <Form.Label>
-              Enter Settle Amount <span style={{ color: "red" }}>*</span>
-            </Form.Label>
-            <Form.Control
-              type="text"
-              name="settleAmount"
-              placeholder="Enter settle amount"
-              value={settleAmount}
-              onChange={handleSettleAmountChange}
-            />
-          </Form.Group>
+          {isSearchPerformed && (
+            <Form onSubmit={handleSettle}>
+              <h3 className="text-center">
+                Settle Payment for Invoice: {selectedInvoiceNumber}
+              </h3>
+              <Form.Group className="mb-3" controlId="formBasicSettleAmount">
+                <Form.Label>
+                  Enter Settle Amount <span style={{ color: "red" }}>*</span>
+                </Form.Label>
+                <Form.Control
+                  type="text"
+                  name="settleAmount"
+                  placeholder="Enter settle amount"
+                  value={settleAmount}
+                  onChange={handleSettleAmountChange}
+                />
+              </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicDescription">
-            <Form.Label>Enter Description (Optional)</Form.Label>
-            <Form.Control
-              type="text"
-              name="description"
-              placeholder="Enter description"
-              value={description}
-              onChange={handleDescriptionChange}
-            />
-          </Form.Group>
+              <Form.Group className="mb-3" controlId="formBasicDescription">
+                <Form.Label>Enter Description (Optional)</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="description"
+                  placeholder="Enter description"
+                  value={description}
+                  onChange={handleDescriptionChange}
+                />
+              </Form.Group>
 
-          <Button variant="primary" type="submit">
-            Settle
-          </Button>
-          <Button variant="danger" onClick={handleCancel} className="mx-2">
-            Cancel
-          </Button>
-        </Form>
-      )}
+              <Button variant="primary" type="submit">
+                Settle
+              </Button>
+              <Button variant="danger" onClick={handleCancel} className="mx-2">
+                Cancel
+              </Button>
+            </Form>
+          )}
+        </div>
+      </div>
     </>
   );
 }

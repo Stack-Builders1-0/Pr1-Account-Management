@@ -75,7 +75,10 @@ function AddTransaction() {
           <Link to="/transaction/cashtransaction" className="btn btn-primary">
             Cash
           </Link>
-          <Link to="/transaction/credittransaction" className="btn btn-primary">
+          <Link
+            to="/transaction/credittransaction/add"
+            className="btn btn-primary"
+          >
             Credit
           </Link>
           <Link

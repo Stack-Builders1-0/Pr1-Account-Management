@@ -21,6 +21,7 @@ import EditCreditForm from "./pages/transaction/Credit/EditCreditForm";
 import EditTransaction from "./pages/transaction/EditTransaction";
 import EditAdvanceBPForm from "./pages/transaction/AdvanceBP/EditAdvanceBPForm";
 import EditAdvanceAPForm from "./pages/transaction/AdvanceAP/EditAdvanceAPForm";
+import AddCreditForm from "./pages/transaction/Credit/AddCreditForm";
 // import EditCashTransaction from "./pages/transaction/Cash" "./pages/transaction/Cash/EditCashForm";
 // import EditCreditTransaction from "./pages/transaction/Credit/EditCreditForm";
 // import EditAdvanceTransaction from "./pages/transaction/AdvanceBP/EditAdvanceForm";
@@ -88,6 +89,11 @@ function App() {
               <Route
                 path="/transaction/advancebptransaction"
                 element={<AdvanceBPTransaction />}
+              ></Route>
+
+              <Route
+                path="/transaction/credittransaction/add"
+                element={<AddCreditForm />}
               ></Route>
 
               <Route
