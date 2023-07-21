@@ -30,6 +30,7 @@ import History from "./History";
 import Report from "./pages/report/Report";
 
 
+
 function App() {
   const [user, setUser] = useState(null);
 
@@ -56,7 +57,8 @@ function App() {
                 <Route path="/employee" element={<Employee />}></Route>
                 <Route path="/transaction" element={<AddTransaction />}></Route>
                 <Route path="/profile" element={<Profile />}></Route>
-                <Route path="/customer" element={<Customer />}></Route>
+                  <Route path="/customer" element={<Customer />}></Route>
+               
                 <Route path="/addemployee" element={<AddEmployee />}></Route>
                 <Route path="/addcustomer" element={<AddCustomer />}></Route>
                 <Route path="/expenses" element={<Expenses />}></Route>

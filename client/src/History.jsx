@@ -9,8 +9,7 @@ function History() {
 
   useEffect(() => {
     axios
-      .post(
-        import.meta.env.VITE_API_URL + "/creditSale/histoyCreditTransection",
+      .post(import.meta.env.VITE_API_URL + "/creditSale/histoyCreditTransection",
         { invoice_id: invoice_id }
       )
       .then((res) => {
