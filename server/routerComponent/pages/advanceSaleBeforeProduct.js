@@ -284,7 +284,7 @@ router.post("/return", (req, res) => {
   employee_id = decodeUserId(sessionToken);
   const total_settle_amount = parseFloat(body.amount)-parseFloat(body.balance) - parseFloat(body.return_payment)
 
-  const settleQuery =
+  const returnQuery =
     "insert into accountmanagement.advance_bp_partial_settle (type_id,invoice_id, customer_id, description, settle_amount, balance, employee_id, total_settle_amount,return_payment ) values (?,?,?,?,?,?,?,?,?);";
 
   // response has 3 field
@@ -292,10 +292,9 @@ router.post("/return", (req, res) => {
   // exist => if the employee nic alredy regiterd exist = true else exist = false
   // employee regeister is sucess then sucess=true
   connection.query(
-    settleQuery,
+    returnQuery,
     [
-      // body.type_id,========================================================================================
-      "as",
+      body.type_id,
       body.invoice_id,
       body.customer_id,
       body.description,

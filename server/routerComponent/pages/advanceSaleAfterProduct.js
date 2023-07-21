@@ -1,5 +1,6 @@
 const mysql = require("mysql");
 const express = require("express");
+const decodeUserId = require('../Authentication/decodedToken');
 
 const router = express.Router();
 
@@ -24,6 +25,9 @@ router.post("/add", (req, res) => {
   const amount = body.bill_amount - body.discount;
   const balance = amount - body.advance_amount;
 
+  const sessionToken = req.headers.authorization.replace('key ','');
+  const employee_id = decodeUserId(sessionToken);
+
   const insertQuery =
     "insert into accountmanagement.advance_sales_ap (type_id,manual_invoice_id, customer_id, description, bill_amount,advance_amount, discount, amount,balance, employee_id ) values (?,?,?,?,?,?,?,?,?,?);";
 
@@ -43,21 +47,23 @@ router.post("/add", (req, res) => {
       body.discount,
       amount,
       balance,
-      body.employee_id,
+      employee_id,
     ],
     (err, result) => {
       if (err) {
         console.log(err);
         res.send({
           sucess: false,
-          error: true,
-          exist: false,
+          isError: true,
+          erroe: err,
+          result : null
         });
       } else {
         res.send({
           sucess: true,
-          error: false,
-          exist: false,
+          isError: false,
+          error: err,
+          result:result
         });
       }
     }
@@ -136,8 +142,11 @@ router.post("/edit", (req, res) => {
 
 
 router.post('/settle', (req, res) => {
-  body  = req.body;
+  body  = req.body.data;
   const balance = body.balance -body.settle_amount;
+
+  const sessionToken = req.headers.authorization.replace('key ','');
+  const employee_id = decodeUserId(sessionToken);
 
   const settleQuery = "insert into accountmanagement.advance_ap_partial_settle (type_id,invoice_id, customer_id, description, settle_amount, balance, employee_id ) values (?,?,?,?,?,?,?);";
 
@@ -145,20 +154,30 @@ router.post('/settle', (req, res) => {
   // error occur then error = true , otherwise error = false
   // exist => if the employee nic alredy regiterd exist = true else exist = false
   // employee regeister is sucess then sucess=true
-  connection.query(settleQuery, [body.type_id, body.invoice_id, body.customer_id, body.description, body.settle_amount, balance, body.employee_id ], (err, result) => {
+  connection.query(settleQuery, 
+    [body.type_id, 
+    body.invoice_id,
+    body.customer_id,
+    body.description,
+    body.settle_amount,
+    balance,
+    employee_id ], 
+    (err, result) => {
       if (err) {
           console.log(err)
           res.send({
               sucess : false,
-              error : true,
-              exist : false
+              isError : true,
+              error : err,
+              result:null
           })
       }
       else{
           res.send({
               sucess : true,
-              error : false,
-              exist : false
+              isError : false,
+              error: null,
+              result:result
           })
       }
   });
@@ -223,14 +242,14 @@ router.post('/histoyCreditTransection', (req, res) =>{
 router.post("/filterManualInvoice", (req, res) => {
 
   const selectQuery =
-    "SELECT invoice_id, income_type.type_id, type, manual_invoice_id,customer_id, description, bill_amount, discount, amount, balance, date , customer_name, business_name, credit_limit, nic_no, mobile FROM advance_sales_ap join accountmanagement.income_type using (type_id)  join customers using (customer_id) where manual_invoice_id = "+ mysql.escape(req.body.manual_invoice_id);
+    "SELECT invoice_id, income_type.type_id, type, type_id, manual_invoice_id,customer_id, description, bill_amount, discount, amount, balance, date , customer_name, business_name, credit_limit, nic_no, mobile FROM advance_sales_ap join accountmanagement.income_type using (type_id)  join customers using (customer_id) where manual_invoice_id = "+ mysql.escape(req.body.manual_invoice_id);
 
   connection.query(selectQuery, (err, result) => {
     if (err) {
       res.send({
         sucess: false,
         isError: true,
-        result: null,
+        result: null
       });
     } else {
       if (result.length == 0){

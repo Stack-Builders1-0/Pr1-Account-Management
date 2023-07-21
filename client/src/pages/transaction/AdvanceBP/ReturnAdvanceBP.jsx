@@ -9,6 +9,7 @@ import CommonNavbar from "./CommonNavbar";
 function ReturnAdvanceBP() {
   const [searchInvoiceNumber, setSearchInvoiceNumber] = useState("");
   const [customerID, setCustomerID] = useState("");
+  const [typeId, setTypeId] = useState("");
   const [balance, setBalance] = useState("");
   const [filteredRecords, setFilteredRecords] = useState([]);
   const [selectedInvoiceNumber, setSelectedInvoiceNumber] = useState("");
@@ -43,6 +44,7 @@ function ReturnAdvanceBP() {
             setBalance(data.balance);
             setSelectedBillNumber(data.invoice_id);
             setAmount(data.amount);
+            setTypeId(data.type_id);
           } else {
             setShowAlert(true);
             console.log("No records found for the provided invoice number.");
@@ -89,6 +91,7 @@ function ReturnAdvanceBP() {
         balance: balance,
         customer_id: customerID,
         description: description,
+        type_id : typeId
       };
 
       axios
