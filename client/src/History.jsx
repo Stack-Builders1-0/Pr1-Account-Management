@@ -5,12 +5,15 @@ import axios from "axios";
 
 function History() {
   const invoice_id = localStorage.getItem("invoice_id");
+  const type_id = localStorage.getItem("type_id");
   const [invoiceHistory, setInvoiceHistory] = useState([]);
-
+  // console.log(invoice_id,type_id)
   useEffect(() => {
     axios
-      .post(import.meta.env.VITE_API_URL + "/creditSale/histoyCreditTransection",
-        { invoice_id: invoice_id }
+      .post(
+        import.meta.env.VITE_API_URL + "/creditSale/histoyCreditTransection",
+        { invoice_id: invoice_id, type_id:type_id}
+
       )
       .then((res) => {
         setInvoiceHistory(res.data.result);

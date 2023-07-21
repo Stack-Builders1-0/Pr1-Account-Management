@@ -16,6 +16,7 @@ function SettleAdvancedAP() {
   const [selectedBillNumber, setSelectedBillNumber] = useState("");
   const [settleAmount, setSettleAmount] = useState("");
   const [amount, setAmount] = useState("");
+  const [typeId, setTypeId] = useState("");
   const [isSearchPerformed, setIsSearchPerformed] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [description, setDescription] = useState("");
@@ -43,6 +44,7 @@ function SettleAdvancedAP() {
             setBalance(data.balance);
             setSelectedBillNumber(data.invoice_id);
             setAmount(data.amount);
+            setTypeId(data.type_id);
           } else {
             setShowAlert(true);
             console.log("No records found for the provided invoice number.");
@@ -89,6 +91,7 @@ function SettleAdvancedAP() {
         balance: balance,
         customer_id: customerID,
         description: description,
+        type_id : typeId
       };
 
       axios
@@ -97,7 +100,8 @@ function SettleAdvancedAP() {
           { data: settleData },
           { headers: { Authorization: "key " + sessionToken } }
         )
-        .then((response) => {
+        .then((response) => { 
+          // we wannt to check the res.sucess  => this is true then settle is sucess else we want to display the alert =====================================
           navigate("/transaction");
           setSettleAmount("");
           setCustomerID("");

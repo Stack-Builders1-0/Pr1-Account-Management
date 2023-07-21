@@ -30,10 +30,10 @@ function EditTransaction() {
 
         {/* Buttons section */}
         <div className="d-flex justify-content-between mb-4">
-          <Link to="/editcashtransaction" className="btn btn-primary">
+          <Link to="/edittransaction/cash" className="btn btn-primary">
             Cash
           </Link>
-          <Link to="/editcredittransaction" className="btn btn-primary">
+          <Link to="/edittransaction/credit" className="btn btn-primary">
             Credit
           </Link>
           <Link to="/editadvancetransaction" className="btn btn-primary">

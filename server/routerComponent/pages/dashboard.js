@@ -169,5 +169,79 @@ router.post('/addOpeningBalance', (req, res) => {
 });
 
 
+router.post('/isAddOpeningBalance', (req, res) => {
+  const date  = req.body.date;
+
+  try{
+    const sessionToken = req.headers.authorization.replace('key ','');
+    const employee_id = decodedUserId(sessionToken);
+// const employee_id = req.body.employee_id;
+
+    const getQuery = "select * from opening_balance where (employee_id= "+mysql.escape(employee_id)+" and locate("+mysql.escape(date)+" , date))";
+
+    // response has 3 field 
+    // error occur then error = true , otherwise error = false
+    // exist => if the employee nic alredy regiterd exist = true else exist = false
+    // employee regeister is sucess then sucess=true
+    connection.query(getQuery, (err, result) => {
+        if (err) {
+            console.log(err)
+            res.send({
+                sucess : false,
+                isError : true,
+                isExist : false
+            })
+        }
+        else{
+          if(result.length == 0){
+            res.send({
+              sucess : true,
+              isError : false,
+              isExist : false
+          })
+          }else {
+            res.send({
+              sucess : true,
+              isError : false,
+              isExist : true
+          })
+          }
+            
+        }
+    });
+  }catch(err){
+    res.send({
+      isTokenValied : false
+    });
+  }
+
+});
+
+
+// this show the 15 transection which transection not settle 
+router.get('/creditNotSettle', (req, res) => {
+  const selectQuery = "select * from (select * from combine_sales where balance <> '0'  union all select * from combine_sales where (balance <> amount and return_payment >0)  ) as serch_query order by date limit 10"
+
+  connection.query(selectQuery, (err, result) => {
+    if (err) {
+      console.log(err)
+      res.send({
+          sucess : false,
+          error : true,
+          result : result
+      })
+    }
+    else{
+        res.send({
+            sucess : true,
+            error : false,
+            result : result
+        })
+    }
+  });
+
+});
+
+
 
 module.exports = router;

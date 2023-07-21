@@ -244,7 +244,7 @@ router.post("/histoyCreditTransection", (req, res) => {
 router.post("/filterManualInvoice", (req, res) => {
 
   const selectQuery =
-    "SELECT invoice_id, income_type.type_id, type, manual_invoice_id,customer_id, description, bill_amount, discount, amount, balance, date , customer_name, business_name, credit_limit, nic_no, mobile FROM advance_sales_bp join accountmanagement.income_type using (type_id)  join customers using (customer_id) where manual_invoice_id = "+ mysql.escape(req.body.manual_invoice_id);
+    "SELECT * from amount_details_on_date_bp where manual_invoice_id = "+ mysql.escape(req.body.manual_invoice_id);
 
   connection.query(selectQuery, (err, result) => {
     if (err) {
@@ -284,7 +284,7 @@ router.post("/return", (req, res) => {
   employee_id = decodeUserId(sessionToken);
   const total_settle_amount = parseFloat(body.amount)-parseFloat(body.balance) - parseFloat(body.return_payment)
 
-  const settleQuery =
+  const returnQuery =
     "insert into accountmanagement.advance_bp_partial_settle (type_id,invoice_id, customer_id, description, settle_amount, balance, employee_id, total_settle_amount,return_payment ) values (?,?,?,?,?,?,?,?,?);";
 
   // response has 3 field
@@ -292,10 +292,9 @@ router.post("/return", (req, res) => {
   // exist => if the employee nic alredy regiterd exist = true else exist = false
   // employee regeister is sucess then sucess=true
   connection.query(
-    settleQuery,
+    returnQuery,
     [
-      // body.type_id,========================================================================================
-      "as",
+      body.type_id,
       body.invoice_id,
       body.customer_id,
       body.description,

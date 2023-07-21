@@ -92,7 +92,7 @@ router.get("/showAll", (req, res) => {
 router.post("/filterManualInvoice", (req, res) => {
 
   const selectQuery =
-    "SELECT invoice_id, accountmanagement.credit_sales.type_id, type, manual_invoice_id,customer_id, description, bill_amount, discount, amount, balance, date , customer_name, business_name, credit_limit, nic_no, mobile FROM accountmanagement.credit_sales join accountmanagement.income_type using (type_id)  join customers using (customer_id) where manual_invoice_id = "+ mysql.escape(req.body.manual_invoice_id);
+    "SELECT * from amount_details_on_date_credit where manual_invoice_id = "+ mysql.escape(req.body.manual_invoice_id);
 
   connection.query(selectQuery, (err, result) => {
     if (err) {
@@ -240,22 +240,22 @@ router.get('/creditNotSettle', (req, res) => {
 // this show the history of the specific transection 
 router.post('/histoyCreditTransection', (req, res) =>{
   const body = req.body;
-  console.log(req.body);
   const selectQuery = "select invoice_id,type_id, date, settle_amount, balance, customer_id,customer_name, business_name from credit_partial_settle left join customers using (customer_id) where invoice_id = "+ mysql.escape(body.invoice_id) +"  order by date;";
-  console.log(selectQuery);
   connection.query(selectQuery, (err, result) => {
     if (err) {
       console.log(err)
       res.send({
           sucess : false,
-          error : true,
+          isError : true,
+          error : err,
           result : null
       })
     }
     else{
         res.send({
             sucess : true,
-            error : false,
+            isError : false,
+            error : null,
             result : result
         })
     }
