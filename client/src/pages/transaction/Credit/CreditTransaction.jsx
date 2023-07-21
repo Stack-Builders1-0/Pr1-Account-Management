@@ -12,7 +12,7 @@ function CreditTransaction() {
     customer_id: "",
     manual_invoice_id: "",
     description: "",
-    billAmount: "",
+    bill_amount: "",
     discount: "",
     date: "",
   });
@@ -74,14 +74,17 @@ function CreditTransaction() {
       const billAmount = parseFloat(data.billAmount);
       const creditLimit = parseFloat(customerInfo.creditLimit);
 
-      if (billAmount <= creditLimit) {
+      if (isNaN(billAmount) || billAmount <= 0) {
+        // Bill amount is not a valid number or is zero/empty
+        alert("Please enter a valid bill amount.");
+      } else if (billAmount <= creditLimit) {
         const formdata = {
-          type_id: "cr", // we manually set the type id of tha credit sale
+          type_id: "cr", // we manually set the type id of the credit sale
           manual_invoice_id: data.manual_invoice_id,
           date: data.date,
           customer_id: data.customer_id,
           description: data.description,
-          bill_amount: data.billAmount,
+          bill_amount: data.bill_amount,
           discount: data.discount,
         };
 
@@ -218,9 +221,9 @@ function CreditTransaction() {
                 <Form.Control
                   type="number"
                   placeholder="Enter bill amount"
-                  value={data.billAmount}
+                  value={data.bill_amount}
                   onChange={(e) =>
-                    setData({ ...data, billAmount: e.target.value })
+                    setData({ ...data, bill_amount: e.target.value })
                   }
                 />
               </Form.Group>

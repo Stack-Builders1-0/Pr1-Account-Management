@@ -10,8 +10,6 @@ import axios from "axios";
 // import AdvancedBPSalesTable from "./AdvancedBP";
 // import AdvancedAPSalesTable from "./AdvancedAP";
 
- 
-
 function AddTransaction() {
   const [selectedTab, setSelectedTab] = useState("");
   const [showTransaction, setShowTransaction] = useState(false);
@@ -28,27 +26,40 @@ function AddTransaction() {
     setShowTransaction(true);
   };
 
-  const sessionToken = localStorage.getItem('sessionToken');
+  const sessionToken = localStorage.getItem("sessionToken");
 
   // get the current date in yyyy-mm-dd this format
   const currentDate = new Date();
-  const date = currentDate.getFullYear() + '-0' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
-
+  const date =
+    currentDate.getFullYear() +
+    "-0" +
+    (currentDate.getMonth() + 1) +
+    "-" +
+    currentDate.getDate();
 
   useEffect(() => {
     // show the the emplyee and details
-    axios.post("http://localhost:5000/employee/showCurrent",{}, { headers: { 'Authorization': 'key ' + sessionToken } })
-    .then((res) => {
-      // console.log(res.data.result[0]);
-    });
+    axios
+      .post(
+        "http://localhost:5000/employee/showCurrent",
+        {},
+        { headers: { Authorization: "key " + sessionToken } }
+      )
+      .then((res) => {
+        // console.log(res.data.result[0]);
+      });
 
     // get the count of the add transection on today
-    axios.post("http://localhost:5000/employee/count",{date:date}, { headers: { 'Authorization': 'key ' + sessionToken } })
-    .then((res) => {
-      // console.log(res.data.result[0]);
-    });
+    axios
+      .post(
+        "http://localhost:5000/employee/count",
+        { date: date },
+        { headers: { Authorization: "key " + sessionToken } }
+      )
+      .then((res) => {
+        // console.log(res.data.result[0]);
+      });
   }, []);
-
 
   return (
     <div>
@@ -68,13 +79,13 @@ function AddTransaction() {
             Credit
           </Link>
           <Link
-            to="/transaction/advancebptransaction"
+            to="/transaction/advancebptransaction/add"
             className="btn btn-primary"
           >
             AdvancedBP
           </Link>
           <Link
-            to="/transaction/advanceaptransaction"
+            to="/transaction/advanceaptransaction/add"
             className="btn btn-primary"
           >
             AdvancedAP
