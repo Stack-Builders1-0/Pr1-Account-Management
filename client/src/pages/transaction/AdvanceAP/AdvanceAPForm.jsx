@@ -77,7 +77,13 @@ function AddAdvanceAPForm() {
           headers: { Authorization: "key " + sessionToken },
         })
         .then((res) => {
-          navigate("/transaction");
+          // Sucess
+          if(res.data.sucess){
+            navigate("/transaction");
+          }else{
+            // we want to disply the alert please check the data value===================================================
+          }
+          
         })
         .catch((err) => console.log(err));
     } else {
