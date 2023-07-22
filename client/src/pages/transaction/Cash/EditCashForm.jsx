@@ -12,6 +12,7 @@ function EditCashForm() {
     date: "",
     customer_name: "",
     business_name: "",
+    invoice_id:""
   });
 
   const [searchedTransaction, setSearchedTransaction] = useState(null);
@@ -35,6 +36,7 @@ function EditCashForm() {
       .then((res) => {
         if (res.data.sucess) {
           const data = res.data.result[0];
+          console.log(data);
           if (data) {
             setSearchedTransaction(data);
             setEditMode(true);
@@ -121,6 +123,7 @@ function EditCashForm() {
       description: filteredRecords.description,
       bill_amount: filteredRecords.bill_amount,
       discount: filteredRecords.discount,
+      invoice_id : filteredRecords.invoice_id
     };
 
     console.log(formdata);
