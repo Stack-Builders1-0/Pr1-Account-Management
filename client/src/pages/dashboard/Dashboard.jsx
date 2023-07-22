@@ -27,11 +27,11 @@ function Dashboard() {
 
   //table content
   const [creditSaleData, setCreditSaleData] = useState([]);
-  const [advanceSaleAPData, setAdvanceSaleAPData] = useState([]);
-  const [advanceSaleBPData, setAdvanceSaleBPData] = useState([]);
+  // const [advanceSaleAPData, setAdvanceSaleAPData] = useState([]);
+  // const [advanceSaleBPData, setAdvanceSaleBPData] = useState([]);
 
-  const [totalCash, setTotalCash] = useState([]);
-  const [totalCredit, setTotalCredit] = useState('');
+  
+ 
 
 
   // get the current date in yyyy-mm-dd this format
@@ -42,14 +42,17 @@ function Dashboard() {
 
     axios.post(import.meta.env.VITE_API_URL + "/dashboard/totalTransection", { date: date }, { headers: { 'Authorization': 'key '+sessionToken } })
       .then((res) => {
-        console.log(res.data.result[0].cash);
-        console.log(res.data.result[0].credit);
+        const { cash, credit } = res.data.result[0];
+        console.log(res.data.result[0])
+        setData({
+          ...data,
+          totalCashSales: cash,
+          totalCreditSales: credit,
+          totalSales: cash + credit
+        });
         
-        setData({ ...data, totalCashSales: res.data.resul[0].cash });
-        setData({ ...data, totalCreditSales: res.data.resul[0].credit });
-        setData({ ...data, totalSales: res.data.resul[0].cash + res.data.resul[0].credit });
-        console.log(data);
       });
+      console.log(data);
 
     // axios.post(import.meta.env.VITE_API_URL + "/dashboard/totalCreditSales", { date: date }, { headers: { 'Authorization': 'key ' + sessionToken } })
     //   .then((res) => {
@@ -65,7 +68,7 @@ function Dashboard() {
 
 
     axios
-      .get('http://localhost:5000/dashboard/creditNotSettle')
+      .get(import.meta.env.VITE_API_URL +'/dashboard/creditNotSettle')
       .then((res) => {
         setCreditSaleData(res.data.result);
       })
