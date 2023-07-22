@@ -5,25 +5,26 @@ import Form from "react-bootstrap/Form";
 
 function AddExpense() {
   const [data, setData] = useState({
-    manual_expense_id :"",
+    manual_expense_id: "",
     type: "",
     description: "",
     amount: "",
   });
 
-
   const [selectedType, setselectedType] = useState("");
 
   const navigate = useNavigate();
 
-  const sessionToken = localStorage.getItem('sessionToken');
+  const sessionToken = localStorage.getItem("sessionToken");
 
   const handleSubmit = (event) => {
     event.preventDefault();
     // formdata.append("image", data.image);
     console.log(data);
     axios
-      .post("http://localhost:5000/expenses/add", data, {headers : {'Authorization' : 'key '+sessionToken}})
+      .post("http://localhost:5000/expenses/add", data, {
+        headers: { Authorization: "key " + sessionToken },
+      })
       .then((res) => {
         console.log(res.data);
         if (res.data.sucess) {
@@ -60,15 +61,15 @@ function AddExpense() {
                 size="sm"
                 aria-label="Default select example w-50"
                 name="selectedType"
-                value={selectedType}
-                onChange={handleSelectChange}
+                // value={selectedType}
+                onChange={(e) => setData({ ...data, type: e.target.value })}
               >
                 <option value="">--Select</option>
                 <option value="food">Food</option>
                 <option value="travel">Travel</option>
                 <option value="others">Others</option>
               </Form.Select>
-              <div>
+              {/* <div>
                 <input
                   type="text"
                   className="form-control"
@@ -76,26 +77,25 @@ function AddExpense() {
                   placeholder="Select type"
                   readOnly
                   autoComplete="off"
-                  onChange={(e) =>
-                    setData({ ...data, type: e.target.value })
-                  }
+                  onChange={(e) => setData({ ...data, type: e.target.value })}
                 />
-              </div>
+              </div> */}
             </label>
 
             <div className="col-12">
               <label htmlFor="manualExpenseId" className="form-label">
-              Expense Invoice no
+                Expense Invoice no
               </label>
               <input
                 type="text"
                 className="form-control"
                 id="manualExpenseId"
                 placeholder="Expense Invoice no"
-                onChange={(e) => setData({ ...data, manual_expense_id: e.target.value })}
+                onChange={(e) =>
+                  setData({ ...data, manual_expense_id: e.target.value })
+                }
               />
             </div>
-
 
             <div className="col-12">
               <label htmlFor="inputDescription" className="form-label">
