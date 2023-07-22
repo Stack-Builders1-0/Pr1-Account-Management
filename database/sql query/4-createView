@@ -96,11 +96,6 @@ VIEW `amount_details_on_date_ap` AS
         JOIN `income_type` ON ((`credit_sales`.`type_id` = `income_type`.`type_id`)));
 
 
-
-
-
-
-
 create VIEW `amount_details_on_date_cash` AS
     SELECT 
         `cash_sales`.`invoice_id` AS `invoice_id`,
@@ -128,8 +123,6 @@ create VIEW `amount_details_on_date_cash` AS
         ((`cash_sales`
         JOIN `customers` ON ((`customers`.`customer_id` = `cash_sales`.`customer_id`)))
         JOIN `income_type` ON ((`cash_sales`.`type_id` = `income_type`.`type_id`)));
-
-
 
 
 
