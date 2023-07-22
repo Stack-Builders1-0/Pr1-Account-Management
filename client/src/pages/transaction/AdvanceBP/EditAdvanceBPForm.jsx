@@ -13,6 +13,8 @@ function EditAdvanceBPForm() {
     date: "",
     customer_name: "",
     business_name: "",
+    invoice_id: "",
+    return_payment: "",
   });
 
   const [searchedTransaction, setSearchedTransaction] = useState(null);
@@ -23,6 +25,11 @@ function EditAdvanceBPForm() {
   const [showNICAlert, setShowNICAlert] = useState(false);
   const [customerInfo, setCustomerInfo] = useState(null);
   const [searchedNic, setSearchedNic] = useState(false);
+  const [old_bill_amount, setOldBillAmount] = useState(0);
+  const [old_discount, setOldDiscount] = useState(0);
+  const [old_balance, setOldBalance] = useState(0);
+  const [old_advance_amount, setOldAdvanceAmount] = useState(0);
+  const [old_return_payment, setOldReturnPayment] = useState(0);
 
   const navigate = useNavigate();
   const sessionToken = localStorage.getItem("sessionToken");
@@ -36,11 +43,19 @@ function EditAdvanceBPForm() {
       .then((res) => {
         if (res.data.sucess) {
           const data = res.data.result[0];
+          console.log(data);
           if (data) {
             setSearchedTransaction(data);
             setEditMode(true);
             setFilteredRecords(data);
             setShowAlert(false);
+
+            setOldBillAmount(parseFloat(data.bill_amount));
+            setOldDiscount(parseFloat(data.discount));
+            setOldBalance(parseFloat(data.balance));
+            setOldAdvanceAmount(parseFloat(data.advance_amount));
+            setOldReturnPayment(parseFloat(data.return_payment));
+
             console.log(data);
           } else {
             setSearchedTransaction(null);
@@ -125,6 +140,20 @@ function EditAdvanceBPForm() {
       bill_amount: filteredRecords.bill_amount,
       discount: filteredRecords.discount,
       advance_amount: filteredRecords.advance_amount,
+      invoice_id: filteredRecords.invoice_id,
+    };
+
+    const olddata = {
+      old_bill_amount: old_bill_amount,
+      old_discount: old_discount,
+      old_balance: old_balance,
+      old_advance_amount: old_advance_amount,
+      old_return_payment: old_return_payment,
+    };
+
+    const requestData = {
+      formdata: formdata,
+      olddata: olddata,
     };
 
     console.log(formdata);
@@ -132,7 +161,7 @@ function EditAdvanceBPForm() {
     axios
       .post(
         "http://localhost:5000/advanceSaleBP/edit",
-        { data: formdata },
+        { data: requestData },
         { headers: { Authorization: "key " + sessionToken } }
       )
       .then((res) => {
