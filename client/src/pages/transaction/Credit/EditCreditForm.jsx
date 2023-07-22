@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Button, Alert } from "react-bootstrap";
+import { Form, Button, Alert, Modal } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -12,6 +12,8 @@ function EditCreditForm() {
     date: "",
     customer_name: "",
     business_name: "",
+    invoice_id: "",
+    nic_no: "",
   });
 
   const [searchedTransaction, setSearchedTransaction] = useState(null);
@@ -22,6 +24,10 @@ function EditCreditForm() {
   const [showNICAlert, setShowNICAlert] = useState(false);
   const [customerInfo, setCustomerInfo] = useState(null);
   const [searchedNic, setSearchedNic] = useState(false);
+  const [old_bill_amount, setOldBillAmount] = useState(0);
+  const [old_discount, setOldDiscount] = useState(0);
+  const [old_balance, setOldBalance] = useState(0);
+  const [confirmNicChange, setConfirmNicChange] = useState(false);
 
   const navigate = useNavigate();
   const sessionToken = localStorage.getItem("sessionToken");
@@ -41,6 +47,10 @@ function EditCreditForm() {
             setFilteredRecords(data);
             setShowAlert(false);
             console.log(data);
+
+            setOldBillAmount(parseFloat(data.bill_amount));
+            setOldDiscount(parseFloat(data.discount));
+            setOldBalance(parseFloat(data.balance));
           } else {
             setSearchedTransaction(null);
             setEditMode(false);
@@ -63,6 +73,14 @@ function EditCreditForm() {
       setSearchedTransaction(null);
       setEditMode(false);
     }
+  };
+
+  const handleConfirmNicChange = (confirmed) => {
+    setConfirmNicChange(confirmed);
+  };
+
+  const handleSearchNicConfirmation = () => {
+    setConfirmNicChange(true);
   };
 
   const handleNICSearch = () => {
@@ -99,6 +117,7 @@ function EditCreditForm() {
             credit_limit: customerData.credit_limit,
           }));
           setSearchedNic(true);
+          setConfirmNicChange(false);
         } else {
           // NIC number is invalid or no customer found
           setCustomerInfo(null);
@@ -132,6 +151,18 @@ function EditCreditForm() {
         description: filteredRecords.description,
         bill_amount: filteredRecords.bill_amount,
         discount: filteredRecords.discount,
+        invoice_id: filteredRecords.invoice_id,
+      };
+
+      const olddata = {
+        old_bill_amount: old_bill_amount,
+        old_discount: old_discount,
+        old_balance: old_balance,
+      };
+
+      const requestData = {
+        formdata: formdata,
+        olddata: olddata,
       };
 
       console.log(formdata);
@@ -139,7 +170,7 @@ function EditCreditForm() {
       axios
         .post(
           "http://localhost:5000/creditSale/edit",
-          { data: formdata },
+          { data: requestData },
           { headers: { Authorization: "key " + sessionToken } }
         )
         .then((res) => {
@@ -205,11 +236,11 @@ function EditCreditForm() {
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       e.preventDefault(); // Prevent form submission
-                      handleSearch(); // Perform the search operation
+                      handleSearchNicConfirmation(); // Perform the search operation
                     }
                   }}
                 />
-                <Button variant="primary" onClick={handleNICSearch}>
+                <Button variant="primary" onClick={handleSearchNicConfirmation}>
                   Search NIC
                 </Button>
               </Form.Group>
@@ -235,29 +266,29 @@ function EditCreditForm() {
                 </div>
               )}
 
-              <Form.Group className="mb-3" controlId="formBasicCustomerName">
-                <Form.Label>Customer name</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter customer name"
-                  value={filteredRecords.customer_name}
-                  onChange={(e) =>
-                    setData({ ...data, customer_name: e.target.value })
-                  }
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3" controlId="formBasicBusinessName">
-                <Form.Label>Business name</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter business name"
-                  value={filteredRecords.business_name}
-                  onChange={(e) =>
-                    setData({ ...data, business_name: e.target.value })
-                  }
-                />
-              </Form.Group>
+              <Modal
+                show={confirmNicChange}
+                onHide={() => handleConfirmNicChange(false)}
+              >
+                <Modal.Header closeButton>
+                  <Modal.Title>Confirm Customer Change</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  Are you sure you want to change the customer information for
+                  the provided NIC?
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button
+                    variant="secondary"
+                    onClick={() => handleConfirmNicChange(false)}
+                  >
+                    No
+                  </Button>
+                  <Button variant="primary" onClick={() => handleNICSearch()}>
+                    Yes
+                  </Button>
+                </Modal.Footer>
+              </Modal>
 
               <Form.Group className="mb-3" controlId="formBasicDescription">
                 <Form.Label>Description</Form.Label>

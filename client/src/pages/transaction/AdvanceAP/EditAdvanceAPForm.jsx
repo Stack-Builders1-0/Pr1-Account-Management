@@ -13,6 +13,7 @@ function EditAdvanceAPForm() {
     date: "",
     customer_name: "",
     business_name: "",
+    invoice_id: "",
   });
 
   const [searchedTransaction, setSearchedTransaction] = useState(null);
@@ -23,6 +24,10 @@ function EditAdvanceAPForm() {
   const [showNICAlert, setShowNICAlert] = useState(false);
   const [customerInfo, setCustomerInfo] = useState(null);
   const [searchedNic, setSearchedNic] = useState(false);
+  const [old_bill_amount, setOldBillAmount] = useState(0);
+  const [old_discount, setOldDiscount] = useState(0);
+  const [old_balance, setOldBalance] = useState(0);
+  const [old_advance_amount, setOldAdvanceAmount] = useState(0);
 
   const navigate = useNavigate();
   const sessionToken = localStorage.getItem("sessionToken");
@@ -41,6 +46,12 @@ function EditAdvanceAPForm() {
             setEditMode(true);
             setFilteredRecords(data);
             setShowAlert(false);
+
+            setOldBillAmount(parseFloat(data.bill_amount));
+            setOldDiscount(parseFloat(data.discount));
+            setOldBalance(parseFloat(data.balance));
+            setOldAdvanceAmount(parseFloat(data.advance_amount));
+
             console.log(data);
           } else {
             setSearchedTransaction(null);
@@ -123,6 +134,19 @@ function EditAdvanceAPForm() {
       bill_amount: filteredRecords.bill_amount,
       discount: filteredRecords.discount,
       advance_amount: filteredRecords.advance_amount,
+      invoice_id: filteredRecords.invoice_id,
+    };
+
+    const olddata = {
+      old_bill_amount: old_bill_amount,
+      old_discount: old_discount,
+      old_balance: old_balance,
+      old_advance_amount: old_advance_amount,
+    };
+
+    const requestData = {
+      formdata: formdata,
+      olddata: olddata,
     };
 
     console.log(formdata);
@@ -130,7 +154,7 @@ function EditAdvanceAPForm() {
     axios
       .post(
         "http://localhost:5000/advanceSaleAP/edit",
-        { data: formdata },
+        { data: requestData },
         { headers: { Authorization: "key " + sessionToken } }
       )
       .then((res) => {
