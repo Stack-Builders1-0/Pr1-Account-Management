@@ -251,7 +251,7 @@ router.post("/totalTransection", (req, res) => {
   
 
   try{
-    const sessionToken = req.headers("Authorization").replace("key ", "");
+    const sessionToken =req.headers.authorization.replace("key ", "");
     const employee_id = decodedUserId(sessionToken);
     // const employee_id = body.employee_id
 
