@@ -4,16 +4,17 @@ import axios from 'axios';
 
 function Customer() {
   const [customerData, setCustomerData] = useState([]);
+  const sessionToken = localStorage.getItem('sessionToken');
 
   useEffect(() => {
-    axios.get(import.meta.env.VITE_API_URL + "/customer/showAll")
+    axios.post(import.meta.env.VITE_API_URL + "/customer/showByEmployee",'', { headers: { 'Authorization': 'key ' + sessionToken } })
       .then((res) => {
         setCustomerData(res.data.result);
       })
       .catch((error) => {
         console.log("Error fetching creditSale data:", error);
       })
-  });
+  },[]);
 
   return (
     <div className='px-5 py-3'>

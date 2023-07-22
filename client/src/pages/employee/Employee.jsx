@@ -16,7 +16,7 @@ function Employee() {
       .catch((error) => {
         console.log("Error fetching creditSale data:", error);
       })
-  });
+  },[]);
 
 
   return (
@@ -34,7 +34,7 @@ function Employee() {
               <th>Address</th>
               <th>Mobile</th>
               <th>nic</th>
-              <th>age</th>
+              <th>dob</th>
               
             </tr>
           </thead>
@@ -47,7 +47,7 @@ function Employee() {
                 <td>{data.address}</td>
                 <td>{data.mobile}</td>
                 <td>{data.nic}</td>
-                <td>{data.age}</td>
+                <td>{data.dob}</td>
           
               </tr>
             ))}

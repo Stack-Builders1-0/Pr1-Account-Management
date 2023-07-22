@@ -195,7 +195,7 @@ router.post('/isAddOpeningBalance', (req, res) => {
         else{
           if(result.length == 0){
             res.send({
-              sucess : true,
+              sucess : false,
               isError : false,
               isExist : false
           })
