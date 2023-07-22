@@ -19,7 +19,7 @@ class CheckEdited {
     this.balance = balance;
     this.settleAmount = oldBillAmount - oldDiscount - OldAdvanceAmount-balance;
 
-    // console.log(billAmount," ", oldBillAmount," ", discount," ",oldDiscount," ", balance," ", advanceAmount," ", OldAdvanceAmount)
+    console.log(billAmount," ", oldBillAmount," ", discount," ",oldDiscount," ", balance," ", advanceAmount," ", OldAdvanceAmount)
   }
 
   

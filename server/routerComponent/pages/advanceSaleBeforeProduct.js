@@ -1,6 +1,7 @@
 const mysql = require("mysql");
 const express = require("express");
 const decodeUserId = require('../Authentication/decodedToken');
+const CheckEdited = require('./CheckingEditAmount/checkEdited');
 
 const router = express.Router();
 
@@ -93,55 +94,120 @@ router.get("/showAll", (req, res) => {
   });
 });
 
+function updateReturnPayment(oldReturnPayment, returnPayment){
+
+}
 router.post("/edit", (req, res) => {
   const body = req.body;
-  const amount = body.bill_amount - body.discount;
-  const balance = amount - body.advance_amount;
+  try{
+    const sessionToken = req.headers.authorization.replace('key ','');
+    const employee_id = decodeUserId(sessionToken);
+    // employee_id = body.employee_id
 
-  const updateQuery =
-    "UPDATE accountmanagement.advance_sales_bp SET type_id = " +
-    mysql.escape(body.type_id) +
-    ", manual_invoice_id = " +
-    mysql.escape(body.manual_invoice_id) +
-    ", customer_id = " +
-    mysql.escape(body.customer_id) +
-    ", description = " +
-    mysql.escape(body.description) +
-    ", bill_amount = " +
-    mysql.escape(body.bill_amount) +
-    ", advance_amount = " +
-    mysql.escape(body.advance_amount) +
-    ", discount =" +
-    mysql.escape(body.discount) +
-    ", updated_by = " +
-    mysql.escape(body.employee_id) +
-    ", amount = " +
-    mysql.escape(amount) +
-    ", balance = " +
-    mysql.escape(balance) +
-    "  WHERE (invoice_id = " +
-    mysql.escape(body.invoice_id) +
-    ");";
+    const checkEdited = new CheckEdited(
+      body.billAmount,
+      body.oldBillAmount,
+      body.discount,
+      body.oldDisCount,
+      body.balance,
+      body.advanceAmount,
+      body.oldAdvanceAmount
+    );
+    
+    const totalSettleAmount =  body.oldBillAmount-body.oldDisCount-body.oldAdvanceAmount-body.balance-body.oldReturnPayment
+    const bill_amount = checkEdited.updateBillAmount();
+    const discount = checkEdited.updateDiscount();
+    const advance_amount = checkEdited.updateAdvanceAmount();
 
-  //  response has 2 field
-  // error occur then error = true , otherwise error = false
-  // employee regeister is sucess then sucess=true
-  connection.query(updateQuery, (err, result) => {
-    if (err) {
-      console.log(err);
-      res.send({
-        sucess: false,
-        error: true,
-      });
-    } else {
-      res.send({
-        sucess: true,
-        error: false,
-      });
-    }
-  });
+    // we want to check the returnAmount details
+    const differenceReturnPayment = body.returnPayment - body.oldReturnPayment;
+    const returnPayment = body.oldReturnPayment + differenceReturnPayment;
+
+    const balance = checkEdited.updateBalance() + differenceReturnPayment;
+    const amount = bill_amount - discount;
+    
+
+    const updateQueryAdvanceAP =
+      "UPDATE accountmanagement.advance_sales_bp SET type_id = " +
+      mysql.escape(body.type_id) +
+      ", manual_invoice_id = " +
+      mysql.escape(body.manual_invoice_id) +
+      ", customer_id = " +
+      mysql.escape(body.customer_id) +
+      ", description = " +
+      mysql.escape(body.description) +
+      ", bill_amount = " +
+      mysql.escape(bill_amount) +
+      ", advance_amount = " +
+      mysql.escape(advance_amount) +
+      ", discount =" +
+      mysql.escape(discount) +
+      ", amount =" +
+      mysql.escape(amount) +
+      ", balance =" +
+      mysql.escape(balance) +
+      ", return_payment =" +
+      mysql.escape(returnPayment) + // =================return_payment============================================
+      ", updated_by = " +
+      mysql.escape(body.employee_id) +
+      ", updated_at = " +
+      mysql.escape(body.updated_at) +
+      "  WHERE (invoice_id = " +
+      mysql.escape(body.invoice_id) +
+      ");";
+      
+
+      const insertQueryCreditPartial =
+      "INSERT INTO `accountmanagement`.`advance_bp_partial_settle` (`type_id`, `invoice_id`, `description`, `customer_id`, `settle_amount`, `balance`, `employee_id`,`return_payment`, `total_settle_amount`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
+    //  response has 2 field
+    // error occur then error = true , otherwise error = false
+    // employee regeister is sucess then sucess=true
+    connection.query(updateQueryAdvanceAP, (err, result) => {
+      if (err) {
+        console.log(err);
+        res.send({
+          sucess: false,
+          error: true,
+        });
+      } else {
+        connection.query(
+          insertQueryCreditPartial,
+          [
+            body.type_id,
+            body.invoice_id,
+            "edited",
+            body.customer_id,
+            0,
+            balance,
+            employee_id,
+            returnPayment,
+            totalSettleAmount
+          ],
+          (err, result) => {
+            if (err) {
+              console.log(err);
+              res.send({
+                sucess: false,
+                error: true,
+              });
+            } else {
+              res.send({
+                sucess: true,
+                error: false,
+              });
+            }
+          }
+        );
+      }
+    });
+  } catch (err){
+    console.log(err);
+    res.send({
+      isTokenValied : false
+    });
+  }
 });
-
 router.post("/settle", (req, res) => {
   body = req.body.data;
   const balance = body.balance - body.settle_amount;

@@ -118,31 +118,23 @@ router.post("/filterManualInvoice", (req, res) => {
   });
 });
 
-async function runQueries() {
-  try {
-    const [results1, results2] = await Promise.all([
-      pool.promise().query(query1),
-      pool.promise().query(query2),
-    ]);
-
-    console.log("Results from query 1:", results1[0]);
-    console.log("Results from query 2:", results2[0]);
-  } catch (error) {
-    console.error("Error executing queries:", error.message);
-  } finally {
-    pool.end(); // Close the connection pool when done
-  }
-}
 
 router.post("/edit", (req, res) => {
   const body = req.body;
   // const checkEdited = new CheckEdited(body.billAmount, body.oldBillAmount, body.discount, body.oldDisCount, body.balance, body.advanceAmount, body.OldAdvanceAmount )
+  
+  try{
+
+    const sessionToken = req.headers.authorization.replace('key ','');
+  const employee_id = decodedUserId(sessionToken);
+  // const employee_id = body.employee_id;
+
   const checkEdited = new CheckEdited(
     body.billAmount,
-    body.oldBillAmount,
+    body.olddata.old_bill_amount,
     body.discount,
-    body.oldDisCount,
-    body.balance,
+    body.olddata.old_discount,
+    body.olddata.old_balance,
     0,
     0
   );
@@ -152,9 +144,7 @@ router.post("/edit", (req, res) => {
   const balance = checkEdited.updateBalance();
   const amount = bill_amount - discount;
 
-  // const sessionToken = req.headers.authorization.replace('key ','');
-  // const employee_id = decodedUserId(sessionToken);
-  const employee_id = body.employee_id;
+  
 
   const updateQueryCredit =
     "UPDATE accountmanagement.credit_sales SET type_id = " +
@@ -221,6 +211,13 @@ router.post("/edit", (req, res) => {
       );
     }
   });
+  } catch (err){
+    console.log(err);
+    res.send({
+      isTokenValied : false
+    })
+  }
+  
 });
 
 router.post("/settle", (req, res) => {
