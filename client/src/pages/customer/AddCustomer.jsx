@@ -37,7 +37,7 @@ function AddCustomer() {
 
 
     const findFormErrors = () => {
-        const { firstName, mobile, email_id, nic_no, credit_limit } = form
+        const { customer_name, mobile, email_id, nic_no, credit_limit } = form
         const newErrors = {}
         // name errors
         if (!customer_name || customer_name === '') newErrors.customer_name = 'cannot be blank!'
@@ -62,15 +62,13 @@ function AddCustomer() {
     const handleSubmit = (event) => {
         event.preventDefault();
         const newErrors = findFormErrors();
+        console.log(form)
         if (Object.keys(newErrors).length > 0) {
             // We got errors!
             setErrors(newErrors)
         }
-      
-        setForm({ ...form, customer_name: form.firstName + ' ' + form.lastName })
-        console.log(form.customer_name)
-        console.log(form)
-        axios.post(import.meta.env.VITE_API_URL + '/customer/add', form, { headers: { 'Authorization': 'key ' + sessionToken } })
+        else
+            axios.post(import.meta.env.VITE_API_URL + '/customer/add', form, { headers: { 'Authorization': 'key ' + sessionToken } })
             .then(res => {
                 
                 if (res.data.isExist) {

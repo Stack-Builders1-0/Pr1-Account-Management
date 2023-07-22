@@ -97,7 +97,7 @@ router.post('/edit', (req, res) => {
 
     bcrypt.hash(password, 10, function(err, hash) {
         // store hash in the database
-        const updateQuery = "UPDATE accountmanagement.employees SET employee_name = "+ mysql.escape(body.employee_name) +", address = "+ mysql.escape(body.address) +", mobile= "+ mysql.escape(body.mobile) +", email = "+ mysql.escape(body.email) +", nic = "+ mysql.escape(body.nic) +", type_id = "+ mysql.escape(body.type_id) +", age = "+ mysql.escape(body.age) +", password = "+ mysql.escape(hash) +" WHERE (employee_id = "+mysql.escape(body.employee_id)+");";
+        const updateQuery = "UPDATE accountmanagement.employees SET employee_name = "+ mysql.escape(body.employee_name) +", address = "+ mysql.escape(body.address) +", mobile= "+ mysql.escape(body.mobile) +", email = "+ mysql.escape(body.email) +", nic = "+ mysql.escape(body.nic) +", type_id = "+ mysql.escape(body.type_id) +", dob = "+ mysql.escape(body.dob) +", password = "+ mysql.escape(hash) +" WHERE (employee_id = "+mysql.escape(body.employee_id)+");";
     
         //  response has 2 field 
         // error occur then error = true , otherwise error = false
@@ -123,7 +123,7 @@ router.post('/edit', (req, res) => {
 
 router.get('/showAll', (req,res) => {
 
-    const selectQuery = "SELECT employee_id, employee_name, type, address, mobile, email, nic, age FROM employees join employee_type using(type_id);";
+    const selectQuery = "SELECT employee_id, employee_name, type, address, mobile, email, nic, dob FROM employees join employee_type using(type_id);";
 
     connection.query(selectQuery,(err,result)=>{
         if(err){
@@ -155,7 +155,7 @@ router.post('/showCurrent', (req,res) => {
     
         // const employee_id = req.body.employee_id;
 
-        const selectQuery = "SELECT employee_id, employee_name, type, address, mobile, email, nic, age FROM employees join employee_type using(type_id) where employee_id = "+ mysql.escape(employee_id) +";";
+        const selectQuery = "SELECT employee_id, employee_name, type, address, mobile, email, nic, dob FROM employees join employee_type using(type_id) where employee_id = "+ mysql.escape(employee_id) +";";
 
         connection.query(selectQuery,(err,result)=>{
             if(err){

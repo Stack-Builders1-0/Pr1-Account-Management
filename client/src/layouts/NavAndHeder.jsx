@@ -17,21 +17,21 @@ function NavAndHeder() {
     setIsLoggedin(false);
   };
 
-    // Token is not present, consider it expired
-    function isTokenExpired() {
-      const sessionToken = localStorage.getItem('sessionToken');
-      if (!sessionToken) return true; 
+  // Token is not present, consider it expired
+  function isTokenExpired() {
+    const sessionToken = localStorage.getItem('sessionToken');
+    if (!sessionToken) return true;
+  }
+
+
+
+  // Check token expiration when the app loads at regular intervals
+  // Check every minute
+  setInterval(() => {
+    if (isTokenExpired()) {
+      logout();
     }
-  
-    
-  
-    // Check token expiration when the app loads at regular intervals
-    // Check every minute
-    setInterval(() => {
-      if (isTokenExpired()) {
-        logout();
-      }
-    }, 60000); 
+  }, 60000);
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -82,7 +82,7 @@ function NavAndHeder() {
                 </NavLink>
               </li>
 
-              
+
               <li>
                 <NavLink to="/transaction" style={setStyle}>
                   <div
@@ -95,9 +95,8 @@ function NavAndHeder() {
                       Transaction
                     </span>{" "}
                     <i
-                      className={`bi bi-chevron-${
-                        dropdownOpen ? "up" : "down"
-                      } toggle-btn `}
+                      className={`bi bi-chevron-${dropdownOpen ? "up" : "down"
+                        } toggle-btn `}
                     ></i>
                   </div>
                 </NavLink>
@@ -156,8 +155,8 @@ function NavAndHeder() {
           <div className="p-2 d-flex justify-content-between shadow navstyle sticky-top">
 
             <div></div>
-              <h4 className="text" >Account Management System</h4>
-              
+            <h4 className="text" >Account Management System</h4>
+
             <div className="dropdown ml-auto">
               <button
                 className="btn btn-secondary dropdown-toggle"
