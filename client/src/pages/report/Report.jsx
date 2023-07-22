@@ -52,6 +52,7 @@ function Report() {
         endDate: endDate,
       })
       .then((res) => {
+        console.log(res.data)
         // Handle the API response here
         setTransactionData(res.data.result);
       })

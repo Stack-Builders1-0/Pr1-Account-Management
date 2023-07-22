@@ -23,66 +23,61 @@ connection.connect((err) => {
 router.post("/getSales", (req, res) => {
   const body = req.body;
 
-//   const sessionToken = req.headers.authorization.replace('key ','');
+  //   const sessionToken = req.headers.authorization.replace('key ','');
 
-//   const employee_id = decodeUserId(sessionToken);
+  //   const employee_id = decodeUserId(sessionToken);
 
   const getQuery = "SELECT * FROM combine_sales where locate(?,date);";
 
-
   connection.query(getQuery, [body.date], (err, result) => {
-      if (err) {
-        console.log(err)
-        res.send({
-          sucess: false,
-          isError: true,
-          error : err,
-          result : result
-        });
-      } else {
-        res.send({
-          sucess: true,
-          isError: false,
-          error : null,
-          result : result
-        });
-      }
+    if (err) {
+      console.log(err);
+      res.send({
+        sucess: false,
+        isError: true,
+        error: err,
+        result: result,
+      });
+    } else {
+      res.send({
+        sucess: true,
+        isError: false,
+        error: null,
+        result: result,
+      });
     }
-  );
+  });
 });
-
-
 
 router.post("/getSalesBetweenDate", (req, res) => {
   const body = req.body;
 
-//   const sessionToken = req.headers.authorization.replace('key ','');
+  //   const sessionToken = req.headers.authorization.replace('key ','');
 
-//   const employee_id = decodeUserId(sessionToken);
+  //   const employee_id = decodeUserId(sessionToken);
 
-  const getQuery = "SELECT * FROM combine_sales where date >= ? and date < ?;";
-
+  const getQuery =
+    "SELECT * FROM combine_sales where date >= ? and date < ? order by date;";
+  // const getQuery = "SELECT * FROM total_transection where date >= ? and date < ? order by date;";
 
   connection.query(getQuery, [body.startDate, body.endDate], (err, result) => {
-      if (err) {
-        console.log(err)
-        res.send({
-          sucess: false,
-          isError: true,
-          error : err,
-          result : result
-        });
-      } else {
-        res.send({
-          sucess: true,
-          isError: false,
-          error : null,
-          result : result
-        });
-      }
+    if (err) {
+      console.log(err);
+      res.send({
+        sucess: false,
+        isError: true,
+        error: err,
+        result: result,
+      });
+    } else {
+      res.send({
+        sucess: true,
+        isError: false,
+        error: null,
+        result: result,
+      });
     }
-  );
+  });
 });
-
 
 module.exports = router;
