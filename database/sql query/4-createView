@@ -174,3 +174,61 @@ create VIEW `amount_details_on_date_cash` AS
         NULL AS `return_payment`
     FROM
         `amount_details_on_date_credit`;
+
+
+create VIEW `total_transection` AS
+    SELECT 
+        `cash_sales`.`invoice_id` AS `invoice_id`,
+        `cash_sales`.`type_id` AS `type_id`,
+        `cash_sales`.`manual_invoice_id` AS `manual_invoice_id`,
+        `cash_sales`.`date` AS `date`,
+        `cash_sales`.`customer_id` AS `customer_id`,
+        `cash_sales`.`amount` AS `amount`,
+        `cash_sales`.`amount` AS `settle_amount`,
+        NULL as balance,
+        NULL AS `return_payment`,
+        `cash_sales`.`employee_id` AS `employee_id`
+    FROM
+        `cash_sales` 
+        UNION ALL SELECT 
+        `credit_partial_settle`.`invoice_id` AS `invoice_id`,
+        `credit_partial_settle`.`type_id` AS `type_id`,
+        `credit_sales`.`manual_invoice_id` AS `manual_invoice_id`,
+        `credit_partial_settle`.`date` AS `date`,
+        `credit_partial_settle`.`customer_id` AS `customer_id`,
+        `credit_sales`.`amount` AS `amount`,
+        `credit_partial_settle`.`settle_amount` AS `settle_amount`,
+        `credit_partial_settle`.`balance` AS `balance`,
+        NULL AS `return_payment`,
+        `credit_partial_settle`.`employee_id` AS `employee_id`
+    FROM
+        (`credit_partial_settle`
+        JOIN `credit_sales` ON ((`credit_partial_settle`.`invoice_id` = `credit_sales`.`invoice_id`))) 
+    UNION ALL SELECT 
+        `advance_bp_partial_settle`.`invoice_id` AS `invoice_id`,
+        `advance_bp_partial_settle`.`type_id` AS `type_id`,
+        `advance_sales_bp`.`manual_invoice_id` AS `manual_invoice_id`,
+        `advance_bp_partial_settle`.`date` AS `date`,
+        `advance_bp_partial_settle`.`customer_id` AS `customer_id`,
+        `advance_sales_bp`.`amount` AS `amount`,
+        `advance_bp_partial_settle`.`settle_amount` AS `settle_amount`,
+        `advance_bp_partial_settle`.`balance` AS `balance`,
+        `advance_bp_partial_settle`.`return_payment` AS `return_payment`,
+        `advance_bp_partial_settle`.`employee_id` AS `employee_id`
+    FROM
+        (`advance_bp_partial_settle`
+        JOIN `advance_sales_bp` ON ((`advance_bp_partial_settle`.`invoice_id` = `advance_sales_bp`.`invoice_id`))) 
+    UNION ALL SELECT 
+        `advance_ap_partial_settle`.`invoice_id` AS `invoice_id`,
+        `advance_ap_partial_settle`.`type_id` AS `type_id`,
+        `advance_sales_ap`.`manual_invoice_id` AS `manual_invoice_id`,
+        `advance_ap_partial_settle`.`date` AS `date`,
+        `advance_ap_partial_settle`.`customer_id` AS `customer_id`,
+        `advance_sales_ap`.`amount` AS `amount`,
+        `advance_ap_partial_settle`.`settle_amount` AS `settle_amount`,
+        `advance_ap_partial_settle`.`balance` AS `balance`,
+        NULL AS `return_payment`,
+        `advance_ap_partial_settle`.`employee_id` AS `employee_id`
+    FROM
+        (`advance_ap_partial_settle`
+        JOIN `advance_sales_ap` ON ((`advance_ap_partial_settle`.`invoice_id` = `advance_sales_ap`.`invoice_id`)));
