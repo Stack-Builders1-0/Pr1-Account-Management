@@ -36,10 +36,10 @@ function EditTransaction() {
           <Link to="/edittransaction/credit" className="btn btn-primary">
             Credit
           </Link>
-          <Link to="/editadvancetransaction" className="btn btn-primary">
+          <Link to="/edittransaction/advancebp" className="btn btn-primary">
             AdvancedBP
           </Link>
-          <Link to="/editadvancetransaction" className="btn btn-primary">
+          <Link to="/edittransaction/advanceap" className="btn btn-primary">
             AdvancedAP
           </Link>
         </div>

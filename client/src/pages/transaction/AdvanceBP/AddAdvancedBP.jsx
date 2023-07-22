@@ -203,16 +203,6 @@ function AddAdvanceBPForm() {
             />
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicDate">
-            <Form.Label>Date</Form.Label>
-            <Form.Control
-              type="date"
-              placeholder="Enter date"
-              value={data.date}
-              onChange={(e) => setData({ ...data, date: e.target.value })}
-            />
-          </Form.Group>
-
           <Button variant="primary" type="submit">
             Submit
           </Button>

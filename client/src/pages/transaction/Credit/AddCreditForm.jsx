@@ -1,27 +1,27 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { Button, Form, Navbar, Container, Nav } from "react-bootstrap";
 import Alert from "react-bootstrap/Alert";
+import CommonNavbar from "./CommonNavBar";
 
-function CashTransaction() {
+function AddCreditForm() {
   const [data, setData] = useState({
     nic_no: "",
-    customer_name: "",
     customer_id: "",
     manual_invoice_id: "",
     description: "",
-    billAmount: "",
+    bill_amount: "",
     discount: "",
     date: "",
   });
 
+  const navigate = useNavigate();
+
   const [customerInfo, setCustomerInfo] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
   const [searchedNic, setSearchedNic] = useState(false);
-
-  const navigate = useNavigate();
 
   const handleSearch = () => {
     const apiUrl = "http://localhost:5000/customer/filterCustomerNIC";
@@ -30,13 +30,14 @@ function CashTransaction() {
       .post(apiUrl, { nic: data.nic_no })
       .then((res) => {
         const responseData = res.data;
+        console.log(responseData);
         if (responseData.sucess && responseData.result.length > 0) {
           // NIC number is valid and customer information is found
           const customerData = responseData.result[0];
           setCustomerInfo({
             customerName: customerData.customer_name,
             businessName: customerData.business_name,
-            customer_id: customerData.customer_id,
+            creditLimit: customerData.credit_limit,
           });
           setShowAlert(false);
           setData({ ...data, customer_name: customerData.customer_name });
@@ -61,28 +62,35 @@ function CashTransaction() {
 
     if (searchedNic) {
       // Only allow form submission if NIC has been searched
-      const formdata = {
-        type_id: "ca", // we manually set the type id of tha cash sale
-        manual_invoice_id: data.manual_invoice_id,
-        date: data.date,
-        customer_id: data.customer_id,
-        description: data.description,
-        bill_amount: data.billAmount,
-        discount: data.discount,
-      };
+      const billAmount = parseFloat(data.bill_amount);
+      const creditLimit = parseFloat(customerInfo.creditLimit);
 
-      axios
-        .post("http://localhost:5000/cashSale/add", formdata, {
-          headers: { Authorization: "key " + sessionToken },
-        })
-        .then((res) => {
-          navigate("/transaction");
-        })
-        .catch((err) => console.log(err));
-    } else {
-      alert(
-        "Please search for a valid NIC first before submitting the form or you have to register first"
-      );
+      if (billAmount <= creditLimit) {
+        const formdata = {
+          type_id: "cr", // we manually set the type id of the credit sale
+          manual_invoice_id: data.manual_invoice_id,
+          date: data.date,
+          customer_id: data.customer_id,
+          description: data.description,
+          bill_amount: data.bill_amount,
+          discount: data.discount,
+        };
+
+        axios
+          .post("http://localhost:5000/creditSale/add", formdata, {
+            headers: { Authorization: "key " + sessionToken },
+          })
+          .then((res) => {
+            navigate("/transaction");
+            console.log(res.data);
+          })
+          .catch((err) => console.log(err));
+      } else {
+        // Bill amount exceeds the credit limit, display error message
+        alert(
+          "Bill amount exceeds the credit limit. Please adjust the bill amount."
+        );
+      }
     }
   };
 
@@ -93,11 +101,14 @@ function CashTransaction() {
   return (
     <div className="d-flex flex-column align-items-center pt-4">
       <div className="white-box">
-        <div className="d-flex flex-column align-items-center">
-          <h2>Cash Payment</h2>
+        <div>
+          <CommonNavbar /> {/* Use the CommonNavbar component here */}
         </div>
+        <div className="d-flex flex-column align-items-center">
+          <h2>Credit Payment Only</h2>
+        </div>
+        <h4>Add Payment Only</h4>
 
-        {/* Search for customer by NIC */}
         <Form.Group className="mb-3" controlId="formBasicNicNo">
           <Form.Label>Search Customer by NIC</Form.Label>
           <Form.Control
@@ -117,10 +128,9 @@ function CashTransaction() {
           </Button>
         </Form.Group>
 
-        {/* Alert for invalid NIC */}
         {showAlert && (
           <Alert variant="danger">
-            No customer found with the provided NIC. Do you want to register?
+            No customer found with the provided NIC. Do you want to register?{" "}
             <Link to="/addcustomer" className="btn btn-primary">
               Add Customer
             </Link>
@@ -135,6 +145,9 @@ function CashTransaction() {
             </p>
             <p>
               <strong>Business Name:</strong> {customerInfo.businessName}
+            </p>
+            <p>
+              <strong>Credit Limit:</strong> {customerInfo.creditLimit}
             </p>
           </div>
         )}
@@ -169,8 +182,10 @@ function CashTransaction() {
             <Form.Control
               type="number"
               placeholder="Enter bill amount"
-              value={data.billAmount}
-              onChange={(e) => setData({ ...data, billAmount: e.target.value })}
+              value={data.bill_amount}
+              onChange={(e) =>
+                setData({ ...data, bill_amount: e.target.value })
+              }
             />
           </Form.Group>
 
@@ -196,4 +211,4 @@ function CashTransaction() {
   );
 }
 
-export default CashTransaction;
+export default AddCreditForm;

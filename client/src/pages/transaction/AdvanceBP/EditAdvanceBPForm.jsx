@@ -3,12 +3,13 @@ import { Form, Button, Alert } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-function EditCreditForm() {
+function EditAdvanceBPForm() {
   const [data, setData] = useState({
     manual_invoice_id: "",
     description: "",
     bill_amount: "",
     discount: "",
+    advance_amount: "",
     date: "",
     customer_name: "",
     business_name: "",
@@ -29,7 +30,7 @@ function EditCreditForm() {
   const handleSearch = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:5000/creditSale/filterManualInvoice", {
+      .post("http://localhost:5000/advanceSaleBP/filterManualInvoice", {
         manual_invoice_id: searchInvoiceNumber,
       })
       .then((res) => {
@@ -72,7 +73,7 @@ function EditCreditForm() {
       .post(apiUrl, { nic: data.nic_no })
       .then((res) => {
         const responseData = res.data;
-        console.log(res.data);
+        console.log(responseData);
         if (responseData.sucess && responseData.result.length > 0) {
           // NIC number is valid and customer information is found
           const customerData = responseData.result[0];
@@ -115,43 +116,30 @@ function EditCreditForm() {
     event.preventDefault();
     // Perform validation if needed
 
-    const billAmount = parseFloat(filteredRecords.bill_amount);
-    const creditLimit = searchedNic
-      ? parseFloat(data.credit_limit)
-      : parseFloat(filteredRecords.credit_limit);
+    const formdata = {
+      type_id: "as", // we manually set the type id of the credit sale
+      manual_invoice_id: filteredRecords.manual_invoice_id,
+      date: filteredRecords.date,
+      customer_id: searchedNic ? data.customer_id : filteredRecords.customer_id,
+      description: filteredRecords.description,
+      bill_amount: filteredRecords.bill_amount,
+      discount: filteredRecords.discount,
+      advance_amount: filteredRecords.advance_amount,
+    };
 
-    if (billAmount <= creditLimit) {
-      // Bill amount exceeds the credit limit, display error message
-      const formdata = {
-        type_id: "cr", // we manually set the type id of the credit sale
-        manual_invoice_id: filteredRecords.manual_invoice_id,
-        date: filteredRecords.date,
-        customer_id: searchedNic
-          ? data.customer_id
-          : filteredRecords.customer_id,
-        description: filteredRecords.description,
-        bill_amount: filteredRecords.bill_amount,
-        discount: filteredRecords.discount,
-      };
+    console.log(formdata);
 
-      console.log(formdata);
-
-      axios
-        .post(
-          "http://localhost:5000/creditSale/edit",
-          { data: formdata },
-          { headers: { Authorization: "key " + sessionToken } }
-        )
-        .then((res) => {
-          //navigate("/edittransaction");
-          console.log(res.data);
-        })
-        .catch((err) => console.log(err));
-    } else {
-      alert(
-        "Bill amount exceeds the credit limit. Please adjust the bill amount."
-      );
-    }
+    axios
+      .post(
+        "http://localhost:5000/advanceSaleBP/edit",
+        { data: formdata },
+        { headers: { Authorization: "key " + sessionToken } }
+      )
+      .then((res) => {
+        navigate("/edittransaction");
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err));
   };
 
   const handleCancel = () => {
@@ -163,7 +151,7 @@ function EditCreditForm() {
       <div className="d-flex flex-column align-items-center pt-4">
         <div className="white-box">
           <div className="d-flex flex-column align-items-center">
-            <h2>{editMode ? "Edit Credit Payment" : "Credit Payment"}</h2>
+            <h2>{editMode ? "Edit AdvanceBP Payment" : "AdvanceBP Payment"}</h2>
           </div>
 
           {/* Search for credit transaction by bill number */}
@@ -230,7 +218,7 @@ function EditCreditForm() {
                     <strong>Business Name:</strong> {customerInfo.businessName}
                   </p>
                   <p>
-                    <strong>Credit Limit:</strong> {customerInfo.creditLimit}
+                    <strong>CreditLimit:</strong> {customerInfo.creditLimit}
                   </p>
                 </div>
               )}
@@ -304,6 +292,21 @@ function EditCreditForm() {
                 />
               </Form.Group>
 
+              <Form.Group className="mb-3" controlId="formBasicAdvanceAmount">
+                <Form.Label>Advance Amount</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="Enter advance amount"
+                  value={filteredRecords.advance_amount}
+                  onChange={(e) =>
+                    setFilteredRecords({
+                      ...filteredRecords,
+                      advance_amount: e.target.value,
+                    })
+                  }
+                />
+              </Form.Group>
+
               <Button variant="primary" type="submit">
                 Edit
               </Button>
@@ -318,4 +321,4 @@ function EditCreditForm() {
   );
 }
 
-export default EditCreditForm;
+export default EditAdvanceBPForm;
