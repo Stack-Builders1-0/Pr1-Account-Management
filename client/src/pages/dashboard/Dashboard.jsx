@@ -30,23 +30,38 @@ function Dashboard() {
   const [advanceSaleAPData, setAdvanceSaleAPData] = useState([]);
   const [advanceSaleBPData, setAdvanceSaleBPData] = useState([]);
 
+  const [totalCash, setTotalCash] = useState([]);
+  const [totalCredit, setTotalCredit] = useState('');
+
+
   // get the current date in yyyy-mm-dd this format
   const currentDate = new Date();
   const date = currentDate.getFullYear() + '-0' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
 
   useEffect(() => {
 
-    axios.post(import.meta.env.VITE_API_URL + "/dashboard/totalCreditSales", { date: date }, { headers: { 'Authorization': 'key ' + sessionToken } })
+    axios.post(import.meta.env.VITE_API_URL + "/dashboard/totalTransection", { date: date }, { headers: { 'Authorization': 'key '+sessionToken } })
       .then((res) => {
-        setData({ ...data, totalCreditSales: res.data.result });
+        console.log(res.data.result[0].cash);
+        console.log(res.data.result[0].credit);
+        
+        setData({ ...data, totalCashSales: res.data.resul[0].cash });
+        setData({ ...data, totalCreditSales: res.data.resul[0].credit });
+        setData({ ...data, totalSales: res.data.resul[0].cash + res.data.resul[0].credit });
+        console.log(data);
       });
 
-    axios.post(import.meta.env.VITE_API_URL + "/dashboard/totalCashSales", { date: date }, { headers: { 'Authorization': 'key ' + sessionToken } })
-      .then((res) => {
-        setData({ ...data, totalCashSales: res.data.result });
-      });
+    // axios.post(import.meta.env.VITE_API_URL + "/dashboard/totalCreditSales", { date: date }, { headers: { 'Authorization': 'key ' + sessionToken } })
+    //   .then((res) => {
+    //     setData({ ...data, totalCreditSales: res.data.result });
+    //   });
 
-    setData({ ...data, totalSales: data.totalCashSales + data.totalCreditSales });
+    // axios.post(import.meta.env.VITE_API_URL + "/dashboard/totalCashSales", { date: date }, { headers: { 'Authorization': 'key ' + sessionToken } })
+    //   .then((res) => {
+    //     setData({ ...data, totalCashSales: res.data.result });
+    //   });
+
+    // setData({ ...data, totalSales: data.totalCashSales + data.totalCreditSales });
 
 
     axios
