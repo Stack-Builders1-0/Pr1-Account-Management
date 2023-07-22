@@ -509,3 +509,19 @@ REFERENCES employees(employee_id)
 ON DELETE CASCADE
 ON UPDATE CASCADE
 );
+
+
+alter table cash_sales
+modify column updated_at timestamp null
+
+alter table credit_sales
+modify column updated_at timestamp null,
+add column balance_updated_at timestamp on UPDATE CURRENT_TIMESTAMP
+
+alter table advance_sales_ap
+modify column updated_at timestamp null,
+add column balance_updated_at timestamp on UPDATE CURRENT_TIMESTAMP
+
+alter table advance_sales_bp
+modify column updated_at timestamp null,
+add column balance_updated_at timestamp on UPDATE CURRENT_TIMESTAMP

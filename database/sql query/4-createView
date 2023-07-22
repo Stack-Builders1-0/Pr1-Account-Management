@@ -1,4 +1,4 @@
-create view `amount_details_on_date_bp` AS
+VIEW `amount_details_on_date_bp` AS
     SELECT 
         `advance_sales_bp`.`invoice_id` AS `invoice_id`,
         `advance_sales_bp`.`type_id` AS `type_id`,
@@ -9,7 +9,11 @@ create view `amount_details_on_date_bp` AS
         `advance_sales_bp`.`discount` AS `discount`,
         `advance_sales_bp`.`amount` AS `amount`,
         `advance_sales_bp`.`balance` AS `balance`,
-         `advance_sales_bp`.`date` AS `date`,
+        `advance_sales_bp`.`date` AS `date`,
+        `advance_sales_bp`.`updated_by` AS `updated_by`,
+        `advance_sales_bp`.`updated_at` AS `updated_at`,
+        `advance_sales_bp`.`balance_updated_by` AS `balance_updated_by`,
+        `advance_sales_bp`.`balance_updated_at` AS `balance_updated_at`,
         `advance_sales_bp`.`return_payment` AS `return_payment`,
         `advance_sales_bp`.`employee_id` AS `employee_id`,
         `customers`.`customer_id` AS `customer_id`,
@@ -27,7 +31,8 @@ create view `amount_details_on_date_bp` AS
 
 
 
-create VIEW `amount_details_on_date_ap` AS
+
+VIEW `amount_details_on_date_ap` AS
     SELECT 
         `advance_sales_ap`.`invoice_id` AS `invoice_id`,
         `advance_sales_ap`.`type_id` AS `type_id`,
@@ -38,12 +43,16 @@ create VIEW `amount_details_on_date_ap` AS
         `advance_sales_ap`.`discount` AS `discount`,
         `advance_sales_ap`.`amount` AS `amount`,
         `advance_sales_ap`.`balance` AS `balance`,
+        `advance_sales_ap`.`updated_by` AS `updated_by`,
+        `advance_sales_ap`.`updated_at` AS `updated_at`,
+        `advance_sales_ap`.`balance_updated_by` AS `balance_updated_by`,
+        `advance_sales_ap`.`balance_updated_at` AS `balance_updated_at`,
         `advance_sales_ap`.`date` AS `date`,
         `advance_sales_ap`.`employee_id` AS `employee_id`,
         `customers`.`customer_id` AS `customer_id`,
         `customers`.`customer_name` AS `customer_name`,
         `customers`.`business_name` AS `business_name`,
-         `customers`.`nic_no` AS `nic_no`,
+        `customers`.`nic_no` AS `nic_no`,
         `customers`.`adress` AS `adress`,
         `customers`.`mobile` AS `mobile`,
         `customers`.`credit_limit` AS `credit_limit`,
@@ -64,6 +73,10 @@ create VIEW `amount_details_on_date_ap` AS
         `credit_sales`.`manual_invoice_id` AS `manual_invoice_id`,
         `credit_sales`.`description` AS `description`,
         `credit_sales`.`date` AS `date`,
+        `credit_sales`.`updated_by` AS `updated_by`,
+        `credit_sales`.`updated_at` AS `updated_at`,
+        `credit_sales`.`balance_updated_by` AS `balance_updated_by`,
+        `credit_sales`.`balance_updated_at` AS `balance_updated_at`,
         `credit_sales`.`bill_amount` AS `bill_amount`,
         `credit_sales`.`discount` AS `discount`,
         `credit_sales`.`amount` AS `amount`,
@@ -87,12 +100,17 @@ create VIEW `amount_details_on_date_ap` AS
 
 
 
+
 create VIEW `amount_details_on_date_cash` AS
     SELECT 
         `cash_sales`.`invoice_id` AS `invoice_id`,
         `cash_sales`.`type_id` AS `type_id`,
         `cash_sales`.`manual_invoice_id` AS `manual_invoice_id`,
         `cash_sales`.`date` AS `date`,
+        `cash_sales`.`updated_by` AS `updated_by`,
+        `cash_sales`.`updated_at` AS `updated_at`,
+       null AS `balance_updated_by`,
+        `cash_sales`.`balance_updated_at` AS `balance_updated_at`,
         `cash_sales`.`description` AS `description`,
         `cash_sales`.`bill_amount` AS `bill_amount`,
         `cash_sales`.`discount` AS `discount`,
@@ -128,6 +146,10 @@ create VIEW `combine_sales` AS
         `amount_details_on_date_bp`.`balance` AS `balance`,
         `amount_details_on_date_bp`.`employee_id` AS `employee_id`,
         `amount_details_on_date_bp`.`date` AS `date`,
+        `amount_details_on_date_bp`.`updated_by` AS `updated_by`,
+        `amount_details_on_date_bp`.`updated_at` AS `updated_at`,
+        `amount_details_on_date_bp`.`balance_updated_by` AS `balance_updated_by`,
+        `amount_details_on_date_bp`.`balance_updated_at` AS `balance_updated_at`,
         `amount_details_on_date_bp`.`customer_name` AS `customer_name`,
         `amount_details_on_date_bp`.`business_name` AS `business_name`,
         `amount_details_on_date_bp`.`mobile` AS `mobile`,
@@ -149,6 +171,10 @@ create VIEW `combine_sales` AS
         `amount_details_on_date_ap`.`balance` AS `balance`,
         `amount_details_on_date_ap`.`employee_id` AS `employee_id`,
         `amount_details_on_date_ap`.`date` AS `date`,
+		`amount_details_on_date_ap`.`updated_by` AS `updated_by`,
+        `amount_details_on_date_ap`.`updated_at` AS `updated_at`,
+        `amount_details_on_date_ap`.`balance_updated_by` AS `balance_updated_by`,
+        `amount_details_on_date_ap`.`balance_updated_at` AS `balance_updated_at`,
         `amount_details_on_date_ap`.`customer_name` AS `customer_name`,
         `amount_details_on_date_ap`.`business_name` AS `business_name`,
         `amount_details_on_date_ap`.`mobile` AS `mobile`,
@@ -170,6 +196,10 @@ create VIEW `combine_sales` AS
         `amount_details_on_date_credit`.`balance` AS `balance`,
         `amount_details_on_date_credit`.`employee_id` AS `employee_id`,
         `amount_details_on_date_credit`.`date` AS `date`,
+		`amount_details_on_date_credit`.`updated_by` AS `updated_by`,
+        `amount_details_on_date_credit`.`updated_at` AS `updated_at`,
+        `amount_details_on_date_credit`.`balance_updated_by` AS `balance_updated_by`,
+        `amount_details_on_date_credit`.`balance_updated_at` AS `balance_updated_at`,
         `amount_details_on_date_credit`.`customer_name` AS `customer_name`,
         `amount_details_on_date_credit`.`business_name` AS `business_name`,
         `amount_details_on_date_credit`.`mobile` AS `mobile`,
@@ -188,19 +218,21 @@ create VIEW `total_transection` AS
         `cash_sales`.`invoice_id` AS `invoice_id`,
         `cash_sales`.`type_id` AS `type_id`,
         `cash_sales`.`manual_invoice_id` AS `manual_invoice_id`,
+        `cash_sales`.`description` AS `description`,
         `cash_sales`.`date` AS `date`,
         `cash_sales`.`customer_id` AS `customer_id`,
         `cash_sales`.`amount` AS `amount`,
         `cash_sales`.`amount` AS `settle_amount`,
-        NULL as balance,
+        NULL AS `balance`,
         NULL AS `return_payment`,
         `cash_sales`.`employee_id` AS `employee_id`
     FROM
         `cash_sales` 
-        UNION ALL SELECT 
+    UNION ALL SELECT 
         `credit_partial_settle`.`invoice_id` AS `invoice_id`,
         `credit_partial_settle`.`type_id` AS `type_id`,
         `credit_sales`.`manual_invoice_id` AS `manual_invoice_id`,
+        `credit_partial_settle`.`description` AS `description`,
         `credit_partial_settle`.`date` AS `date`,
         `credit_partial_settle`.`customer_id` AS `customer_id`,
         `credit_sales`.`amount` AS `amount`,
@@ -215,6 +247,7 @@ create VIEW `total_transection` AS
         `advance_bp_partial_settle`.`invoice_id` AS `invoice_id`,
         `advance_bp_partial_settle`.`type_id` AS `type_id`,
         `advance_sales_bp`.`manual_invoice_id` AS `manual_invoice_id`,
+        `advance_bp_partial_settle`.`description` AS `description`,
         `advance_bp_partial_settle`.`date` AS `date`,
         `advance_bp_partial_settle`.`customer_id` AS `customer_id`,
         `advance_sales_bp`.`amount` AS `amount`,
@@ -229,6 +262,7 @@ create VIEW `total_transection` AS
         `advance_ap_partial_settle`.`invoice_id` AS `invoice_id`,
         `advance_ap_partial_settle`.`type_id` AS `type_id`,
         `advance_sales_ap`.`manual_invoice_id` AS `manual_invoice_id`,
+        `advance_ap_partial_settle`.`description` AS `description`,
         `advance_ap_partial_settle`.`date` AS `date`,
         `advance_ap_partial_settle`.`customer_id` AS `customer_id`,
         `advance_sales_ap`.`amount` AS `amount`,
