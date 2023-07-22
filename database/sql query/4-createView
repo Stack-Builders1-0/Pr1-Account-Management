@@ -1,32 +1,176 @@
-create view amount_details_on_date_bp as
-select advance_sales_bp.invoice_id, advance_sales_bp.type_id,advance_sales_bp.manual_invoice_id,
-advance_sales_bp.bill_amount,advance_sales_bp.advance_amount,advance_sales_bp.discount,advance_sales_bp.amount,advance_sales_bp.return_payment, 
-advance_sales_bp.balance, advance_sales_bp.employee_id , advance_sales_bp.date, customers.customer_name,customers.business_name,customers.adress,
-customers.mobile,customers.credit_limit, income_type.type
-from advance_sales_bp join customers on (customers.customer_id=advance_sales_bp.customer_id) join income_type on (advance_sales_bp.type_id=income_type.type_id);
+create view `amount_details_on_date_bp` AS
+    SELECT 
+        `advance_sales_bp`.`invoice_id` AS `invoice_id`,
+        `advance_sales_bp`.`type_id` AS `type_id`,
+        `advance_sales_bp`.`manual_invoice_id` AS `manual_invoice_id`,
+        `advance_sales_bp`.`description` AS `description`,
+        `advance_sales_bp`.`bill_amount` AS `bill_amount`,
+        `advance_sales_bp`.`advance_amount` AS `advance_amount`,
+        `advance_sales_bp`.`discount` AS `discount`,
+        `advance_sales_bp`.`amount` AS `amount`,
+        `advance_sales_bp`.`balance` AS `balance`,
+         `advance_sales_bp`.`date` AS `date`,
+        `advance_sales_bp`.`return_payment` AS `return_payment`,
+        `advance_sales_bp`.`employee_id` AS `employee_id`,
+        `customers`.`customer_id` AS `customer_id`,
+        `customers`.`customer_name` AS `customer_name`,
+        `customers`.`business_name` AS `business_name`,
+        `customers`.`nic_no` AS `nic_no`,
+        `customers`.`adress` AS `adress`,
+        `customers`.`mobile` AS `mobile`,
+        `customers`.`credit_limit` AS `credit_limit`,
+        `income_type`.`type` AS `type`
+    FROM
+        ((`advance_sales_bp`
+        JOIN `customers` ON ((`customers`.`customer_id` = `advance_sales_bp`.`customer_id`)))
+        JOIN `income_type` ON ((`advance_sales_bp`.`type_id` = `income_type`.`type_id`)));
 
-create view amount_details_on_date_ap as
-select advance_sales_ap.invoice_id, advance_sales_ap.type_id,advance_sales_ap.manual_invoice_id,
-advance_sales_ap.bill_amount,advance_sales_ap.advance_amount,advance_sales_ap.discount,advance_sales_ap.amount, 
-advance_sales_ap.balance, advance_sales_ap.employee_id , advance_sales_ap.date, customers.customer_name,customers.business_name,customers.adress,
-customers.mobile,customers.credit_limit, income_type.type
-from advance_sales_ap join customers on (customers.customer_id=advance_sales_ap.customer_id) join income_type on (advance_sales_ap.type_id=income_type.type_id);
 
 
-create view amount_details_on_date_credit as
-select credit_sales.invoice_id, credit_sales.type_id,credit_sales.manual_invoice_id,
-credit_sales.bill_amount,credit_sales.discount,credit_sales.amount, 
-credit_sales.balance, credit_sales.employee_id , credit_sales.date, customers.customer_name,customers.business_name,customers.adress,
-customers.mobile,customers.credit_limit, income_type.type
-from credit_sales join customers on (customers.customer_id=credit_sales.customer_id) join income_type on (credit_sales.type_id=income_type.type_id);
+create VIEW `amount_details_on_date_ap` AS
+    SELECT 
+        `advance_sales_ap`.`invoice_id` AS `invoice_id`,
+        `advance_sales_ap`.`type_id` AS `type_id`,
+        `advance_sales_ap`.`manual_invoice_id` AS `manual_invoice_id`,
+        `advance_sales_ap`.`description` AS `description`,
+        `advance_sales_ap`.`bill_amount` AS `bill_amount`,
+        `advance_sales_ap`.`advance_amount` AS `advance_amount`,
+        `advance_sales_ap`.`discount` AS `discount`,
+        `advance_sales_ap`.`amount` AS `amount`,
+        `advance_sales_ap`.`balance` AS `balance`,
+        `advance_sales_ap`.`date` AS `date`,
+        `advance_sales_ap`.`employee_id` AS `employee_id`,
+        `customers`.`customer_id` AS `customer_id`,
+        `customers`.`customer_name` AS `customer_name`,
+        `customers`.`business_name` AS `business_name`,
+         `customers`.`nic_no` AS `nic_no`,
+        `customers`.`adress` AS `adress`,
+        `customers`.`mobile` AS `mobile`,
+        `customers`.`credit_limit` AS `credit_limit`,
+        `income_type`.`type` AS `type`
+    FROM
+        ((`advance_sales_ap`
+        JOIN `customers` ON ((`customers`.`customer_id` = `advance_sales_ap`.`customer_id`)))
+        JOIN `income_type` ON ((`advance_sales_ap`.`type_id` = `income_type`.`type_id`)));
 
 
-create view combine_sales as
-SELECT invoice_id,type_id,manual_invoice_id,bill_amount,advance_amount,discount,amount,balance,employee_id,date,customer_name,business_name,adress,credit_limit,type, return_payment
-FROM amount_details_on_date_bp
-UNION all 
-SELECT invoice_id,type_id,manual_invoice_id,bill_amount,advance_amount,discount,amount,balance,employee_id,date,customer_name,business_name,adress,credit_limit,type, NULL AS return_payment
-FROM amount_details_on_date_ap
-UNION all
-SELECT invoice_id,type_id,manual_invoice_id,bill_amount,Null as advance_amount,discount,amount,balance,employee_id,date,customer_name,business_name,adress,credit_limit,type, NULL AS return_payment
-FROM amount_details_on_date_credit
+
+
+
+ create VIEW `amount_details_on_date_credit` AS
+    SELECT 
+        `credit_sales`.`invoice_id` AS `invoice_id`,
+        `credit_sales`.`type_id` AS `type_id`,
+        `credit_sales`.`manual_invoice_id` AS `manual_invoice_id`,
+        `credit_sales`.`date` AS `date`,
+        `credit_sales`.`bill_amount` AS `bill_amount`,
+        `credit_sales`.`discount` AS `discount`,
+        `credit_sales`.`amount` AS `amount`,
+        `credit_sales`.`balance` AS `balance`,
+        `credit_sales`.`employee_id` AS `employee_id`,
+        `customers`.`customer_id` AS `customer_id`,
+        `customers`.`customer_name` AS `customer_name`,
+        `customers`.`business_name` AS `business_name`,
+        `customers`.`nic_no` AS `nic_no`,
+        `customers`.`adress` AS `adress`,
+        `customers`.`mobile` AS `mobile`,
+        `customers`.`credit_limit` AS `credit_limit`,
+        `income_type`.`type` AS `type`
+    FROM
+        ((`credit_sales`
+        JOIN `customers` ON ((`customers`.`customer_id` = `credit_sales`.`customer_id`)))
+        JOIN `income_type` ON ((`credit_sales`.`type_id` = `income_type`.`type_id`)));
+
+
+
+
+
+create VIEW `amount_details_on_date_cash` AS
+    SELECT 
+        `cash_sales`.`invoice_id` AS `invoice_id`,
+        `cash_sales`.`type_id` AS `type_id`,
+        `cash_sales`.`manual_invoice_id` AS `manual_invoice_id`,
+        `cash_sales`.`date` AS `date`,
+        `cash_sales`.`description` AS `description`,
+        `cash_sales`.`bill_amount` AS `bill_amount`,
+        `cash_sales`.`discount` AS `discount`,
+        `cash_sales`.`amount` AS `amount`,
+        `cash_sales`.`employee_id` AS `employee_id`,
+        `customers`.`customer_id` AS `customer_id`,
+        `customers`.`customer_name` AS `customer_name`,
+        `customers`.`business_name` AS `business_name`,
+        `customers`.`nic_no` AS `nic_no`,
+        `customers`.`adress` AS `adress`,
+        `customers`.`mobile` AS `mobile`,
+        `customers`.`credit_limit` AS `credit_limit`,
+        `income_type`.`type` AS `type`
+    FROM
+        ((`cash_sales`
+        JOIN `customers` ON ((`customers`.`customer_id` = `cash_sales`.`customer_id`)))
+        JOIN `income_type` ON ((`cash_sales`.`type_id` = `income_type`.`type_id`)));
+
+
+
+
+
+        create VIEW `combine_sales` AS
+    SELECT 
+        `amount_details_on_date_bp`.`invoice_id` AS `invoice_id`,
+        `amount_details_on_date_bp`.`type_id` AS `type_id`,
+        `amount_details_on_date_bp`.`manual_invoice_id` AS `manual_invoice_id`,
+        `amount_details_on_date_bp`.`bill_amount` AS `bill_amount`,
+        `amount_details_on_date_bp`.`advance_amount` AS `advance_amount`,
+        `amount_details_on_date_bp`.`discount` AS `discount`,
+        `amount_details_on_date_bp`.`amount` AS `amount`,
+        `amount_details_on_date_bp`.`balance` AS `balance`,
+        `amount_details_on_date_bp`.`employee_id` AS `employee_id`,
+        `amount_details_on_date_bp`.`date` AS `date`,
+        `amount_details_on_date_bp`.`customer_name` AS `customer_name`,
+        `amount_details_on_date_bp`.`business_name` AS `business_name`,
+        `amount_details_on_date_bp`.`mobile` AS `mobile`,
+        `amount_details_on_date_bp`.`adress` AS `adress`,
+        `amount_details_on_date_bp`.`credit_limit` AS `credit_limit`,
+        `amount_details_on_date_bp`.`type` AS `type`,
+        `amount_details_on_date_bp`.`return_payment` AS `return_payment`
+    FROM
+        `amount_details_on_date_bp` 
+    UNION ALL SELECT 
+        `amount_details_on_date_ap`.`invoice_id` AS `invoice_id`,
+        `amount_details_on_date_ap`.`type_id` AS `type_id`,
+        `amount_details_on_date_ap`.`manual_invoice_id` AS `manual_invoice_id`,
+        `amount_details_on_date_ap`.`bill_amount` AS `bill_amount`,
+        `amount_details_on_date_ap`.`advance_amount` AS `advance_amount`,
+        `amount_details_on_date_ap`.`discount` AS `discount`,
+        `amount_details_on_date_ap`.`amount` AS `amount`,
+        `amount_details_on_date_ap`.`balance` AS `balance`,
+        `amount_details_on_date_ap`.`employee_id` AS `employee_id`,
+        `amount_details_on_date_ap`.`date` AS `date`,
+        `amount_details_on_date_ap`.`customer_name` AS `customer_name`,
+        `amount_details_on_date_ap`.`business_name` AS `business_name`,
+        `amount_details_on_date_ap`.`mobile` AS `mobile`,
+        `amount_details_on_date_ap`.`adress` AS `adress`,
+        `amount_details_on_date_ap`.`credit_limit` AS `credit_limit`,
+        `amount_details_on_date_ap`.`type` AS `type`,
+        NULL AS `return_payment`
+    FROM
+        `amount_details_on_date_ap` 
+    UNION ALL SELECT 
+        `amount_details_on_date_credit`.`invoice_id` AS `invoice_id`,
+        `amount_details_on_date_credit`.`type_id` AS `type_id`,
+        `amount_details_on_date_credit`.`manual_invoice_id` AS `manual_invoice_id`,
+        `amount_details_on_date_credit`.`bill_amount` AS `bill_amount`,
+        NULL AS `advance_amount`,
+        `amount_details_on_date_credit`.`discount` AS `discount`,
+        `amount_details_on_date_credit`.`amount` AS `amount`,
+        `amount_details_on_date_credit`.`balance` AS `balance`,
+        `amount_details_on_date_credit`.`employee_id` AS `employee_id`,
+        `amount_details_on_date_credit`.`date` AS `date`,
+        `amount_details_on_date_credit`.`customer_name` AS `customer_name`,
+        `amount_details_on_date_credit`.`business_name` AS `business_name`,
+        `amount_details_on_date_credit`.`mobile` AS `mobile`,
+        `amount_details_on_date_credit`.`adress` AS `adress`,
+        `amount_details_on_date_credit`.`credit_limit` AS `credit_limit`,
+        `amount_details_on_date_credit`.`type` AS `type`,
+        NULL AS `return_payment`
+    FROM
+        `amount_details_on_date_credit`;

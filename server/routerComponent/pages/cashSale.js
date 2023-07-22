@@ -142,4 +142,37 @@ router.post("/edit", (req, res) => {
   });
 });
 
+
+router.post("/filterManualInvoice", (req, res) => {
+
+  const selectQuery =
+    "SELECT * from amount_details_on_date_cash where manual_invoice_id = "+ mysql.escape(req.body.manual_invoice_id);
+
+  connection.query(selectQuery, (err, result) => {
+    if (err) {
+      res.send({
+        sucess: false,
+        isError: true,
+        result: null,
+      });
+    } else {
+      if (result.length == 0){
+        res.send({
+          sucess: true,
+          isError: false,
+          result: null,
+        });
+      }else{
+        res.send({
+          sucess: true,
+          isError: false,
+          result: result,
+        });
+      }
+      
+    }
+  });
+});
+
+
 module.exports = router;
