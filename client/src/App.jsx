@@ -31,7 +31,7 @@ import Expenses from "./pages/expenses/Expenses";
 import AddExpense from "./pages/expenses/AddExpense";
 import { UserContext } from "./UserContext";
 import SettleForm from "./pages/transaction/Credit/SettleForm";
-import History from "./History";
+import History from "./pages/employee/History";
 import Report from "./pages/report/Report";
 
 function App() {
