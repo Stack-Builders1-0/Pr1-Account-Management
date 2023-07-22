@@ -60,7 +60,7 @@ router.post("/getSalesBetweenDate", (req, res) => {
 
 //   const employee_id = decodeUserId(sessionToken);
 
-  const getQuery = "SELECT * FROM combine_sales where date >= ? and date < ?;";
+  const getQuery = "SELECT * FROM combine_sales where date >= ? and date < ? order by date;";
 
 
   connection.query(getQuery, [body.startDate, body.endDate], (err, result) => {
