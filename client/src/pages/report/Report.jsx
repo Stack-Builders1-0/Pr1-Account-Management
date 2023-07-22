@@ -1,9 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
+import { useReactToPrint } from "react-to-print";
 
 function Report() {
+  const componentPdf = useRef();
+
+  const generatePDF = useReactToPrint({
+    content: () => componentPdf.current,
+    documentTitle: "Transaction Report",
+    // onAfterPrint: () => alert("Data save in PDF"),
+  });
+
   const today = new Date();
 
   const defaultStartDate = `${
@@ -74,7 +83,7 @@ function Report() {
   };
 
   const capitalize = (value) => {
-    return value.charAt(0).toUpperCase() + value.slice(1);
+    return (value.charAt(0).toUpperCase() + value.slice(1)).replace(/_/g, " ");
   };
   const getDateFromTimestamp = (data) => {
     const dateObj = new Date(data.date);
@@ -103,41 +112,51 @@ function Report() {
   return (
     <div>
       <div>
-        <form onSubmit={handleSubmit}>
-          <label>
-            Start Date
-            <input
-              type="date"
-              value={startDate.slice(0, 10)} // Show only the date part
-              onChange={handleStartDateChange}
-              className="custom-date-input"
-            />
-          </label>
+        <div className="d-flex justify-content-between">
+          <form onSubmit={handleSubmit}>
+            <label className="lable">
+              Start Date
+              <input
+                type="date"
+                value={startDate.slice(0, 10)} // Show only the date part
+                onChange={handleStartDateChange}
+                className="custom-date-input"
+              />
+            </label>
 
-          <label>
-            End Date:
-            <input
-              type="date"
-              value={endDate.slice(0, 10)} // Show only the date part
-              onChange={handleEndDateChange}
-              className="custom-date-input"
-            />
-          </label>
+            <label className="lable">
+              End Date:
+              <input
+                type="date"
+                value={endDate.slice(0, 10)} // Show only the date part
+                onChange={handleEndDateChange}
+                className="custom-date-input"
+              />
+            </label>
 
-          <button type="submit" className="btn btn-primary m-2">
-            Show
+            <button type="submit" className="btn btn-primary m-2">
+              Show
+            </button>
+          </form>
+
+          <button
+            type="submit"
+            onClick={generatePDF}
+            className="btn btn-success m-2"
+          >
+            Generate PDF
           </button>
-        </form>
+        </div>
 
-        {/* <ul>
-          {filteredData.map((item) => (
-            <li key={item.id}>{item.name}</li>
-          ))}
-        </ul> */}
+        {/* ... The rest of your code ... */}
       </div>
 
       <div></div>
-      <div className="mt-4 px-2 pt-3">
+      <div
+        className="mt-4 px-2 pt-3"
+        ref={componentPdf}
+        style={{ width: "100%" }}
+      >
         <h3>Transaction List</h3>
         <table className="table table-bordered">
           <thead>
@@ -148,6 +167,7 @@ function Report() {
               {/* <th>Description</th> */}
               <th>Cash</th>
               <th>Credit</th>
+              {/* <th>Expense</th> */}
               <th>Balance</th>
             </tr>
           </thead>
@@ -157,14 +177,14 @@ function Report() {
               <tr key={data.invoice_id + data.type_id}>
                 <td>{data.manual_invoice_id}</td>
                 <td>{getDateFromTimestamp(data)}</td>
-                {/* <td>{data.date}</td> */}
                 <td>{capitalize(data.type)}</td>
-                {/* <td>{data.cutomername}</td> */}
+                {/* <td></td> */}
                 <td className={cashTextChanger(data)}>
                   {data.amount - data.balance}
                 </td>
+
                 <td className={credTextChanger(data)}>{data.balance}</td>
-                <td>{calculateBalance({ data })}</td>
+                <td className="lable">{calculateBalance({ data })}</td>
               </tr>
             ))}
             <tr>
