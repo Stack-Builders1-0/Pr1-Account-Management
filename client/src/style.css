@@ -57,10 +57,15 @@
   background-color: #2b80eb;
 }
 
+.lable{
+  font-weight: bold;
+}
+
 .custom-date-input{
   background-color: #f9f6f6;
   color: #000000;
   margin: 20px;
+  font-weight: bold;
   }
 
   .custom-date-input::-webkit-calendar-picker-indicator {
