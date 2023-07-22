@@ -27,9 +27,9 @@ router.post("/add", (req, res) => {
   const employee_id = decodedUserId(sessionToken);
 
   const insertQuery =
-    "insert into expenses (type,manual_expense_id, description, net_total, employee_id ) values (?,?,?,?,?);";
-  // "insert into expenses (type,manual_expense_id, description, net_total ) values (?,?,?,?);";
+    "insert into expenses (type,manual_expense_id, description, amount, employee_id ) values (?,?,?,?,?);";
 
+  
   connection.query(
     insertQuery,
     [
@@ -37,7 +37,7 @@ router.post("/add", (req, res) => {
       body.manual_expense_id,
       body.description,
       body.amount,
-      employee_id,
+      employee_id
     ],
     (err, result) => {
       if (err) {
@@ -46,7 +46,7 @@ router.post("/add", (req, res) => {
           sucess: false,
           isError: true,
           error: err,
-          result: null,
+          result: null
         });
       } else {
         res.send({
@@ -62,7 +62,7 @@ router.post("/add", (req, res) => {
 
 router.get("/showAll", (req, res) => {
   const selectQuery =
-    "SELECT manual_expense_id, type,date,description, net_total FROM expenses;";
+    "SELECT manual_expense_id, type,date,description, amount FROM expenses;";
   connection.query(selectQuery, (err, result) => {
     if (err) {
       console.log(err);
@@ -82,5 +82,6 @@ router.get("/showAll", (req, res) => {
     }
   });
 });
+
 
 module.exports = router;
