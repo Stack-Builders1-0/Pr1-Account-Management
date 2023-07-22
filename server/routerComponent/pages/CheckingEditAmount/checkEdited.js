@@ -19,7 +19,7 @@ class CheckEdited {
     this.balance = balance;
     this.settleAmount = oldBillAmount - oldDiscount - OldAdvanceAmount-balance;
 
-    console.log(billAmount," ", oldBillAmount," ", discount," ",oldDiscount," ", balance," ", advanceAmount," ", OldAdvanceAmount)
+    // console.log(billAmount," ", oldBillAmount," ", discount," ",oldDiscount," ", balance," ", advanceAmount," ", OldAdvanceAmount)
   }
 
   
@@ -60,7 +60,7 @@ class CheckEdited {
     if (this.isChangeBillAmount) {
       if (this.isChangeDiscount) {
         if (this.isChangeAdvanceAmount) {
-            console.log(this.settleAmount);
+            // console.log(this.settleAmount);
           return (
             this.billAmount - this.discount - this.advanceAmount - this.settleAmount
           );
