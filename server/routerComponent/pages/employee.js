@@ -34,7 +34,7 @@ router.post('/add', (req, res) => {
     const checkQuery = "select * from accountmanagement.employees where nic = ? ;";
 
     // type id is the forigen key so we set the forigen key correctly 
-    const insertQuery = "insert into accountmanagement.employees (employee_name, address, mobile, email, nic, type_id, age, password) values(?,?,?,?,?,?,?,?);";
+    const insertQuery = "insert into accountmanagement.employees (employee_name, address, mobile, email, nic, type_id, dob, password) values(?,?,?,?,?,?,?,?);";
 
 
     // response has 3 field 
@@ -64,7 +64,7 @@ router.post('/add', (req, res) => {
                 // encrpt the user pasword
                 bcrypt.hash(password, 10, function(err, hash) {
                     // store hash in the database
-                    connection.query(insertQuery,[body.employee_name,body.address, body.mobile, body.email, body.nic, body.type_id, body.age, hash], (err, result) => {
+                    connection.query(insertQuery,[body.employee_name,body.address, body.mobile, body.email, body.nic, body.type_id, body.dob, hash], (err, result) => {
                         if (err){
                             res.send({
                                 sucess : false,
