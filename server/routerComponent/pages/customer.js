@@ -46,7 +46,7 @@ router.post("/add", (req, res) => {
       body.office_num,
       body.email_id,
       body.nic_no,
-      body.employee_id,
+      employee_id,
       body.credit_limit,
     ],
     (err, result) => {
@@ -72,6 +72,30 @@ router.post("/add", (req, res) => {
   );
 });
 
+router.post("/showByEmployee", (req, res) => {
+  const sessionToken = req.headers.authorization.replace('key ','');
+
+  const employee_id = decodeUserId(sessionToken);
+
+  const selectQuery =
+    "SELECT customer_id, customer_name, business_name, adress, lan_line, w_app_no, office_num, email_id, nic_no,credit_limit FROM accountmanagement.customers where employee_id=?;";
+
+  connection.query(selectQuery, [employee_id],(err, result) => {
+    if (err) {
+      res.send({
+        sucess: false,
+        error: true,
+        result: null,
+      });
+    } else {
+      res.send({
+        sucess: true,
+        error: false,
+        result: result,
+      });
+    }
+  });
+});
 router.get("/showAll", (req, res) => {
   const selectQuery =
     "SELECT customer_id, customer_name, business_name, adress, lan_line, w_app_no, office_num, email_id, nic_no,credit_limit FROM accountmanagement.customers;";
@@ -92,7 +116,6 @@ router.get("/showAll", (req, res) => {
     }
   });
 });
-
 router.post("/filterCustomerNIC", (req, res) => {
   const body = req.body;
   const selectQuery =
