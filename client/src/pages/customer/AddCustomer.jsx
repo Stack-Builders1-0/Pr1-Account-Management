@@ -7,9 +7,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function AddCustomer() {
     const [form, setForm] = useState({
-        customer_name: '',
-        firstName: '',
-        lastName: '',
+      
+        customer_name : '' ,
         businessname: '',
         adress: '',
         mobile: '',
@@ -18,12 +17,13 @@ function AddCustomer() {
         officeNo: '',
         email_id: '',
         nic_no: '',
-        employee_id: "",
         credit_limit: ""
     })
+    
     const [errors, setErrors] = useState({})
 
     const setField = (field, value) => {
+       
         setForm({
             ...form,
             [field]: value
@@ -37,17 +37,18 @@ function AddCustomer() {
 
 
     const findFormErrors = () => {
-        const { firstName, adress, mobile, lan_line, w_app_no, officeNo, email_id, nic_no, employee_id, credit_limit } = form
+        const { firstName, mobile, email_id, nic_no, credit_limit } = form
         const newErrors = {}
         // name errors
-        if (!firstName || firstName === '') newErrors.firstName = 'cannot be blank!'
-        else if (firstName.length > 30) newErrors.firstName = 'firstName is too long!'
-        // food errors
-        // if ( !employee_id || employee_id === '' ) newErrors.employee_id = 'cannot be blank!'
+        if (!customer_name || customer_name === '') newErrors.customer_name = 'cannot be blank!'
+        else if (customer_name.length > 30) newErrors.customer_name = 'firstName is too long!'
+    
+        if (!mobile || mobile === '') newErrors.mobile = 'cannot be blank!'
+        if ( !email_id || email_id === '' ) newErrors.email_id = 'cannot be blank!'
         if (!nic_no || nic_no === '') newErrors.nic_no = 'cannot be blank!'
         // comment errors
         if (!credit_limit || credit_limit === '') newErrors.credit_limit = 'cannot be blank!'
-        else if (comment.credit_limit > 6) newErrors.credit_limit = 'comment is too long!'
+       
 
         return newErrors
     }
@@ -61,18 +62,24 @@ function AddCustomer() {
     const handleSubmit = (event) => {
         event.preventDefault();
         const newErrors = findFormErrors();
+        if (Object.keys(newErrors).length > 0) {
+            // We got errors!
+            setErrors(newErrors)
+        }
+      
+        setForm({ ...form, customer_name: form.firstName + ' ' + form.lastName })
+        console.log(form.customer_name)
+        console.log(form)
         axios.post(import.meta.env.VITE_API_URL + '/customer/add', form, { headers: { 'Authorization': 'key ' + sessionToken } })
             .then(res => {
-                if (Object.keys(newErrors).length > 0) {
-                    // We got errors!
-                    setErrors(newErrors)
-                }
-                else if (field.data.sucess) {
-                    navigate('/customer');
-                    // we want to display sucess message
-                } else if (res.field.isExist) {
+                
+                if (res.data.isExist) {
                     alert("this nic no has the acount. Please check your nic no");
                 }
+                else if (res.data.sucess) {
+                    navigate('/customer');
+                    // we want to display sucess message
+                } 
             })
             .catch(err => console.log(err));
     }
@@ -84,26 +91,21 @@ function AddCustomer() {
                 <Form onSubmit={handleSubmit}>
                     <Form.Group className="mb-3">
                         <Form.Label>Name</Form.Label>
+                        
                         <div className="d-flex">
                             <Form.Control
                                 type="text"
-                                id="inputFirstName"
-                                placeholder="First Name"
+                                id="customer_name"
+                                placeholder="Customer Name"
                                 autoComplete="off"
-                                onChange={(e) => setField({ ...form, firstName: e.target.value })}
-                                isInvalid={!!errors.firstName}
+                                onChange={(e) => setField('customer_name', e.target.value)}
+                                
+                                isInvalid={!!errors.customer_name}
                             />
                             <Form.Control.Feedback type='invalid'>
-                                {errors.firstName}
+                                {errors.customer_name}
                             </Form.Control.Feedback>
 
-                            <Form.Control
-                                type="text"
-                                id="inputLastName"
-                                placeholder="Last Name"
-                                autoComplete="off"
-                                onChange={(e) => setField({ ...form, lastName: e.target.value })}
-                            />
                         </div>
                     </Form.Group>
 
@@ -114,22 +116,19 @@ function AddCustomer() {
                             id="inputBusinessName"
                             placeholder="Business Name"
                             autoComplete="off"
-                            onChange={(e) => setField({ ...form, BusinessName: e.target.value })}
-                            isInvalid={!!errors.BusinessName}
+                            onChange={(e) => setField( 'BusinessName', e.target.value)}
+                            
                         />
-                        <Form.Control.Feedback type='invalid'>
-                            {errors.BusinessName}
-                        </Form.Control.Feedback>
-                    </Form.Group>
+                        </Form.Group>
 
                     <Form.Group className="mb-3">
                         <Form.Label>Address</Form.Label>
                         <Form.Control
                             type="text"
-                            id="inputAddress"
+                            id="adress"
                             placeholder="1234 Main St"
                             autoComplete="off"
-                            onChange={(e) => setField({ ...form, adress: e.target.value })}
+                            onChange={(e) => setField( 'adress', e.target.value )}
                         />
                     </Form.Group>
 
@@ -137,10 +136,10 @@ function AddCustomer() {
                         <Form.Label>Mobile</Form.Label>
                         <Form.Control
                             type="number"
-                            id="inputMobile"
+                            id="mobile"
                             placeholder="Enter Mobile Number"
                             autoComplete="off"
-                            onChange={(e) => setField({ ...form, mobile: e.target.value })}
+                            onChange={(e) => setField(  'mobile', e.target.value)}
                             isInvalid={!!errors.mobile}
                         />
                         <Form.Control.Feedback type='invalid'>
@@ -155,7 +154,7 @@ function AddCustomer() {
                             id="inputLandLine"
                             placeholder="Enter Landline Number"
                             autoComplete="off"
-                            onChange={(e) => setField({ ...form, lan_line: e.target.value })}
+                            onChange={(e) => setField( 'lan_line', e.target.value )}
                         />
                     </Form.Group>
 
@@ -166,7 +165,7 @@ function AddCustomer() {
                             id="inputWhatsApp"
                             placeholder="Enter WhatsApp Number"
                             autoComplete="off"
-                            onChange={(e) => setField({ ...form, w_app_no: e.target.value })}
+                            onChange={(e) => setField( 'w_app_no', e.target.value )}
                         />
                     </Form.Group>
 
@@ -177,7 +176,7 @@ function AddCustomer() {
                             id="inputOffice"
                             placeholder="Enter Office Number"
                             autoComplete="off"
-                            onChange={(e) => setField({ ...form, officeNo: e.target.value })}
+                            onChange={(e) => setField( 'officeNo', e.target.value )}
                         />
                     </Form.Group>
 
@@ -185,21 +184,25 @@ function AddCustomer() {
                         <Form.Label>Email</Form.Label>
                         <Form.Control
                             type="email"
-                            id="inputEmail4"
+                            id="email_id"
                             placeholder="Enter Email"
                             autoComplete="off"
-                            onChange={(e) => setField({ ...form, email_id: e.target.value })}
+                            onChange={(e) => setField( 'email_id', e.target.value)}
+                            isInvalid={!!errors.email_id}
                         />
+                        <Form.Control.Feedback type='invalid'>
+                            {errors.email_id}
+                        </Form.Control.Feedback>
                     </Form.Group>
 
                     <Form.Group className="mb-3">
                         <Form.Label>NIC Number</Form.Label>
                         <Form.Control
                             type="text"
-                            id="inputNIC"
+                            id="nic_no"
                             placeholder="Enter NIC Number"
                             autoComplete="off"
-                            onChange={(e) => setField({ ...form, nic_no: e.target.value })}
+                            onChange={(e) => setField( 'nic_no', e.target.value)}
                             isInvalid={!!errors.nic_no}
                         />
                         <Form.Control.Feedback type='invalid'>
@@ -208,28 +211,13 @@ function AddCustomer() {
                     </Form.Group>
 
                     <Form.Group className="mb-3">
-                        <Form.Label>Employee ID</Form.Label>
-                        <Form.Control
-                            type="text"
-                            id="inputEmployeeID"
-                            placeholder="Enter Employee ID"
-                            autoComplete="off"
-                            onChange={(e) => setField({ ...form, employee_id: e.target.value })}
-                            isInvalid={!!errors.employee_id}
-                        />
-                        <Form.Control.Feedback type='invalid'>
-                            {errors.employee_id}
-                        </Form.Control.Feedback>
-                    </Form.Group>
-
-                    <Form.Group className="mb-3">
                         <Form.Label>Credit Limit</Form.Label>
                         <Form.Control
-                            type="text"
-                            id="inputCreditLimit"
+                            type="number"
+                            id="credit_limit"
                             placeholder="Enter Credit Limit"
                             autoComplete="off"
-                            onChange={(e) => setField({ ...form, credit_limit: e.target.value })}
+                            onChange={(e) => setField( 'credit_limit', e.target.value )}
                             isInvalid={!!errors.credit_limit}
                         />
                         <Form.Control.Feedback type='invalid'>
