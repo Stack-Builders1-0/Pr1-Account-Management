@@ -61,10 +61,17 @@ function Report() {
     return totbalance;
   };
 
+  let totcred = 0;
+  // const calcualteCredit = ({ data }) => {
+  //   totcred += data.balance;
+  //   return totcred;
+  // };
+
   const capitalize = (value) => {
     return (value.charAt(0).toUpperCase() + value.slice(1)).replace(/_/g, " ");
   };
-  const getDateFromTimestamp = (data) => {
+
+  const getDate = (data) => {
     const dateObj = new Date(data.date);
 
     const year = dateObj.getFullYear();
@@ -73,28 +80,6 @@ function Report() {
 
     return `${year}-${month}-${day}`;
   };
-
-  const setCredit = (data) => {
-    return data.start_transection == 1 ? data.balance : "";
-  };
-
-  const setAmount = (cash) => {
-    return cash > 0 ? cash : "";
-  };
-
-  const cashTextChanger = (data) => {
-    return data.settle_amount ? "text-success" : "";
-  };
-
-  const credTextChanger = (data) => {
-    return data.balance ? "text-danger" : "";
-    return data.return_payment ? "text-danger" : "";
-  };
-
-  // const returnTextChanger = (data) => {
-  //   // Your logic to determine the font color based on the data
-  //   // For example, let's say you want to make the font color red for negative balance and green for positive balance
-  // };
 
   return (
     <div>
@@ -133,47 +118,92 @@ function Report() {
           </button>
         </div>
       </div>
-
-      <div></div>
       <div
-        className="mt-4 px-2 pt-3"
+        className="mt-2 px-2 pt-3"
         ref={componentPdf}
         style={{ width: "100%" }}
       >
-        <h3>Transaction List</h3>
-        <table className="table table-bordered">
-          <thead>
-            <tr>
-              <th>Bill No</th>
-              <th>Date</th>
-              <th>Transaction Type</th>
-              <th>Cash</th>
-              <th>Credit</th>
-              <th>Paid Amount</th>
-              <th>Balance</th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* Table rows with data */}
-            {transactionData.map((data) => (
-              <tr key={data.invoice_id + data.type_id}>
-                <td>{data.manual_invoice_id}</td>
-                <td>{getDateFromTimestamp(data)}</td>
-                <td>{capitalize(data.description)}</td>
-                {/* <td></td> */}
-                <td className={cashTextChanger(data)}>
-                  {data.settle_amount ? data.settle_amount : ""}
-                </td>
+        <>
+          <main className="m-2 p-2 xl:max-w-4xl xl:mx-auto bg-white rounded-shadow">
+            <div>
+              <header className="header-container  xl:flex-row">
+                <div className="font-bold uppercase tracking-wide text-4xl mb-3">
+                  <h1>
+                    <img
+                      src="src\pages\report\aivha-full.png"
+                      class="small-image"
+                      alt="Aivha Logo"
+                    />
+                  </h1>
+                </div>
 
-                <td className={credTextChanger(data)}>{setCredit(data)}</td>
-                <td className={credTextChanger(data)}>
-                  {data.return_payment ? data.return_payment : ""}
-                </td>
-                <td className="lable">{calculateBalance({ data })}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                {/* <div className="table-container">
+                  <table className="table table-bordered table-striped table-hover ">
+                    <thead>
+                      <tr>
+                        <th>Total Cred</th>
+                        <th> Total Cash</th>
+                        <th>Total Return</th>
+                        <th>Total Balance</th>
+                      </tr>
+                    </thead>
+                  </table>
+                </div> */}
+
+                <div className="flex flex-col items-end justify-end ">
+                  <ul>
+                    <li>
+                      <strong>Start Date :</strong> {startDate.slice(0, 10)}
+                    </li>
+                    <li>
+                      <strong>End Date :</strong> {endDate.slice(0, 10)}
+                    </li>
+                  </ul>
+                </div>
+              </header>
+            </div>
+            <h3>Transaction Report</h3>
+
+            <table className="table table-bordered table-striped table-hover ">
+              <thead>
+                <tr>
+                  <th>Bill No</th>
+                  <th width="100">Date</th>
+                  <th>Transaction Type</th>
+                  <th width="100">Cash</th>
+                  <th width="100">Credit</th>
+                  <th width="100">Paid Amount</th>
+                  <th width="100">Balance</th>
+                </tr>
+              </thead>
+              <tbody>
+                {transactionData.map((data) => (
+                  <tr key={data.invoice_id + data.type_id}>
+                    <td>{data.manual_invoice_id}</td>
+                    <td>{getDate(data)}</td>
+                    <td>
+                      {(
+                        data.description.charAt(0).toUpperCase() +
+                        data.description.slice(1)
+                      ).replace(/_/g, " ")}
+                    </td>
+                    <td className="text-success">
+                      {data.settle_amount ? data.settle_amount : ""}
+                    </td>
+
+                    <td className="text-danger">
+                      {data.start_transection == 1 ? data.balance : ""}
+                    </td>
+                    <td className="text-danger">
+                      {data.return_payment ? data.return_payment : ""}
+                    </td>
+                    <td className="lable">{calculateBalance({ data })}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </main>
+        </>
       </div>
     </div>
   );
