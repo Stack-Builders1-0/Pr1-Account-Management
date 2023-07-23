@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Form, Button, Alert } from "react-bootstrap";
+import { Form, Button, Alert, Modal } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 function EditAdvanceBPForm() {
   const [data, setData] = useState({
@@ -15,6 +16,7 @@ function EditAdvanceBPForm() {
     business_name: "",
     invoice_id: "",
     return_payment: "",
+    nic_no: "",
   });
 
   const [searchedTransaction, setSearchedTransaction] = useState(null);
@@ -30,6 +32,7 @@ function EditAdvanceBPForm() {
   const [old_balance, setOldBalance] = useState(0);
   const [old_advance_amount, setOldAdvanceAmount] = useState(0);
   const [old_return_payment, setOldReturnPayment] = useState(0);
+  const [confirmNicChange, setConfirmNicChange] = useState(false);
 
   const navigate = useNavigate();
   const sessionToken = localStorage.getItem("sessionToken");
@@ -81,6 +84,14 @@ function EditAdvanceBPForm() {
     }
   };
 
+  const handleConfirmNicChange = (confirmed) => {
+    setConfirmNicChange(confirmed);
+  };
+
+  const handleSearchNicConfirmation = () => {
+    setConfirmNicChange(true);
+  };
+
   const handleNICSearch = () => {
     const apiUrl = "http://localhost:5000/customer/filterCustomerNIC";
 
@@ -115,6 +126,7 @@ function EditAdvanceBPForm() {
             credit_limit: customerData.credit_limit,
           }));
           setSearchedNic(true);
+          setConfirmNicChange(false);
         } else {
           // NIC number is invalid or no customer found
           setCustomerInfo(null);
@@ -130,30 +142,25 @@ function EditAdvanceBPForm() {
   const handleEditSubmit = (event) => {
     event.preventDefault();
     // Perform validation if needed
+    const currentDateTime = moment().format("YYYY-MM-DD HH:mm:ss");
 
     const formdata = {
-      type_id: "as", // we manually set the type id of the credit sale
+      invoice_id: filteredRecords.invoice_id,
+      type_id: filteredRecords.type_id,
       manual_invoice_id: filteredRecords.manual_invoice_id,
-      date: filteredRecords.date,
+      update_at: currentDateTime,
       customer_id: searchedNic ? data.customer_id : filteredRecords.customer_id,
       description: filteredRecords.description,
-      bill_amount: filteredRecords.bill_amount,
+      billAmount: filteredRecords.bill_amount,
       discount: filteredRecords.discount,
-      advance_amount: filteredRecords.advance_amount,
-      invoice_id: filteredRecords.invoice_id,
-    };
-
-    const olddata = {
-      old_bill_amount: old_bill_amount,
-      old_discount: old_discount,
-      old_balance: old_balance,
-      old_advance_amount: old_advance_amount,
-      old_return_payment: old_return_payment,
-    };
-
-    const requestData = {
-      formdata: formdata,
-      olddata: olddata,
+      employee_id: filteredRecords.employee_id,
+      oldBillAmount: old_bill_amount,
+      oldDisCount: old_discount,
+      balance: old_balance,
+      advanceAmount: filteredRecords.advance_amount,
+      oldAdvanceAmount: old_advance_amount,
+      returnPayment: filteredRecords.return_payment,
+      oldReturnPayment: old_return_payment,
     };
 
     console.log(formdata);
@@ -161,7 +168,7 @@ function EditAdvanceBPForm() {
     axios
       .post(
         "http://localhost:5000/advanceSaleBP/edit",
-        { data: requestData },
+        { data: formdata },
         { headers: { Authorization: "key " + sessionToken } }
       )
       .then((res) => {
@@ -222,11 +229,11 @@ function EditAdvanceBPForm() {
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       e.preventDefault(); // Prevent form submission
-                      handleSearch(); // Perform the search operation
+                      handleSearchNicConfirmation(); // Perform the search operation
                     }
                   }}
                 />
-                <Button variant="primary" onClick={handleNICSearch}>
+                <Button variant="primary" onClick={handleSearchNicConfirmation}>
                   Search NIC
                 </Button>
               </Form.Group>
@@ -247,34 +254,34 @@ function EditAdvanceBPForm() {
                     <strong>Business Name:</strong> {customerInfo.businessName}
                   </p>
                   <p>
-                    <strong>CreditLimit:</strong> {customerInfo.creditLimit}
+                    <strong>Credit Limit:</strong> {customerInfo.creditLimit}
                   </p>
                 </div>
               )}
 
-              <Form.Group className="mb-3" controlId="formBasicCustomerName">
-                <Form.Label>Customer name</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter customer name"
-                  value={filteredRecords.customer_name}
-                  onChange={(e) =>
-                    setData({ ...data, customer_name: e.target.value })
-                  }
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3" controlId="formBasicBusinessName">
-                <Form.Label>Business name</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter business name"
-                  value={filteredRecords.business_name}
-                  onChange={(e) =>
-                    setData({ ...data, business_name: e.target.value })
-                  }
-                />
-              </Form.Group>
+              <Modal
+                show={confirmNicChange}
+                onHide={() => handleConfirmNicChange(false)}
+              >
+                <Modal.Header closeButton>
+                  <Modal.Title>Confirm Customer Change</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  Are you sure you want to change the customer information for
+                  the provided NIC?
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button
+                    variant="secondary"
+                    onClick={() => handleConfirmNicChange(false)}
+                  >
+                    No
+                  </Button>
+                  <Button variant="primary" onClick={() => handleNICSearch()}>
+                    Yes
+                  </Button>
+                </Modal.Footer>
+              </Modal>
 
               <Form.Group className="mb-3" controlId="formBasicDescription">
                 <Form.Label>Description</Form.Label>
