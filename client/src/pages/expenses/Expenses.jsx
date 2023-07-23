@@ -15,7 +15,7 @@ function Expenses() {
       .catch((error) => {
         console.log("Error expense data:", error);
       });
-  });
+  },[]);
 
   return (
     <div className="px-5 py-3">
