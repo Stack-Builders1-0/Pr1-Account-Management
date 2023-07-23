@@ -5,8 +5,8 @@ DELIMITER //
 CREATE TRIGGER after_insert_credit_sales_add_to_partial_settle
 AFTER INSERT ON credit_sales FOR EACH ROW
 BEGIN
-    INSERT INTO credit_partial_settle (type_id, invoice_id, description, customer_id, date, settle_amount,balance, employee_id)
-    VALUES (NEW.type_id, NEW.invoice_id, NEW.description, NEW.customer_id, new.date, "0",  NEW.amount, NEW.employee_id);
+    INSERT INTO credit_partial_settle (type_id, invoice_id, description, customer_id, date, settle_amount,balance, employee_id, start_transection)
+    VALUES (NEW.type_id, NEW.invoice_id, NEW.description, NEW.customer_id, new.date, "0",  NEW.amount, NEW.employee_id, true);
 END //
 
 
@@ -27,8 +27,8 @@ DELIMITER //
 CREATE TRIGGER after_insert_advance_sales_ap_add_to_partial_settle
 AFTER INSERT ON advance_sales_ap FOR EACH ROW
 BEGIN
-    INSERT INTO advance_ap_partial_settle (type_id, invoice_id, description, customer_id, date, settle_amount,balance, employee_id)
-    VALUES (NEW.type_id, NEW.invoice_id, NEW.description, NEW.customer_id, new.date, new.advance_amount ,  NEW.balance, NEW.employee_id);
+    INSERT INTO advance_ap_partial_settle (type_id, invoice_id, description, customer_id, date, settle_amount,balance, employee_id, start_transection)
+    VALUES (NEW.type_id, NEW.invoice_id, NEW.description, NEW.customer_id, new.date, new.advance_amount ,  NEW.balance, NEW.employee_id, true);
 END //
 
 
@@ -50,8 +50,8 @@ DELIMITER //
 CREATE TRIGGER after_insert_advance_sales_bp_add_to_partial_settle
 AFTER INSERT ON advance_sales_bp FOR EACH ROW
 BEGIN
-    INSERT INTO advance_bp_partial_settle (type_id, invoice_id, description, customer_id, date, settle_amount,balance, employee_id,total_settle_amount)
-    VALUES (NEW.type_id, NEW.invoice_id, NEW.description, NEW.customer_id, new.date, new.advance_amount ,  NEW.balance, NEW.employee_id, new.advance_amount);
+    INSERT INTO advance_bp_partial_settle (type_id, invoice_id, description, customer_id, date, settle_amount,balance, employee_id,total_settle_amount, start_transection)
+    VALUES (NEW.type_id, NEW.invoice_id, NEW.description, NEW.customer_id, new.date, new.advance_amount ,  NEW.balance, NEW.employee_id, new.advance_amount, true);
 END //
 
 

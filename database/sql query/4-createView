@@ -218,6 +218,7 @@ create VIEW `total_transection` AS
         `cash_sales`.`amount` AS `settle_amount`,
         NULL AS `balance`,
         NULL AS `return_payment`,
+        true as start_transection,
         `cash_sales`.`employee_id` AS `employee_id`
     FROM
         `cash_sales` 
@@ -232,6 +233,7 @@ create VIEW `total_transection` AS
         `credit_partial_settle`.`settle_amount` AS `settle_amount`,
         `credit_partial_settle`.`balance` AS `balance`,
         NULL AS `return_payment`,
+        `credit_partial_settle`.`start_transection` AS `start_transection`,
         `credit_partial_settle`.`employee_id` AS `employee_id`
     FROM
         (`credit_partial_settle`
@@ -247,6 +249,7 @@ create VIEW `total_transection` AS
         `advance_bp_partial_settle`.`settle_amount` AS `settle_amount`,
         `advance_bp_partial_settle`.`balance` AS `balance`,
         `advance_bp_partial_settle`.`return_payment` AS `return_payment`,
+        `advance_bp_partial_settle`.`start_transection` AS `start_transection`,
         `advance_bp_partial_settle`.`employee_id` AS `employee_id`
     FROM
         (`advance_bp_partial_settle`
@@ -262,6 +265,7 @@ create VIEW `total_transection` AS
         `advance_ap_partial_settle`.`settle_amount` AS `settle_amount`,
         `advance_ap_partial_settle`.`balance` AS `balance`,
         NULL AS `return_payment`,
+        `advance_ap_partial_settle`.`start_transection` AS `start_transection`,
         `advance_ap_partial_settle`.`employee_id` AS `employee_id`
     FROM
         (`advance_ap_partial_settle`

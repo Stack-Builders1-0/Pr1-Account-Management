@@ -529,3 +529,13 @@ add column balance_updated_at timestamp on UPDATE CURRENT_TIMESTAMP
 alter table employees
 drop column age,
 add column dob date null
+
+
+alter table credit_partial_settle
+add column start_transection boolean default false;
+
+alter table advance_ap_partial_settle
+add column start_transection boolean default false;
+
+alter table advance_bp_partial_settle
+add column start_transection boolean default false;
