@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Form, Button, Alert, Modal } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 function EditCashForm() {
   const [data, setData] = useState({
@@ -134,29 +135,18 @@ function EditCashForm() {
   const handleEditSubmit = (event) => {
     event.preventDefault();
     // Perform validation if needed
+    const currentDateTime = moment().format("YYYY-MM-DD HH:mm:ss");
 
     const formdata = {
-      type_id: "ca", // we manually set the type id of the credit sale
+      invoice_id: filteredRecords.invoice_id,
+      type_id: filteredRecords.type_id,
       manual_invoice_id: filteredRecords.manual_invoice_id,
-      date: filteredRecords.date,
+      update_at: currentDateTime,
       customer_id: searchedNic ? data.customer_id : filteredRecords.customer_id,
       description: filteredRecords.description,
-      bill_amount: filteredRecords.bill_amount,
+      billAmount: filteredRecords.bill_amount,
       discount: filteredRecords.discount,
-      invoice_id: filteredRecords.invoice_id,
-    };
-
-    console.log(formdata);
-
-    const olddata = {
-      old_bill_amount: old_bill_amount,
-      old_discount: old_discount,
-      old_balance: old_balance,
-    };
-
-    const requestData = {
-      formdata: formdata,
-      olddata: olddata,
+      employee_id: filteredRecords.employee_id,
     };
 
     console.log(formdata);
@@ -164,7 +154,7 @@ function EditCashForm() {
     axios
       .post(
         "http://localhost:5000/cashSale/edit",
-        { data: requestData },
+        { data: formdata },
         { headers: { Authorization: "key " + sessionToken } }
       )
       .then((res) => {
@@ -316,21 +306,6 @@ function EditCashForm() {
                     setFilteredRecords({
                       ...filteredRecords,
                       discount: e.target.value,
-                    })
-                  }
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3" controlId="formBasicDate">
-                <Form.Label>Date</Form.Label>
-                <Form.Control
-                  type="date"
-                  placeholder="Enter date"
-                  value={filteredRecords.date}
-                  onChange={(e) =>
-                    setFilteredRecords({
-                      ...filteredRecords,
-                      date: e.target.value,
                     })
                   }
                 />

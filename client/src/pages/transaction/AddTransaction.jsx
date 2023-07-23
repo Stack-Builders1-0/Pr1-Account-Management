@@ -2,13 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
-// import CashForm from "./CashTransaction";
-// import CreditForm from "./CreditTransaction";
-// import AdvancedForm from "./AdvanceOnly";
-// import CashSalesTable from "./CashSales";
-// import CreditSalesTable from "./CreditSales";
-// import AdvancedBPSalesTable from "./AdvancedBP";
-// import AdvancedAPSalesTable from "./AdvancedAP";
+import CashSale from "./Cash/CashSalesTable";
+import CreditSale from "./Credit/CreditSaleTable";
 
 function AddTransaction() {
   const [selectedTab, setSelectedTab] = useState("");
@@ -96,18 +91,16 @@ function AddTransaction() {
         </div>
       </div>
 
-      {/* <div className="mt-4 px-2 pt-5">
+      <div className="mt-1 px-2 pt-3 pb-5">
         <div>
-          <h3>Cash List</h3>
-          <CashSalesTable />
+          <CashSale />
         </div>
 
         <div>
-          <h3>Credit List</h3>
-          <CreditSalesTable />
+          <CreditSale />
         </div>
 
-        <div>
+        {/* <div>
           <h3>Advanced BP List</h3>
           <AdvancedBPSalesTable />
         </div>
@@ -115,8 +108,8 @@ function AddTransaction() {
         <div>
           <h3>Advanced AP List</h3>
           <AdvancedAPSalesTable />
-        </div>
-      </div> */}
+        </div> */}
+      </div>
     </div>
   );
 }

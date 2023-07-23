@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Form, Button, Alert, Modal } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 function EditCreditForm() {
   const [data, setData] = useState({
@@ -134,6 +135,8 @@ function EditCreditForm() {
     event.preventDefault();
     // Perform validation if needed
 
+    const currentDateTime = moment().format("YYYY-MM-DD HH:mm:ss");
+
     const billAmount = parseFloat(filteredRecords.bill_amount);
     const creditLimit = searchedNic
       ? parseFloat(data.credit_limit)
@@ -142,27 +145,20 @@ function EditCreditForm() {
     if (billAmount <= creditLimit) {
       // Bill amount exceeds the credit limit, display error message
       const formdata = {
-        type_id: "cr", // we manually set the type id of the credit sale
+        invoice_id: filteredRecords.invoice_id,
+        type_id: filteredRecords.type_id,
         manual_invoice_id: filteredRecords.manual_invoice_id,
-        date: filteredRecords.date,
+        update_at: currentDateTime,
         customer_id: searchedNic
           ? data.customer_id
           : filteredRecords.customer_id,
         description: filteredRecords.description,
-        bill_amount: filteredRecords.bill_amount,
+        billAmount: filteredRecords.bill_amount,
         discount: filteredRecords.discount,
-        invoice_id: filteredRecords.invoice_id,
-      };
-
-      const olddata = {
-        old_bill_amount: old_bill_amount,
-        old_discount: old_discount,
-        old_balance: old_balance,
-      };
-
-      const requestData = {
-        formdata: formdata,
-        olddata: olddata,
+        employee_id: filteredRecords.employee_id,
+        oldBillAmount: old_bill_amount,
+        oldDisCount: old_discount,
+        balance: old_balance,
       };
 
       console.log(formdata);
@@ -170,7 +166,7 @@ function EditCreditForm() {
       axios
         .post(
           "http://localhost:5000/creditSale/edit",
-          { data: requestData },
+          { data: formdata },
           { headers: { Authorization: "key " + sessionToken } }
         )
         .then((res) => {
@@ -251,20 +247,20 @@ function EditCreditForm() {
                 </Alert>
               )}
 
-              {customerInfo && (
-                <div className="customer-info-box">
-                  <h3>Customer Information</h3>
-                  <p>
-                    <strong>Customer Name:</strong> {customerInfo.customerName}
-                  </p>
-                  <p>
-                    <strong>Business Name:</strong> {customerInfo.businessName}
-                  </p>
-                  <p>
-                    <strong>Credit Limit:</strong> {customerInfo.creditLimit}
-                  </p>
-                </div>
-              )}
+              <div className="customer-info-box">
+                <h3>Customer Information</h3>
+                <p>
+                  <strong>Customer Name:</strong>{" "}
+                  {filteredRecords.customer_name}
+                </p>
+                <p>
+                  <strong>Business Name:</strong>{" "}
+                  {filteredRecords.business_name}
+                </p>
+                <p>
+                  <strong>Credit Limit:</strong> {filteredRecords.credit_limit}
+                </p>
+              </div>
 
               <Modal
                 show={confirmNicChange}
