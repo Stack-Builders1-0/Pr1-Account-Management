@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import axios from "axios";
 import CashSale from "./Cash/CashSalesTable";
 import CreditSale from "./Credit/CreditSaleTable";
+import AdvanceBPSale from "./AdvanceBP/AdvanceBPSaleTable";
+import AdvanceAPSale from "./AdvanceAP/AdvanceAPSaleTable";
 
 function AddTransaction() {
   const [selectedTab, setSelectedTab] = useState("");
@@ -100,15 +102,13 @@ function AddTransaction() {
           <CreditSale />
         </div>
 
-        {/* <div>
-          <h3>Advanced BP List</h3>
-          <AdvancedBPSalesTable />
+        <div>
+          <AdvanceBPSale />
         </div>
 
         <div>
-          <h3>Advanced AP List</h3>
-          <AdvancedAPSalesTable />
-        </div> */}
+          <AdvanceAPSale />
+        </div>
       </div>
     </div>
   );
