@@ -14,26 +14,11 @@ function Report() {
   });
 
   const today = new Date();
-
-  const defaultStartDate = `${
-    today.getFullYear
-  }-${today.getMonth()}-${today.getDate()} 00:00:00`;
-  const defaultEndtDate = `${
-    today.getFullYear
-  }-${today.getMonth()}-${today.getDate()} 23:59:59`;
-
-  // Extract the components of the current date and time
-
+  const todayFormatted = today.toISOString().slice(0, 10);
+  const [startDate, setStartDate] = useState(todayFormatted + " 00:00:00");
+  const [endDate, setEndDate] = useState(todayFormatted + " 23:59:59");
   const [transactionData, setTransactionData] = useState([]);
-  const [startDate, setStartDate] = useState(defaultStartDate);
-  const [endDate, setEndDate] = useState(defaultEndtDate);
-  // const [startDate, setStartDate] = useState("13-07-2023 00:00:00");
-  // const [endDate, setEndDate] = useState("13-07-2023 23:59:59");
 
-  const [submitted, setSubmitted] = useState(false);
-
-  // const [endDate, setEndDate] = useState("");
-  // Your data array
   const data = [];
 
   const handleStartDateChange = (e) => {
@@ -48,45 +33,45 @@ function Report() {
     setEndDate(endDateWithTime);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent form submission
-
-    // You can perform any necessary actions here after clicking the submit button
-    // For example, you can call an API, update the state, etc.
-
-    setSubmitted(true);
+  const handleSubmit = () => {
+    setStartDate(todayFormatted + " 00:00:00");
+    setEndDate(todayFormatted + " 23:59:59");
+  };
+  useEffect(() => {
+    // Fetch the data for today's date when the component mounts
     axios
       .post("http://localhost:5000/report/getSalesBetweenDate", {
         startDate: startDate,
         endDate: endDate,
       })
+
       .then((res) => {
-        console.log(res.data)
         // Handle the API response here
         setTransactionData(res.data.result);
+        setLoading(false);
       })
       .catch((err) => {
         // Handle errors
-      }); // Set the submitted flag to true to trigger the date filtering
-  };
+      });
+  }, [startDate, endDate]);
 
-  // Filter the data based on the start and end dates
-  // const filteredData = data.filter((item) => {
-  //   if (!startDate || !endDate) {
-  //     return true; // If start or end date is not provided, return all items
-  //   }
-  // });
-
-  let balance = 0;
+  let totbalance = 0;
   const calculateBalance = ({ data }) => {
-    balance += data.amount - 2 * data.balance;
-    return balance;
+    totbalance += data.settle_amount - data.balance - data.return_payment;
+    return totbalance;
   };
+
+  let totcred = 0;
+  // const calcualteCredit = ({ data }) => {
+  //   totcred += data.balance;
+  //   return totcred;
+  // };
 
   const capitalize = (value) => {
     return (value.charAt(0).toUpperCase() + value.slice(1)).replace(/_/g, " ");
   };
-  const getDateFromTimestamp = (data) => {
+
+  const getDate = (data) => {
     const dateObj = new Date(data.date);
 
     const year = dateObj.getFullYear();
@@ -94,20 +79,6 @@ function Report() {
     const day = String(dateObj.getDate()).padStart(2, "0");
 
     return `${year}-${month}-${day}`;
-  };
-
-  const cashTextChanger = (data) => {
-    // Your logic to determine the font color based on the data
-    // For example, let's say you want to make the font color red for negative balance and green for positive balance
-    ``;
-    return data.amount - data.balance ? "text-success" : "";
-  };
-
-  const credTextChanger = (data) => {
-    // Your logic to determine the font color based on the data
-    // For example, let's say you want to make the font color red for negative balance and green for positive balance
-
-    return data.balance ? "text-danger" : "";
   };
 
   return (
@@ -134,70 +105,105 @@ function Report() {
                 className="custom-date-input"
               />
             </label>
-
-            <button type="submit" className="btn btn-primary m-2">
-              Show
+            <button type="onSubmit" className="btn btn-primary">
+              Reset Date
             </button>
           </form>
-
           <button
             type="submit"
             onClick={generatePDF}
             className="btn btn-success m-2"
           >
-            Generate PDF
+            Generate PDF 🖨
           </button>
         </div>
-
-        {/* ... The rest of your code ... */}
       </div>
-
-      <div></div>
       <div
-        className="mt-4 px-2 pt-3"
+        className="mt-2 px-2 pt-3"
         ref={componentPdf}
         style={{ width: "100%" }}
       >
-        <h3>Transaction List</h3>
-        <table className="table table-bordered">
-          <thead>
-            <tr>
-              <th>Bill No</th>
-              <th>Date</th>
-              <th>Transaction Type</th>
-              {/* <th>Description</th> */}
-              <th>Cash</th>
-              <th>Credit</th>
-              {/* <th>Expense</th> */}
-              <th>Balance</th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* Table rows with data */}
-            {transactionData.map((data) => (
-              <tr key={data.invoice_id + data.type_id}>
-                <td>{data.manual_invoice_id}</td>
-                <td>{getDateFromTimestamp(data)}</td>
-                <td>{capitalize(data.type)}</td>
-                {/* <td></td> */}
-                <td className={cashTextChanger(data)}>
-                  {data.amount - data.balance}
-                </td>
+        <>
+          <main className="m-2 p-2 xl:max-w-4xl xl:mx-auto bg-white rounded-shadow">
+            <div>
+              <header className="header-container  xl:flex-row">
+                <div className="font-bold uppercase tracking-wide text-4xl mb-3">
+                  <h1>
+                    <img
+                      src="src\pages\report\aivha-full.png"
+                      class="small-image"
+                      alt="Aivha Logo"
+                    />
+                  </h1>
+                </div>
 
-                <td className={credTextChanger(data)}>{data.balance}</td>
-                <td className="lable">{calculateBalance({ data })}</td>
-              </tr>
-            ))}
-            <tr>
-              <td>#</td>
-              <td colSpan={2}>Total</td>
-              <td></td>
-              <td>@twitter</td>
+                {/* <div className="table-container">
+                  <table className="table table-bordered table-striped table-hover ">
+                    <thead>
+                      <tr>
+                        <th>Total Cred</th>
+                        <th> Total Cash</th>
+                        <th>Total Return</th>
+                        <th>Total Balance</th>
+                      </tr>
+                    </thead>
+                  </table>
+                </div> */}
 
-              <td>{balance}</td>
-            </tr>
-          </tbody>
-        </table>
+                <div className="flex flex-col items-end justify-end ">
+                  <ul>
+                    <li>
+                      <strong>Start Date :</strong> {startDate.slice(0, 10)}
+                    </li>
+                    <li>
+                      <strong>End Date :</strong> {endDate.slice(0, 10)}
+                    </li>
+                  </ul>
+                </div>
+              </header>
+            </div>
+            <h3>Transaction Report</h3>
+
+            <table className="table table-bordered table-striped table-hover ">
+              <thead>
+                <tr>
+                  <th>Bill No</th>
+                  <th width="100">Date</th>
+                  <th>Transaction Type</th>
+                  <th width="100">Cash</th>
+                  <th width="100">Credit</th>
+                  <th width="100">Paid Amount</th>
+                  <th width="100">Balance</th>
+                </tr>
+              </thead>
+              <tbody>
+                {transactionData.map((data) => (
+                  <tr key={data.invoice_id + data.type_id}>
+                    <td>{data.manual_invoice_id}</td>
+                    <td>{getDate(data)}</td>
+                    <td>
+                      {(
+                        data.description.charAt(0).toUpperCase() +
+                        data.description.slice(1)
+                      ).replace(/_/g, " ")}
+                    </td>
+                    <td className="text-success">
+                      {data.settle_amount ? data.settle_amount : ""}
+                    </td>
+
+                    <td className="text-danger">
+                      {data.start_transection == 1 ? data.balance : ""}
+                    </td>
+                    <td className="text-danger">
+                      {data.return_payment ? data.return_payment : ""}
+                    </td>
+                    <td className="lable">{calculateBalance({ data })}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </main>
+        </>
       </div>
     </div>
   );

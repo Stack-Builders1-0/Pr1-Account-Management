@@ -1,32 +1,31 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { useEffect,useState } from 'react'
-import axios from 'axios';
-
-
+import React from "react";
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 function Employee() {
   const [employeeData, setEmployeeData] = useState([]);
 
- useEffect(() => {
-    axios.get(import.meta.env.VITE_API_URL + "/employee/showAll")
+  useEffect(() => {
+    axios
+      .get(import.meta.env.VITE_API_URL + "/employee/showAll")
       .then((res) => {
         setEmployeeData(res.data.result);
       })
       .catch((error) => {
         console.log("Error fetching creditSale data:", error);
-      })
-  },[]);
-
+      });
+  }, []);
 
   return (
-    <div className='px-5 py-3'>
-      
-      <Link to='/addemployee' className='btn btn-primary'>Add Employee</Link>
-      
-      <div className='mt-4 px-2 pt-5'>
+    <div className="px-5 py-3">
+      <Link to="/addemployee" className="btn btn-primary">
+        Add Employee
+      </Link>
+
+      <div className="mt-4 px-2 pt-5">
         <h3>Employee List</h3>
-        <table className='table table-bordered'>
+        <table className="table table-bordered table-striped table-hover">
           <thead>
             <tr>
               <th>Name</th>
@@ -35,7 +34,6 @@ function Employee() {
               <th>Mobile</th>
               <th>nic</th>
               <th>dob</th>
-              
             </tr>
           </thead>
           <tbody>
@@ -48,18 +46,13 @@ function Employee() {
                 <td>{data.mobile}</td>
                 <td>{data.nic}</td>
                 <td>{data.dob}</td>
-          
               </tr>
             ))}
-
           </tbody>
         </table>
       </div>
-
-        
-      </div>
-   
-  )
+    </div>
+  );
 }
 
-export default Employee
+export default Employee;

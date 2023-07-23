@@ -1,58 +1,65 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Modal, Button } from "react-bootstrap";
 import axios from "axios";
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, useLocation } from "react-router-dom";
 import CustomModel from "./CustomModel";
 
 import { Link } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
   const { state } = useLocation();
-  const show = state?.show | false
-  const onHide = state?.onHide | false
+  const show = state?.show | false;
+  const onHide = state?.onHide | false;
   // get the session token on the local storage
-  const sessionToken = localStorage.getItem('sessionToken');
+  const sessionToken = localStorage.getItem("sessionToken");
 
-  const navigate = useNavigate()
-  
+  const navigate = useNavigate();
+
   const handleHistory = (invoice_id, type_id) => {
-    
-    localStorage.setItem('invoice_id', invoice_id);
-    localStorage.setItem('type_id', type_id);
-    navigate('/history');
+    localStorage.setItem("invoice_id", invoice_id);
+    localStorage.setItem("type_id", type_id);
+    navigate("/history");
   };
 
-  const [data, setData] = useState({ totalCashSales: "N/A", totalCreditSales: "N/A", totalSales: "00.00" });
+  const [data, setData] = useState({
+    totalCashSales: "N/A",
+    totalCreditSales: "N/A",
+    totalSales: "00.00",
+  });
 
   //table content
   const [creditSaleData, setCreditSaleData] = useState([]);
   // const [advanceSaleAPData, setAdvanceSaleAPData] = useState([]);
   // const [advanceSaleBPData, setAdvanceSaleBPData] = useState([]);
 
-  
- 
-
-
   // get the current date in yyyy-mm-dd this format
   const currentDate = new Date();
-  const date = currentDate.getFullYear() + '-0' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
+  const date =
+    currentDate.getFullYear() +
+    "-0" +
+    (currentDate.getMonth() + 1) +
+    "-" +
+    currentDate.getDate();
 
   useEffect(() => {
-
-    axios.post(import.meta.env.VITE_API_URL + "/dashboard/totalTransection", { date: date }, { headers: { 'Authorization': 'key '+sessionToken } })
+    axios
+      .post(
+        import.meta.env.VITE_API_URL + "/dashboard/totalTransection",
+        { date: date },
+        { headers: { Authorization: "key " + sessionToken } }
+      )
       .then((res) => {
         const { cash, credit } = res.data.result[0];
-        console.log(res.data.result[0])
+        console.log(res.data.result[0]);
         setData({
           ...data,
           totalCashSales: cash,
           totalCreditSales: credit,
-          totalSales: cash + credit
+          totalSales: cash + credit,
         });
-        
       });
-      console.log(data);
+    console.log(data);
 
     // axios.post(import.meta.env.VITE_API_URL + "/dashboard/totalCreditSales", { date: date }, { headers: { 'Authorization': 'key ' + sessionToken } })
     //   .then((res) => {
@@ -66,9 +73,8 @@ function Dashboard() {
 
     // setData({ ...data, totalSales: data.totalCashSales + data.totalCreditSales });
 
-
     axios
-      .get(import.meta.env.VITE_API_URL +'/dashboard/creditNotSettle')
+      .get(import.meta.env.VITE_API_URL + "/dashboard/creditNotSettle")
       .then((res) => {
         setCreditSaleData(res.data.result);
       })
@@ -85,12 +91,9 @@ function Dashboard() {
     //   .then((res) => {
     //     // console.log(res.data.result);
     //   });
-    
-      
   }, []);
 
   return (
-
     <div>
       <CustomModel show={show} onHide={onHide} />
 
@@ -126,8 +129,6 @@ function Dashboard() {
         </div>
       </div>
 
-
-
       <div className="d-flex justify-content-between px-5 py-5">
         <Link to="/transaction" className="btn btn-primary">
           Add Transaction
@@ -140,11 +141,9 @@ function Dashboard() {
         </Link>
       </div>
 
-
-
       <div className="mt-4 px-4 pt-3">
         <h3> Cridit Sales</h3>
-        <table className="table table-bordered">
+        <table className="table table-bordered table-striped table-hover">
           <thead>
             <tr>
               <th>StartedDate</th>
@@ -174,7 +173,11 @@ function Dashboard() {
                 <td>{sale.balance}</td>
                 <td>
                   {/* Action buttons */}
-                  <button onClick={() => handleHistory(sale.invoice_id,sale.type_id)}>History</button>
+                  <button
+                    onClick={() => handleHistory(sale.invoice_id, sale.type_id)}
+                  >
+                    History
+                  </button>
                 </td>
               </tr>
             ))}
@@ -183,8 +186,6 @@ function Dashboard() {
           </tbody>
         </table>
       </div>
-      
-      
     </div>
   );
 }

@@ -25,7 +25,7 @@ function Expenses() {
 
       <div className="mt-4 px-2 pt-5">
         <h3>Expense List</h3>
-        <table className="table table-bordered">
+        <table className="table table-bordered table-striped table-hover">
           <thead>
             <tr>
               <th>Date</th>

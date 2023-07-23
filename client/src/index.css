@@ -32,6 +32,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   width: 100% !important;
+
 }
 
 h1 {
@@ -73,4 +74,25 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+.small-image {
+  width: 20%;
+  height: auto;
+}
+
+.header-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.table-container {
+  justify-content: center;
+  align-items: center;
+}
+.small-image {
+  width: 20%;
+  height: auto;
 }
