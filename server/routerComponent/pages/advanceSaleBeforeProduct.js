@@ -98,7 +98,8 @@ function updateReturnPayment(oldReturnPayment, returnPayment){
 
 }
 router.post("/edit", (req, res) => {
-  const body = req.body;
+  const body = req.body.data;
+  // console.log(body);
   try{
     const sessionToken = req.headers.authorization.replace('key ','');
     const employee_id = decodeUserId(sessionToken);

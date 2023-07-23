@@ -94,7 +94,7 @@ router.get("/showAll", (req, res) => {
 });
 
 router.post("/edit", (req, res) => {
-  const body = req.body;
+  const body = req.body.data;
   try{
     const sessionToken = req.headers.authorization.replace('key ','');
     const employee_id = decodeUserId(sessionToken);
