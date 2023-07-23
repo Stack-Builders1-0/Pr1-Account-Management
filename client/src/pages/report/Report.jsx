@@ -14,26 +14,11 @@ function Report() {
   });
 
   const today = new Date();
-
-  const defaultStartDate = `${
-    today.getFullYear
-  }-${today.getMonth()}-${today.getDate()} 00:00:00`;
-  const defaultEndtDate = `${
-    today.getFullYear
-  }-${today.getMonth()}-${today.getDate()} 23:59:59`;
-
-  // Extract the components of the current date and time
-
+  const todayFormatted = today.toISOString().slice(0, 10);
+  const [startDate, setStartDate] = useState(todayFormatted + " 00:00:00");
+  const [endDate, setEndDate] = useState(todayFormatted + " 23:59:59");
   const [transactionData, setTransactionData] = useState([]);
-  const [startDate, setStartDate] = useState(defaultStartDate);
-  const [endDate, setEndDate] = useState(defaultEndtDate);
-  // const [startDate, setStartDate] = useState("13-07-2023 00:00:00");
-  // const [endDate, setEndDate] = useState("13-07-2023 23:59:59");
 
-  const [submitted, setSubmitted] = useState(false);
-
-  // const [endDate, setEndDate] = useState("");
-  // Your data array
   const data = [];
 
   const handleStartDateChange = (e) => {
@@ -48,39 +33,32 @@ function Report() {
     setEndDate(endDateWithTime);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent form submission
-
-    // You can perform any necessary actions here after clicking the submit button
-    // For example, you can call an API, update the state, etc.
-
-    setSubmitted(true);
+  const handleSubmit = () => {
+    setStartDate(todayFormatted + " 00:00:00");
+    setEndDate(todayFormatted + " 23:59:59");
+  };
+  useEffect(() => {
+    // Fetch the data for today's date when the component mounts
     axios
       .post("http://localhost:5000/report/getSalesBetweenDate", {
         startDate: startDate,
         endDate: endDate,
       })
+
       .then((res) => {
-        console.log(res.data)
         // Handle the API response here
         setTransactionData(res.data.result);
+        setLoading(false);
       })
       .catch((err) => {
         // Handle errors
-      }); // Set the submitted flag to true to trigger the date filtering
-  };
+      });
+  }, [startDate, endDate]);
 
-  // Filter the data based on the start and end dates
-  // const filteredData = data.filter((item) => {
-  //   if (!startDate || !endDate) {
-  //     return true; // If start or end date is not provided, return all items
-  //   }
-  // });
-
-  let balance = 0;
+  let totbalance = 0;
   const calculateBalance = ({ data }) => {
-    balance += data.amount - 2 * data.balance;
-    return balance;
+    totbalance += data.settle_amount - data.balance - data.return_payment;
+    return totbalance;
   };
 
   const capitalize = (value) => {
@@ -96,19 +74,27 @@ function Report() {
     return `${year}-${month}-${day}`;
   };
 
+  const setCredit = (data) => {
+    return data.start_transection == 1 ? data.balance : "";
+  };
+
+  const setAmount = (cash) => {
+    return cash > 0 ? cash : "";
+  };
+
   const cashTextChanger = (data) => {
-    // Your logic to determine the font color based on the data
-    // For example, let's say you want to make the font color red for negative balance and green for positive balance
-    ``;
-    return data.amount - data.balance ? "text-success" : "";
+    return data.settle_amount ? "text-success" : "";
   };
 
   const credTextChanger = (data) => {
-    // Your logic to determine the font color based on the data
-    // For example, let's say you want to make the font color red for negative balance and green for positive balance
-
     return data.balance ? "text-danger" : "";
+    return data.return_payment ? "text-danger" : "";
   };
+
+  // const returnTextChanger = (data) => {
+  //   // Your logic to determine the font color based on the data
+  //   // For example, let's say you want to make the font color red for negative balance and green for positive balance
+  // };
 
   return (
     <div>
@@ -134,22 +120,18 @@ function Report() {
                 className="custom-date-input"
               />
             </label>
-
-            <button type="submit" className="btn btn-primary m-2">
-              Show
+            <button type="onSubmit" className="btn btn-primary">
+              Reset Date
             </button>
           </form>
-
           <button
             type="submit"
             onClick={generatePDF}
             className="btn btn-success m-2"
           >
-            Generate PDF
+            Generate PDF 🖨
           </button>
         </div>
-
-        {/* ... The rest of your code ... */}
       </div>
 
       <div></div>
@@ -165,10 +147,9 @@ function Report() {
               <th>Bill No</th>
               <th>Date</th>
               <th>Transaction Type</th>
-              {/* <th>Description</th> */}
               <th>Cash</th>
               <th>Credit</th>
-              {/* <th>Expense</th> */}
+              <th>Paid Amount</th>
               <th>Balance</th>
             </tr>
           </thead>
@@ -178,24 +159,19 @@ function Report() {
               <tr key={data.invoice_id + data.type_id}>
                 <td>{data.manual_invoice_id}</td>
                 <td>{getDateFromTimestamp(data)}</td>
-                <td>{capitalize(data.type)}</td>
+                <td>{capitalize(data.description)}</td>
                 {/* <td></td> */}
                 <td className={cashTextChanger(data)}>
-                  {data.amount - data.balance}
+                  {data.settle_amount ? data.settle_amount : ""}
                 </td>
 
-                <td className={credTextChanger(data)}>{data.balance}</td>
+                <td className={credTextChanger(data)}>{setCredit(data)}</td>
+                <td className={credTextChanger(data)}>
+                  {data.return_payment ? data.return_payment : ""}
+                </td>
                 <td className="lable">{calculateBalance({ data })}</td>
               </tr>
             ))}
-            <tr>
-              <td>#</td>
-              <td colSpan={2}>Total</td>
-              <td></td>
-              <td>@twitter</td>
-
-              <td>{balance}</td>
-            </tr>
           </tbody>
         </table>
       </div>
