@@ -167,7 +167,7 @@ function EditCreditForm() {
         .post(
           "http://localhost:5000/creditSale/edit",
           { data: formdata },
-          { headers: { Authorization: "key " + sessionToken } }
+          {headers:{'Authorization' : 'key '+sessionToken} }
         )
         .then((res) => {
           //navigate("/edittransaction");

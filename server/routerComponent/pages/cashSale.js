@@ -93,7 +93,7 @@ router.get("/showAll", (req, res) => {
 
 router.post("/edit", (req, res) => {
   const body = req.body.data;
-  const amount = body.bill_amount - body.discount;
+  const amount = body.billAmount - body.discount;
 
   const sessionToken = req.headers.authorization.replace("key ", "");
   const employee_id = decodedUserId(sessionToken);
@@ -108,7 +108,7 @@ router.post("/edit", (req, res) => {
     ", description = " +
     mysql.escape(body.description) +
     ", bill_amount = " +
-    mysql.escape(body.bill_amount) +
+    mysql.escape(body.billAmount) +
     ", discount =" +
     mysql.escape(body.discount) +
     ", amount =" +

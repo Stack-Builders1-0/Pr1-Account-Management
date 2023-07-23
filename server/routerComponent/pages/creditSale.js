@@ -120,7 +120,8 @@ router.post("/filterManualInvoice", (req, res) => {
 
 
 router.post("/edit", (req, res) => {
-  const body = req.body;
+  const body = req.body.data;
+  console.log(body);
   // const checkEdited = new CheckEdited(body.billAmount, body.oldBillAmount, body.discount, body.oldDisCount, body.balance, body.advanceAmount, body.OldAdvanceAmount )
   
   try{
@@ -131,10 +132,10 @@ router.post("/edit", (req, res) => {
 
   const checkEdited = new CheckEdited(
     body.billAmount,
-    body.olddata.old_bill_amount,
+    body.oldBillAmount,
     body.discount,
-    body.olddata.old_discount,
-    body.olddata.old_balance,
+    body.oldDisCount,
+    body.balance,
     0,
     0
   );
@@ -161,6 +162,8 @@ router.post("/edit", (req, res) => {
     mysql.escape(discount) +
     ", amount =" +
     mysql.escape(amount) +
+    ", balance =" +
+    mysql.escape(balance) +
     ", updated_by = " +
     mysql.escape(employee_id) +
     ", updated_at = " +
