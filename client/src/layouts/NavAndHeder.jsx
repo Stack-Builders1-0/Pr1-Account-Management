@@ -10,11 +10,13 @@ function NavAndHeder() {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
 
+  // const [isLockedin, setIsLoggedin] = useState({});
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem("sessionToken");
     navigate("/login");
-    setIsLoggedin(false);
+    // setIsLoggedin(false);
   };
 
   // Token is not present, consider it expired
