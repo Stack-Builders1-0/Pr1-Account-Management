@@ -158,8 +158,15 @@ function EditCashForm() {
         { headers: { Authorization: "key " + sessionToken } }
       )
       .then((res) => {
-        //navigate("/edittransaction");
+        const responseData = res.data;
         console.log(res.data);
+        if (responseData.sucess) {
+          // Success is true, so navigate to /transaction
+          navigate("/edittransaction");
+        } else {
+          // Success is false, show an error or handle it as needed
+          alert("An error occurred. Please try again later.");
+        }
       })
       .catch((err) => console.log(err));
   };
@@ -311,12 +318,18 @@ function EditCashForm() {
                 />
               </Form.Group>
 
-              <Button variant="primary" type="submit">
-                Edit
-              </Button>
-              <Button variant="danger" onClick={handleCancel} className="mx-2">
-                Cancel
-              </Button>
+              <div className="col-12 d-flex justify-content-between">
+                <Button
+                  variant="secondary"
+                  onClick={handleCancel}
+                  className="mx-2"
+                >
+                  Cancel
+                </Button>
+                <Button variant="primary" type="submit">
+                  Edit
+                </Button>
+              </div>
             </Form>
           )}
         </div>

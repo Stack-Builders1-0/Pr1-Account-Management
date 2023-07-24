@@ -12,8 +12,8 @@ function CashTransaction() {
     customer_id: "",
     manual_invoice_id: "",
     description: "",
-    billAmount: "",
-    discount: "",
+    bill_amount: "",
+    discount: 0,
     date: "",
   });
 
@@ -60,14 +60,22 @@ function CashTransaction() {
     event.preventDefault();
 
     if (searchedNic) {
+      if (
+        data.manual_invoice_id.trim() === "" ||
+        data.bill_amount === "" ||
+        data.discount === ""
+      ) {
+        alert("Please fill all the required fields.");
+        return;
+      }
+
       // Only allow form submission if NIC has been searched
       const formdata = {
         type_id: "ca", // we manually set the type id of tha cash sale
         manual_invoice_id: data.manual_invoice_id,
-        date: data.date,
         customer_id: data.customer_id,
         description: data.description,
-        bill_amount: data.billAmount,
+        bill_amount: data.bill_amount,
         discount: data.discount,
       };
 
@@ -76,7 +84,14 @@ function CashTransaction() {
           headers: { Authorization: "key " + sessionToken },
         })
         .then((res) => {
-          navigate("/transaction");
+          const responseData = res.data;
+          if (responseData.sucess) {
+            // Success is true, so navigate to /transaction
+            navigate("/transaction");
+          } else {
+            // Success is false, show an error or handle it as needed
+            alert("An error occurred. Please try again later.");
+          }
         })
         .catch((err) => console.log(err));
     } else {
@@ -99,7 +114,9 @@ function CashTransaction() {
 
         {/* Search for customer by NIC */}
         <Form.Group className="mb-3" controlId="formBasicNicNo">
-          <Form.Label>Search Customer by NIC</Form.Label>
+          <Form.Label>
+            Search Customer by NIC<span style={{ color: "red" }}>*</span>
+          </Form.Label>
           <Form.Control
             type="text"
             placeholder="Enter NIC"
@@ -141,7 +158,9 @@ function CashTransaction() {
 
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicManualInvoiceId">
-            <Form.Label>Bill number</Form.Label>
+            <Form.Label>
+              Bill number<span style={{ color: "red" }}>*</span>
+            </Form.Label>
             <Form.Control
               type="text"
               placeholder="Enter bill number"
@@ -165,17 +184,23 @@ function CashTransaction() {
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicBillAmount">
-            <Form.Label>Bill Amount</Form.Label>
+            <Form.Label>
+              Bill Amount<span style={{ color: "red" }}>*</span>
+            </Form.Label>
             <Form.Control
               type="number"
               placeholder="Enter bill amount"
-              value={data.billAmount}
-              onChange={(e) => setData({ ...data, billAmount: e.target.value })}
+              value={data.bill_amount}
+              onChange={(e) =>
+                setData({ ...data, bill_amount: e.target.value })
+              }
             />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicDiscount">
-            <Form.Label>Discount</Form.Label>
+            <Form.Label>
+              Discount<span style={{ color: "red" }}>*</span>
+            </Form.Label>
             <Form.Control
               type="number"
               placeholder="Enter discount"
@@ -184,12 +209,14 @@ function CashTransaction() {
             />
           </Form.Group>
 
-          <Button variant="primary" type="submit">
-            Submit
-          </Button>
-          <Button variant="danger" onClick={handleCancel} className="mx-2">
-            Cancel
-          </Button>
+          <div className="col-12 d-flex justify-content-between">
+            <Button variant="secondary" onClick={handleCancel} className="mx-2">
+              Cancel
+            </Button>
+            <Button variant="primary" type="submit">
+              Submit
+            </Button>
+          </div>
         </Form>
       </div>
     </div>
