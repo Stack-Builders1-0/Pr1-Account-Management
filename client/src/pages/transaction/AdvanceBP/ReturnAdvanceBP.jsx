@@ -91,8 +91,10 @@ function ReturnAdvanceBP() {
         balance: balance,
         customer_id: customerID,
         description: description,
-        type_id : typeId
+        type_id: typeId,
       };
+
+      console.log(settleData);
 
       axios
         .post(
@@ -101,18 +103,26 @@ function ReturnAdvanceBP() {
           { headers: { Authorization: "key " + sessionToken } }
         )
         .then((response) => {
-          console.log("Return API response:", response.data);
-
           setReturnAmount("");
           setCustomerID("");
           setSelectedInvoiceNumber("");
+          setDescription("");
+          const responseData = response.data;
+          console.log(response.data);
+          if (responseData.sucess) {
+            alert("Settlement is successfully submitted.");
+          } else {
+            // Success is false, show an error or handle it as needed
+            alert("An error occurred. Please try again later.");
+          }
         })
         .catch((error) => {
-          console.error("Error occurred during return API call:", error);
+          console.error("Error occurred during settle API call:", error);
 
-          setReturnAmount("");
+          setSettleAmount("");
           setCustomerID("");
           setSelectedInvoiceNumber("");
+          setDescription("");
         });
     } else {
       alert(
@@ -205,12 +215,18 @@ function ReturnAdvanceBP() {
                 />
               </Form.Group>
 
-              <Button variant="primary" type="submit">
-                Return
-              </Button>
-              <Button variant="danger" onClick={handleCancel} className="mx-2">
-                Cancel
-              </Button>
+              <div className="col-12 d-flex justify-content-between">
+                <Button
+                  variant="secondary"
+                  onClick={handleCancel}
+                  className="mx-2"
+                >
+                  Cancel
+                </Button>
+                <Button variant="primary" type="submit">
+                  Return
+                </Button>
+              </div>
             </Form>
           )}
         </div>

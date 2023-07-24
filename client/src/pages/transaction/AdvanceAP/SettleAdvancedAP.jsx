@@ -91,7 +91,7 @@ function SettleAdvancedAP() {
         balance: balance,
         customer_id: customerID,
         description: description,
-        type_id : typeId
+        type_id: typeId,
       };
 
       axios
@@ -100,12 +100,19 @@ function SettleAdvancedAP() {
           { data: settleData },
           { headers: { Authorization: "key " + sessionToken } }
         )
-        .then((response) => { 
-          // we wannt to check the res.sucess  => this is true then settle is sucess else we want to display the alert =====================================
-          navigate("/transaction");
+        .then((response) => {
           setSettleAmount("");
           setCustomerID("");
           setSelectedInvoiceNumber("");
+          setDescription("");
+          const responseData = response.data;
+          console.log(response.data);
+          if (responseData.sucess) {
+            alert("Settlement is successfully submitted.");
+          } else {
+            // Success is false, show an error or handle it as needed
+            alert("An error occurred. Please try again later.");
+          }
         })
         .catch((error) => {
           console.error("Error occurred during settle API call:", error);
@@ -113,6 +120,7 @@ function SettleAdvancedAP() {
           setSettleAmount("");
           setCustomerID("");
           setSelectedInvoiceNumber("");
+          setDescription("");
         });
     } else {
       alert("Please fill all the required fields before settling the payment.");
@@ -204,12 +212,18 @@ function SettleAdvancedAP() {
                 />
               </Form.Group>
 
-              <Button variant="primary" type="submit">
-                Settle
-              </Button>
-              <Button variant="danger" onClick={handleCancel} className="mx-2">
-                Cancel
-              </Button>
+              <div className="col-12 d-flex justify-content-between">
+                <Button
+                  variant="secondary"
+                  onClick={handleCancel}
+                  className="mx-2"
+                >
+                  Cancel
+                </Button>
+                <Button variant="primary" type="submit">
+                  Settle
+                </Button>
+              </div>
             </Form>
           )}
         </div>
