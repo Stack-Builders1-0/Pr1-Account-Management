@@ -1,8 +1,9 @@
 import React, { useState, useContext } from 'react'
-import '../../style.css'
+import './style.css'
+
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-import { UserContext } from "../../UserContext";
+import { UserContext } from "./UserContext";
 
 function Login() {
 
@@ -25,6 +26,7 @@ function Login() {
         if (res.data.sucess) {
           // store the session token in the local storage
           localStorage.setItem('sessionToken', res.data.sessionToken);
+          localStorage.setItem('type_id', res.data.type_id);
           setUser(res.data.sessionToken)
 
           navigate('/', { state: { show: true, onHide: true } })
