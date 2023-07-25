@@ -30,7 +30,7 @@ router.post("/", (req, res) => {
 
   // check the employee already exist or not
   const getQuery =
-    "select employee_id, password from accountmanagement.employees where nic = ? ;";
+    "select employee_id, password, type_id from accountmanagement.employees where nic = ? ;";
 
   // response has 3 field
   // error occur then error = true , otherwise error = false
@@ -43,7 +43,8 @@ router.post("/", (req, res) => {
         isError: true,
         isExist: false,
         error : err,
-        result :result
+        result :null,
+        type_id :null
       });
     } else {
       if (result.length == 0) {
@@ -51,12 +52,14 @@ router.post("/", (req, res) => {
           sucess: false,
           isError: false,
           isExist: false,
-          error : err,
-          result :result
+          error : null,
+          result :result,
+          type_id :null
         });
       } else {
         const employee_id = result[0].employee_id;
         const hash = result[0].password;
+        const type_id = result[0].type_id;
 
         bcrypt.compare(password, hash, function (err, result) {
           if (result) {
@@ -69,7 +72,8 @@ router.post("/", (req, res) => {
               isExist: true,
               error : err,
               result :result,
-              sessionToken : sessionToken
+              sessionToken: sessionToken,
+              type_id :type_id
             });
           } else {
             res.send({
@@ -77,7 +81,8 @@ router.post("/", (req, res) => {
               isError: false,
               isExist: true,
               error : err,
-              result :result
+              result :result,
+              type_id :type_id
             });
           }
         });

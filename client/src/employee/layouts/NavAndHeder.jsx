@@ -1,9 +1,10 @@
 import React, { useState, useContext } from "react";
 import "bootstrap-icons/font/bootstrap-icons.min.css";
 import { Link, Outlet, NavLink } from "react-router-dom";
-import { UserContext } from "../UserContext";
+
 import { useNavigate } from 'react-router-dom';
 import { FaSignOutAlt } from 'react-icons/fa';
+import { UserContext } from "../../UserContext";
 
 
 function NavAndHeder() {
@@ -124,12 +125,7 @@ function NavAndHeder() {
                   <span class="ms-1 d-none d-sm-inline">Customers</span>{" "}
                 </NavLink>
               </li>
-              <li>
-                <NavLink to="/employee" style={setStyle}>
-                  <i class="fs-4 bi-people"></i>{" "}
-                  <span class="ms-1 d-none d-sm-inline">Employee</span>
-                </NavLink>
-              </li>
+
 
               <li>
                 <NavLink to="/expenses"
