@@ -26,7 +26,7 @@ function Login() {
         if (res.data.sucess) {
           // store the session token in the local storage
           localStorage.setItem('sessionToken', res.data.sessionToken);
-          localStorage.setItem('typeID', res.data.typeID)
+          localStorage.setItem('type_id', res.data.type_id);
           setUser(res.data.sessionToken)
 
           navigate('/', { state: { show: true, onHide: true } })
