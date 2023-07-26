@@ -324,93 +324,62 @@ router.post("/histoyCreditTransection", (req, res) => {
   });
 });
 
+
+
+//  we want to show the all credit transection on today enter by specific employee
+// i want to date yyyy-mm-dd format
+router.post("/showTodayForEmployee", (req, res) => {
+  const date = req.body.date;
+
+  const sessionToken = req.headers.authorization.replace('key ','');
+  const employee_id = decodedUserId(sessionToken);
+  const selectQuery =
+    "SELECT invoice_id, accountmanagement.credit_sales.type_id, type, manual_invoice_id,customer_id, description, bill_amount, discount, amount, date  FROM accountmanagement.credit_sales join accountmanagement.income_type using (type_id) where employee_id = ? and locate(?, date) order by(date) desc;";
+
+  connection.query(selectQuery,[employee_id, date], (err, result) => {
+    if (err) {
+      res.send({
+        sucess: false,
+        isError: true,
+        error: err,
+        result: null,
+      });
+    } else {
+      res.send({
+        sucess: true,
+        isError: false,
+        result: result,
+      });
+    }
+  });
+});
+
+
+
+//  we want to show the all credit transection on today enter by all employee
+// i want to date yyyy-mm-dd format
+router.post("/showTodayForOwner", (req, res) => {
+  const date = req.body.date;
+  const selectQuery =
+    "SELECT invoice_id, accountmanagement.credit_sales.type_id, type, manual_invoice_id,customer_id, description, bill_amount, discount, amount, date  FROM accountmanagement.credit_sales join accountmanagement.income_type using (type_id) where locate(?, date) order by(date) desc;";
+
+
+  connection.query(selectQuery,[date], (err, result) => {
+    if (err) {
+      res.send({
+        sucess: false,
+        isError: true,
+        error: err,
+        result: null,
+      });
+    } else {
+      res.send({
+        sucess: true,
+        isError: false,
+        result: result,
+      });
+    }
+  });
+});
+
 module.exports = router;
-
-//  this try code if the edit re=ansection we want to edit 2 table
-// router.post("/edit", (req, res) => {
-//   const body = req.body;
-//   const amount = body.bill_amount - body.discount;
-//   let transectionID ;
-
-//   const selectIDQuery = "select id from credit_partial_settle Settle where invoice_id = "+ mysql.escape(body.invoice_id) +" order by date desc limit 1  "
-
-//   connection.query(selectIDQuery, (err, result) => {
-//     if (err) {
-//       console.log(err);
-//       res.send({
-//         sucess: false,
-//         error: true,
-//       });
-//     } else {
-//       transectionID = result[0].id;
-//     }
-//   });
-
-//   const  updatePartialSettleQuery =
-//     "UPDATE accountmanagement.credit_partial_settle SET type_id = " +
-//     mysql.escape(body.type_id) +
-//     ", invoice_id = " +
-//     mysql.escape(body.invoice_id) +
-//     ", customer_id = " +
-//     mysql.escape(body.customer_id) +
-//     ", description = " +
-//     mysql.escape(body.description) +
-//     ", settle_amount = '0' , balance =" +
-//     mysql.escape(amount) +
-//     " WHERE (id = " +
-//     mysql.escape(transectionID) +
-//     ");";
-
-//     const updateQuery =
-//     "UPDATE accountmanagement.credit_sales SET type_id = " +
-//     mysql.escape(body.type_id) +
-//     ", manual_invoice_id = " +
-//     mysql.escape(body.manual_invoice_id) +
-//     ", customer_id = " +
-//     mysql.escape(body.customer_id) +
-//     ", description = " +
-//     mysql.escape(body.description) +
-//     ", bill_amount = " +
-//     mysql.escape(body.bill_amount) +
-//     ", discount =" +
-//     mysql.escape(body.discount) +
-//     ", amount =" +
-//     mysql.escape(amount) +
-//     ", updated_by = " +
-//     mysql.escape(body.employee_id) +
-//     "  WHERE (invoice_id = " +
-//     mysql.escape(body.invoice_id) +
-//     ");";
-
-//   //  response has 2 field
-//   // error occur then error = true , otherwise error = false
-//   // employee regeister is sucess then sucess=true
-//   connection.query(updateQuery, (err, result) => {
-//     if (err) {
-//       console.log(err);
-//       res.send({
-//         sucess: false,
-//         error: true,
-//       });
-//     } else {
-//       connection.query(updatePartialSettleQuery, (err, result) => {
-//         console.log(updatePartialSettleQuery);
-//         console.log(transectionID);
-//         if (err) {
-//           console.log(err);
-//           res.send({
-//             sucess: false,
-//             error: true,
-//           });
-//         } else {
-//           res.send({
-//             sucess: true,
-//             error: false,
-
-//           });
-//           console.log(result)
-//         }
-//       });
-//     }
-//   });
-// });

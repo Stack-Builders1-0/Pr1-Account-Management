@@ -84,4 +84,69 @@ router.get("/showAll", (req, res) => {
 });
 
 
+
+//  we want to show the all expenses on today enter by specific employee
+// i want to date yyyy-mm-dd format
+router.post("/showTodayForEmployee", (req, res) => {
+  const date = req.body.date;
+
+  const sessionToken = req.headers.authorization.replace('key ','');
+  const employee_id = decodedUserId(sessionToken);
+
+
+  const selectQuery =
+    "SELECT manual_expense_id, type,date,description, amount FROM expenses where employee_id = ? and locate(?, date) ;";
+
+
+  connection.query(selectQuery,[employee_id, date], (err, result) => {
+    if (err) {
+      res.send({
+        sucess: false,
+        isError: true,
+        error: err,
+        result: null,
+      });
+    } else {
+      res.send({
+        sucess: true,
+        isError: false,
+        result: result,
+      });
+    }
+  });
+});
+
+
+
+//  we want to show the all expenses transection on today enter by all employee
+// i want to date yyyy-mm-dd format
+router.post("/showTodayForOwner", (req, res) => {
+  const date = req.body.date;
+
+  const selectQuery =
+  "SELECT manual_expense_id, type,date,description, amount FROM expenses where locate(?, date) ;";
+
+  connection.query(selectQuery,[date], (err, result) => {
+    if (err) {
+      res.send({
+        sucess: false,
+        isError: true,
+        error: err,
+        result: null
+      });
+    } else {
+      res.send({
+        sucess: true,
+        isError: false,
+        error : null,
+        result: result
+      });
+    }
+  });
+});
+
+
+
+
+
 module.exports = router;

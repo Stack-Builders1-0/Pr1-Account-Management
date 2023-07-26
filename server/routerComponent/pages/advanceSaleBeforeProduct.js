@@ -395,4 +395,67 @@ router.post("/return", (req, res) => {
 
 
 
+//  we want to show the all advance BP transection on today enter by specific employee
+// i want to date yyyy-mm-dd format
+router.post("/showTodayForEmployee", (req, res) => {
+  const date = req.body.date;
+
+  const sessionToken = req.headers.authorization.replace('key ','');
+  const employee_id = decodeUserId(sessionToken);
+
+  const selectQuery =
+    "SELECT invoice_id, accountmanagement.advance_sales_bp.type_id, type, manual_invoice_id,customer_id, description, bill_amount,advance_amount, discount, date, amount, balance  FROM accountmanagement.advance_sales_bp join accountmanagement.income_type using (type_id) where employee_id = ? and locate(?, date) order by(date) desc;";
+
+
+  connection.query(selectQuery,[employee_id, date], (err, result) => {
+    if (err) {
+      res.send({
+        sucess: false,
+        isError: true,
+        error: err,
+        result: null,
+      });
+    } else {
+      res.send({
+        sucess: true,
+        isError: false,
+        result: result,
+      });
+    }
+  });
+});
+
+
+
+//  we want to show the all advance BP transection on today enter by all employee
+// i want to date yyyy-mm-dd format
+router.post("/showTodayForOwner", (req, res) => {
+  const date = req.body.date;
+
+   const selectQuery =
+    "SELECT invoice_id, accountmanagement.advance_sales_bp.type_id, type, manual_invoice_id,customer_id, description, bill_amount,advance_amount, discount, date, amount, balance  FROM accountmanagement.advance_sales_bp join accountmanagement.income_type using (type_id) where locate(?, date) order by(date) desc;";
+
+
+  connection.query(selectQuery,[date], (err, result) => {
+    if (err) {
+      res.send({
+        sucess: false,
+        isError: true,
+        error: err,
+        result: null
+      });
+    } else {
+      res.send({
+        sucess: true,
+        isError: false,
+        error : null,
+        result: result
+      });
+    }
+  });
+});
+
+
+
+
 module.exports = router;

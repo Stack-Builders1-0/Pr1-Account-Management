@@ -28,6 +28,7 @@ function App() {
               element={<p>This page isn't available. Sorry about that.</p>}
             ></Route>
           </Routes>
+        // ):(<OwnerPath></OwnerPath>
         ) : typeID === "sca" ? (
           <OwnerPath></OwnerPath>
         ) : typeID === "cas" ? (
@@ -49,13 +50,3 @@ function App() {
 }
 
 export default App;
-
-
-
-
-
-
-
-
-
-
