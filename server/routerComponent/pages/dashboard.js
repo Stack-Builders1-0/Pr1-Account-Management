@@ -287,5 +287,49 @@ router.post("/totalTransection", (req, res) => {
 });
 
 
+// this is send the total credit income of the all todays update
+router.post("/totalTransectionForOwner", (req, res) => {
+  const body = req.body;
+
+  
+
+  try{
+    const sessionToken =req.headers.authorization.replace("key ", "");
+    const employee_id = decodedUserId(sessionToken);
+    // const employee_id = body.employee_id
+
+    // date format is yyyy-mm-dd (2023-07-14)
+        const selectQuery ="SELECT SUM(CASE WHEN type_id IN ('cr', 'as') THEN balance ELSE 0 END) AS credit, SUM(CASE WHEN type_id IN ('ca', 'as') THEN amount - balance ELSE 0 END) AS cash FROM total_transection WHERE type_id IN ('ca', 'cr', 'as') AND (type_id <> 'as' OR amount <> return_payment) and locate(?, date);"
+
+        // response has 3 field
+        // error occur then error = true , otherwise error = false
+        // sucess or not
+        connection.query(selectQuery,[employee_id, body.date], (err, result) => {
+        if (err) {
+            console.log(err);
+            res.send({
+            sucess: false,
+            error: true,
+            result: result,
+            tokenValied: true
+            });
+        } else {
+            res.send({
+            sucess: true,
+            error: false,
+            result: result,
+            tokenValied: true
+            });
+        }
+    });
+
+  }
+  catch(err){
+    res.send({tokenValied: false})
+  }
+});
+
+
+
 
 module.exports = router;

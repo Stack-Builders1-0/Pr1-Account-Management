@@ -45,7 +45,7 @@ function Dashboard() {
   useEffect(() => {
     axios
       .post(
-        import.meta.env.VITE_API_URL + "/dashboard/totalTransection",
+        import.meta.env.VITE_API_URL + "/dashboard/totalTransectionForOwner",
         { date: date },
         { headers: { Authorization: "key " + sessionToken } }
       )
