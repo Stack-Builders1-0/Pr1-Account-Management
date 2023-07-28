@@ -37,6 +37,7 @@ function AddCreditForm() {
             customerName: customerData.customer_name,
             businessName: customerData.business_name,
             creditLimit: customerData.credit_limit,
+            customer_id: customerData.customer_id,
           });
           setShowAlert(false);
           setData({ ...data, customer_name: customerData.customer_name });
@@ -54,58 +55,88 @@ function AddCreditForm() {
       });
   };
 
+  const [errors, setErrors] = useState({});
+
+  // const setField = (field, value) => {
+  //   // Check and see if errors exist, and remove them from the error object:
+  //   setData({
+  //     ...data,
+  //     [field]: value
+  // })
+  //   if (!!errors[field])
+  //     setErrors({
+  //       ...errors,
+  //       [field]: null,
+  //     });
+  // };
+
+  const findFormErrors = () => {
+    const { manual_invoice_id, bill_amount, discount } = data;
+    const newErrors = {};
+    // name errors
+    if (!manual_invoice_id || manual_invoice_id === "")
+      newErrors.manual_invoice_id = "cannot be blank!";
+    if (!bill_amount || bill_amount === "")
+      newErrors.bill_amount = "cannot be blank!";
+    if (discount === "") newErrors.discount = "cannot be blank!";
+
+    return newErrors;
+  };
+
   const sessionToken = localStorage.getItem("sessionToken");
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
     if (searchedNic) {
-      // Only allow form submission if NIC has been
-      if (
-        data.manual_invoice_id.trim() === "" ||
-        data.bill_amount === "" ||
-        data.discount === ""
-      ) {
-        alert("Please fill all the required fields.");
-        return;
-      }
-      const billAmount = parseFloat(data.bill_amount);
-      const creditLimit = parseFloat(customerInfo.creditLimit);
+      const newErrors = findFormErrors();
 
-      if (billAmount <= creditLimit) {
-        const formdata = {
-          type_id: "cr", // we manually set the type id of the credit sale
-          manual_invoice_id: data.manual_invoice_id,
-          customer_id: data.customer_id,
-          description: data.description,
-          bill_amount: data.bill_amount,
-          discount: data.discount,
-        };
-
-        console.log(formdata);
-
-        axios
-          .post("http://localhost:5000/creditSale/add", formdata, {
-            headers: { Authorization: "key " + sessionToken },
-          })
-          .then((res) => {
-            const responseData = res.data;
-            console.log(res.data);
-            if (responseData.sucess) {
-              // Success is true, so navigate to /transaction
-              navigate("/transaction");
-            } else {
-              // Success is false, show an error or handle it as needed
-              alert("An error occurred. Please try again later.");
-            }
-          })
-          .catch((err) => console.log(err));
+      if (Object.keys(newErrors).length > 0) {
+        // We got errors!
+        setErrors(newErrors);
       } else {
-        // Bill amount exceeds the credit limit, display error message
-        alert(
-          "Bill amount exceeds the credit limit. Please adjust the bill amount."
-        );
+        const billAmount = parseFloat(data.bill_amount);
+        const creditLimit = parseFloat(customerInfo.creditLimit);
+
+        if (billAmount <= creditLimit) {
+          const formdata = {
+            type_id: "cr", // we manually set the type id of the credit sale
+            manual_invoice_id: data.manual_invoice_id,
+            customer_id: customerInfo.customer_id,
+            description: data.description,
+            bill_amount: data.bill_amount,
+            discount: data.discount,
+          };
+
+          console.log(formdata);
+
+          axios
+            .post("http://localhost:5000/creditSale/add", formdata, {
+              headers: { Authorization: "key " + sessionToken },
+            })
+            .then((res) => {
+              const responseData = res.data;
+              console.log(res.data);
+              if (responseData.sucess) {
+                // Success is true, so navigate to /transaction
+                navigate("/transaction");
+              } else {
+                // Success is false, show an error or handle it as needed
+                alert("An error occurred. Please try again later.");
+              }
+            })
+            .catch((err) => console.log(err));
+        } else {
+          // Bill amount exceeds the credit limit, display error message
+          alert(
+            "Bill amount exceeds the credit limit. Please adjust the bill amount."
+          );
+        }
       }
+    } else {
+      alert(
+        "Please search for a valid NIC first before submitting the form or you have to register first"
+      );
     }
   };
 
@@ -181,7 +212,11 @@ function AddCreditForm() {
               onChange={(e) =>
                 setData({ ...data, manual_invoice_id: e.target.value })
               }
+              isInvalid={!!errors.manual_invoice_id}
             />
+            <Form.Control.Feedback type="invalid">
+              {errors.manual_invoice_id}
+            </Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicDescription">
@@ -207,7 +242,11 @@ function AddCreditForm() {
               onChange={(e) =>
                 setData({ ...data, bill_amount: e.target.value })
               }
+              isInvalid={!!errors.bill_amount}
             />
+            <Form.Control.Feedback type="invalid">
+              {errors.bill_amount}
+            </Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicDiscount">
@@ -219,7 +258,11 @@ function AddCreditForm() {
               placeholder="Enter discount"
               value={data.discount}
               onChange={(e) => setData({ ...data, discount: e.target.value })}
+              isInvalid={!!errors.discount}
             />
+            <Form.Control.Feedback type="invalid">
+              {errors.discount}
+            </Form.Control.Feedback>
           </Form.Group>
 
           <div className="col-12 d-flex justify-content-between">
@@ -237,3 +280,58 @@ function AddCreditForm() {
 }
 
 export default AddCreditForm;
+
+// const sessionToken = localStorage.getItem("sessionToken");
+
+//   const handleSubmit = (event) => {
+//     event.preventDefault();
+
+//     if (searchedNic) {
+//       // Only allow form submission if NIC has been
+//       if (
+//         data.manual_invoice_id.trim() === "" ||
+//         data.bill_amount === "" ||
+//         data.discount === ""
+//       ) {
+//         alert("Please fill all the required fields.");
+//         return;
+//       }
+//       const billAmount = parseFloat(data.bill_amount);
+//       const creditLimit = parseFloat(customerInfo.creditLimit);
+
+//       if (billAmount <= creditLimit) {
+//         const formdata = {
+//           type_id: "cr", // we manually set the type id of the credit sale
+//           manual_invoice_id: data.manual_invoice_id,
+//           customer_id: data.customer_id,
+//           description: data.description,
+//           bill_amount: data.bill_amount,
+//           discount: data.discount,
+//         };
+
+//         console.log(formdata);
+
+//         axios
+//           .post("http://localhost:5000/creditSale/add", formdata, {
+//             headers: { Authorization: "key " + sessionToken },
+//           })
+//           .then((res) => {
+//             const responseData = res.data;
+//             console.log(res.data);
+//             if (responseData.sucess) {
+//               // Success is true, so navigate to /transaction
+//               navigate("/transaction");
+//             } else {
+//               // Success is false, show an error or handle it as needed
+//               alert("An error occurred. Please try again later.");
+//             }
+//           })
+//           .catch((err) => console.log(err));
+//       } else {
+//         // Bill amount exceeds the credit limit, display error message
+//         alert(
+//           "Bill amount exceeds the credit limit. Please adjust the bill amount."
+//         );
+//       }
+//     }
+//   };

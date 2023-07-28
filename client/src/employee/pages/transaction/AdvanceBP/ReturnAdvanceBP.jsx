@@ -182,6 +182,7 @@ function ReturnAdvanceBP() {
               <p>Bill Amount: {filteredRecords.bill_amount}</p>
               <p>Advance amount: {filteredRecords.advance_amount}</p>
               <p>Discount: {filteredRecords.discount}</p>
+              <p>Balance: {filteredRecords.balance}</p>
               <p>Date: {filteredRecords.date}</p>
             </>
           )}

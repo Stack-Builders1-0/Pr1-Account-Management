@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import SalesList from "./SalesList";
+import { useEffect } from "react";
+import axios from "axios";
 
 // add
 function EditTransaction() {
   const [selectedTab, setSelectedTab] = useState("");
   const [showTransaction, setShowTransaction] = useState(false);
+  const [employeeId, setEmployeeId] = useState("");
+  const [addedTransactionCount, setAddedTransactionCount] = useState(0);
 
   const handleTabChange = (tab) => {
     setSelectedTab(tab);
@@ -19,13 +23,52 @@ function EditTransaction() {
     setShowTransaction(true);
   };
 
+  const sessionToken = localStorage.getItem("sessionToken");
+
+  // get the current date in yyyy-mm-dd this format
+  const currentDate = new Date();
+  const date =
+    currentDate.getFullYear() +
+    "-0" +
+    (currentDate.getMonth() + 1) +
+    "-" +
+    currentDate.getDate();
+
+  useEffect(() => {
+    // show the the emplyee and details
+    axios
+      .post(
+        "http://localhost:5000/employee/showCurrent",
+        {},
+        { headers: { Authorization: "key " + sessionToken } }
+      )
+      .then((res) => {
+        // console.log(res.data.result[0]);
+        console.log(res.data);
+        setEmployeeId(res.data.result[0].employee_id);
+      });
+
+    // get the count of the add transection on today
+    axios
+      .post(
+        "http://localhost:5000/employee/count",
+        { date: date },
+        { headers: { Authorization: "key " + sessionToken } }
+      )
+      .then((res) => {
+        // console.log(res.data.result[0]);
+        console.log(res.data);
+        setAddedTransactionCount(res.data.result[0].count);
+      });
+  }, []);
+
   return (
     <div>
       <div className="container d-flex flex-column">
         <div className="employee-info p-3 mb-3 bg-light border rounded">
-          <p>Employee ID: 12345</p>
-          <p>Today's Date: {new Date().toLocaleDateString()}</p>
-          <p>Employee Edited Transactions Count: 10</p>
+          <p>Employee ID: {employeeId}</p>
+          <p>Today's Date: {date}</p>
+          <p>Employee Added Transactions Count: {addedTransactionCount}</p>
         </div>
 
         {/* Buttons section */}
