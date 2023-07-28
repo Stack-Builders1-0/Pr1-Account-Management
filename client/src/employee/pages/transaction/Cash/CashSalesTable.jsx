@@ -4,10 +4,25 @@ import CommonTable from "../Table";
 
 function CashSale() {
   const [cashSaleData, setCashSaleData] = useState([]);
+  const currentDate = new Date();
+  const date =
+    currentDate.getFullYear() +
+    "-0" +
+    (currentDate.getMonth() + 1) +
+    "-" +
+    currentDate.getDate();
 
   useEffect(() => {
+    const sessionToken = localStorage.getItem("sessionToken");
+
     axios
-      .get(import.meta.env.VITE_API_URL + "/cashSale/showAll")
+      .post(
+        import.meta.env.VITE_API_URL + "/cashSale/showTodayForEmployee",
+        { date: date },
+        {
+          headers: { Authorization: "key " + sessionToken },
+        }
+      )
       .then((res) => {
         setCashSaleData(res.data.result);
       })

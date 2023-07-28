@@ -10,6 +10,8 @@ import AdvanceAPSale from "./AdvanceAP/AdvanceAPSaleTable";
 function AddTransaction() {
   const [selectedTab, setSelectedTab] = useState("");
   const [showTransaction, setShowTransaction] = useState(false);
+  const [employeeId, setEmployeeId] = useState("");
+  const [addedTransactionCount, setAddedTransactionCount] = useState(0);
 
   const handleTabChange = (tab) => {
     setSelectedTab(tab);
@@ -44,6 +46,8 @@ function AddTransaction() {
       )
       .then((res) => {
         // console.log(res.data.result[0]);
+        console.log(res.data);
+        setEmployeeId(res.data.result[0].employee_id);
       });
 
     // get the count of the add transection on today
@@ -55,6 +59,8 @@ function AddTransaction() {
       )
       .then((res) => {
         // console.log(res.data.result[0]);
+        console.log(res.data);
+        setAddedTransactionCount(res.data.result[0].count);
       });
   }, []);
 
@@ -62,9 +68,9 @@ function AddTransaction() {
     <div>
       <div className="container d-flex flex-column">
         <div className="employee-info p-3 mb-3 bg-light border rounded">
-          <p>Employee ID: 12345</p>
-          <p>Today's Date: {new Date().toLocaleDateString()}</p>
-          <p>Employee Added Transactions Count: 10</p>
+          <p>Employee ID: {employeeId}</p>
+          <p>Today's Date: {date}</p>
+          <p>Employee Added Transactions Count: {addedTransactionCount}</p>
         </div>
 
         {/* Buttons section */}
