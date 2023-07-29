@@ -2,8 +2,8 @@ import React, { useState, useContext } from "react";
 import "bootstrap-icons/font/bootstrap-icons.min.css";
 import { Link, Outlet, NavLink } from "react-router-dom";
 
-import { useNavigate } from 'react-router-dom';
-import { FaSignOutAlt } from 'react-icons/fa';
+import { useNavigate } from "react-router-dom";
+import { FaSignOutAlt } from "react-icons/fa";
 import { UserContext } from "../../UserContext";
 
 function NavAndHeder() {
@@ -21,11 +21,9 @@ function NavAndHeder() {
 
   // Token is not present, consider it expired
   function isTokenExpired() {
-    const sessionToken = localStorage.getItem('sessionToken');
+    const sessionToken = localStorage.getItem("sessionToken");
     if (!sessionToken) return true;
   }
-
-
 
   // Check token expiration when the app loads at regular intervals
   // Check every minute
@@ -84,12 +82,12 @@ function NavAndHeder() {
                 </NavLink>
               </li>
 
-
               <li>
                 <NavLink to="/transaction" style={setStyle}>
                   <div
-                    className={`px-0 align-middle  ${dropdownOpen ? "active" : ""
-                      }`}
+                    className={`px-0 align-middle  ${
+                      dropdownOpen ? "active" : ""
+                    }`}
                     onClick={toggleDropdown}
                   >
                     <i className="fs-4 bi-cash-coin "></i>{" "}
@@ -97,8 +95,9 @@ function NavAndHeder() {
                       Transaction
                     </span>{" "}
                     <i
-                      className={`bi bi-chevron-${dropdownOpen ? "up" : "down"
-                        } toggle-btn `}
+                      className={`bi bi-chevron-${
+                        dropdownOpen ? "up" : "down"
+                      } toggle-btn `}
                     ></i>
                   </div>
                 </NavLink>
@@ -113,6 +112,14 @@ function NavAndHeder() {
                     <NavLink to="/edittransaction" style={setStyle}>
                       <i className="fs-5 bi-pencil"></i>{" "}
                       <span className="ms-3 d-none d-sm-inline">Edit</span>{" "}
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/editaccess" style={setStyle}>
+                      <i className="fs-5 bi-person-plus"></i>{" "}
+                      <span className="ms-3 d-none d-sm-inline">
+                        Edit Access
+                      </span>{" "}
                     </NavLink>
                   </li>
                 </ul>
@@ -132,19 +139,14 @@ function NavAndHeder() {
               </li>
 
               <li>
-                <NavLink to="/expenses"
-                  style={setStyle}>
+                <NavLink to="/expenses" style={setStyle}>
                   <i class="fs-4 bi-cash"></i>{" "}
                   <span class="ms-1 d-none d-sm-inline">Expenses</span>
                 </NavLink>
               </li>
 
-
               <li>
-                <NavLink
-                  to="/report"
-                  style={setStyle}
-                >
+                <NavLink to="/report" style={setStyle}>
                   <i class="fs-4 bi-people"></i>{" "}
                   <span class="ms-1 d-none d-sm-inline">Report</span>
                 </NavLink>
@@ -153,11 +155,10 @@ function NavAndHeder() {
           </div>
         </div>
 
-        <div class="col p-0 m-0 "  >
+        <div class="col p-0 m-0 ">
           <div className="p-2 d-flex justify-content-between shadow navstyle sticky-top">
-
             <div></div>
-            <h4 className="text" >Account Management System</h4>
+            <h4 className="text">Account Management System</h4>
 
             <div className="dropdown ml-auto">
               <button
@@ -177,12 +178,19 @@ function NavAndHeder() {
                 style={{ marginLeft: "-100px" }}
               >
                 <li>
-                  <Link to="/profile" className="dropdown-item" onClick={closedropdown}>
+                  <Link
+                    to="/profile"
+                    className="dropdown-item"
+                    onClick={closedropdown}
+                  >
                     <i className="bi bi-person-fill"></i> Profile
                   </Link>
                 </li>
                 <li>
-                  <button onClickCapture={logout} className="btn btn-light dropdown-item">
+                  <button
+                    onClickCapture={logout}
+                    className="btn btn-light dropdown-item"
+                  >
                     <i className="bi bi-box-arrow-right"></i> Log out
                   </button>
                 </li>
