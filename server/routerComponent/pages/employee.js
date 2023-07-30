@@ -301,4 +301,40 @@ router.post('/giveEditAccess', (req, res) => {
 });
 
 
+router.post('/checkEditAccess', (req,res) => {
+    try{
+        const sessionToken = req.headers.authorization.replace('key ','');
+        const employee_id = decodedUserId(sessionToken);
+    
+        // const employee_id = req.body.employee_id;
+
+        const selectQuery = "SELECT count(employee_id) as count FROM employees join employee_type using(type_id) where employee_id = "+ mysql.escape(employee_id) + ", and edit_access = 1;";
+
+        connection.query(selectQuery,(err,result)=>{
+            if(err){
+                console.log(err);
+                res.send({
+                    sucess : false,
+                    isError : true,
+                    error:err,
+                    result:null
+                });
+            }
+            else{
+                res.send({
+                    sucess : true,
+                    isError : false,
+                    error: null,
+                    result: result
+                });
+            }
+        });
+    }
+    catch(err){
+        res.send({isTokenValied : false});
+    }
+});
+
+
+
 module.exports = router;
