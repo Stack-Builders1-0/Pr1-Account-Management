@@ -219,6 +219,86 @@ router.post('/count', (req,res) => {
     }
 });
 
+router.post("/filterEmployeeNIC", (req, res) => {
+    const nic = req.body.nic;
+    const selectQuery =
+    "SELECT employee_id, employee_name, type, address, mobile, email, nic, dob FROM employees join employee_type using(type_id) where nic = "+ mysql.escape(nic) +";";
+      mysql.escape(body.nic) +
+      ");";
+  
+    connection.query(selectQuery, (err, result) => {
+      if (err) {
+        console.log(err);
+        res.send({
+          sucess: false,
+          isError: true,
+          error:err,
+          result: null,
+        });
+      } else {
+        res.send({
+          sucess: true,
+          isError: false,
+          error: null,
+          result: result,
+        });
+      }
+    });
+  });
+  
+
+  router.get('/editAccessableEmployee', (req,res) => {
+    
+        // const employee_id = req.body.employee_id;
+
+        const selectQuery = "SELECT employee_id, employee_name, type, address, mobile, email, nic, dob FROM employees join employee_type using(type_id) where edit_access = 1 ";
+
+        connection.query(selectQuery,(err,result)=>{
+            if(err){
+                console.log(err);
+                res.send({
+                    sucess : false,
+                    isError : true,
+                    error:err,
+                    result:null
+                });
+            }
+            else{
+                res.send({
+                    sucess : true,
+                    isError : false,
+                    error: null,
+                    result: result
+                });
+            }
+        });
+});
+
+
+router.post('/giveEditAccess', (req, res) => {
+    body = req.body;
+
+        const giveAccessQuery = "UPDATE accountmanagement.employees SET edit_access = 1  edit_access_at = "+ mysql.escape(body,date) +" WHERE (employee_id = "+mysql.escape(body.employee_id)+");";
+    
+        //  response has 2 field 
+        // error occur then error = true , otherwise error = false
+        // employee regeister is sucess then sucess=true
+        connection.query(giveAccessQuery, (err,result) => {
+            if(err){
+                console.log(err);
+                res.send({
+                    sucess : false,
+                    error : true
+                });
+            }
+            else{
+                res.send({
+                    sucess : true,
+                    error : false
+                });
+            }
+        });
+});
 
 
 module.exports = router;
