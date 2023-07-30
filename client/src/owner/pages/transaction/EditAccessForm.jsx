@@ -4,7 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { Form, InputGroup, Button } from "react-bootstrap";
 import Alert from "react-bootstrap/Alert";
 import Modal from "react-bootstrap/Modal";
-import sampleData from "./sampleData.json";
+import moment from "moment/moment";
 
 function EditAccessForm() {
   const [data, setData] = useState({
@@ -20,35 +20,38 @@ function EditAccessForm() {
 
   const navigate = useNavigate();
 
-  const currentDate = new Date();
-  const date =
-    currentDate.getFullYear() +
-    "-0" +
-    (currentDate.getMonth() + 1) +
-    "-" +
-    currentDate.getDate();
+  const date = moment().format("YYYY-MM-DD HH:mm:ss");
+
+  // const currentDate = new Date();
+  // const date =
+  //   currentDate.getFullYear() +
+  //   "-0" +
+  //   (currentDate.getMonth() + 1) +
+  //   "-" +
+  //   currentDate.getDate();
 
   const handleConfirmAccess = () => {
-    console.log("Access granted!");
     setConfirmChange(true);
     setShowConfirmationModal(false); // Hide the confirmation modal
 
     // Make the API call to send the data to the backend
     if (searchedNic) {
       const formData = {
-        nic: data.nic_no,
+        employee_id: employeeInfo.employeeId,
         date: date,
       };
+      console.log(formData);
 
       axios
         .post(
-          "http://localhost:5000/employee/grantAccess",
+          "http://localhost:5000/employee/giveEditAccess",
           { data: formData },
           { headers: { Authorization: "key " + sessionToken } }
         )
         .then((res) => {
           const responseData = res.data;
-          if (responseData.success) {
+          console.log(res.data);
+          if (responseData.sucess) {
             console.log(responseData);
             // Success is true, so navigate to /transaction
             navigate("/editaccess");
@@ -66,62 +69,39 @@ function EditAccessForm() {
   };
 
   const handleSearch = () => {
-    //sampledata for checking
-    // original code is below the sample code
+    const apiUrl = "http://localhost:5000/employee/filterEmployeeNIC";
 
-    setTimeout(() => {
-      const filteredData = sampleData.result.filter(
-        (item) => item.nic_no === data.nic_no
-      );
-      if (filteredData.length > 0) {
-        // NIC number is valid and employee information is found
-        const employeeData = filteredData[0];
-        setEmployeeInfo({
-          employeeName: employeeData.employee_name,
-          address: employeeData.address,
-          mobile: employeeData.mobile,
-          email: employeeData.email,
-          type_id: employeeData.type_id,
-        });
-        setShowAlert(false);
-        setSearchedNic(true);
-        setIsSearchPerformed(true);
-      } else {
-        // NIC number is invalid or no employee found
-        setEmployeeInfo(null);
-        setShowAlert(true);
-        setSearchedNic(false);
-      }
-    }, 1000); // Simulate API response delay for 1 second
-
-    // const apiUrl = "http://localhost:5000/employee/filterEmployeeNIC";
-
-    // axios
-    //   .post(apiUrl, { nic: data.nic_no })
-    //   .then((res) => {
-    //     const responseData = res.data;
-    //     if (responseData.sucess && responseData.result.length > 0) {
-    //       // NIC number is valid and customer information is found
-    //       const employeeData = responseData.result[0];
-    //       setEmployeeInfo({
-    //         employeeName: employeeData.employee_name,
-    //         address: employeeData.address,
-    //         mobile: employeeData.mobile,
-    //         email: employeeData.email,
-    //         type_id: employeeData.type_id,
-    //       });
-    //       setShowAlert(false);
-    //       setSearchedNic(true);
-    //     } else {
-    //       // NIC number is invalid or no customer found
-    //       setEmployeeInfo(null);
-    //       setShowAlert(true);
-    //       setSearchedNic(false);
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    axios
+      .post(apiUrl, { nic: data.nic_no })
+      .then((res) => {
+        const responseData = res.data;
+        console.log(responseData);
+        if (responseData.sucess && responseData.result.length > 0) {
+          // NIC number is valid and customer information is found
+          const employeeData = responseData.result[0];
+          console.log(employeeData);
+          setEmployeeInfo({
+            employeeId: employeeData.employee_id,
+            employeeName: employeeData.employee_name,
+            address: employeeData.address,
+            mobile: employeeData.mobile,
+            email: employeeData.email,
+            type: employeeData.type,
+            dob: employeeData.dob,
+          });
+          setShowAlert(false);
+          setSearchedNic(true);
+          setIsSearchPerformed(true);
+        } else {
+          // NIC number is invalid or no customer found
+          setEmployeeInfo(null);
+          setShowAlert(true);
+          setSearchedNic(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const sessionToken = localStorage.getItem("sessionToken");
@@ -179,6 +159,9 @@ function EditAccessForm() {
           <div className="customer-info-box">
             <h3>Employee Information</h3>
             <p>
+              <strong>Employee ID:</strong> {employeeInfo.employeeId}
+            </p>
+            <p>
               <strong>Employee Name:</strong> {employeeInfo.employeeName}
             </p>
             <p>
@@ -191,7 +174,10 @@ function EditAccessForm() {
               <strong>Email:</strong> {employeeInfo.email}
             </p>
             <p>
-              <strong>Type:</strong> {employeeInfo.type_id}
+              <strong>Type:</strong> {employeeInfo.type}
+            </p>
+            <p>
+              <strong>DOB:</strong> {employeeInfo.dob}
             </p>
           </div>
         )}

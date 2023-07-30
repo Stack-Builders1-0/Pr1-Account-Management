@@ -6,22 +6,8 @@ import axios from "axios";
 
 // add
 function EditAccess() {
-  const [selectedTab, setSelectedTab] = useState("");
-  const [showTransaction, setShowTransaction] = useState(false);
   const [employeeId, setEmployeeId] = useState("");
   const [addedTransactionCount, setAddedTransactionCount] = useState(0);
-
-  const handleTabChange = (tab) => {
-    setSelectedTab(tab);
-  };
-
-  const handleClose = () => {
-    setShowTransaction(false);
-  };
-
-  const handleShow = () => {
-    setShowTransaction(true);
-  };
 
   const sessionToken = localStorage.getItem("sessionToken");
 
@@ -51,8 +37,8 @@ function EditAccess() {
     // get the count of the add transection on today
     axios
       .post(
-        "http://localhost:5000/employee/count",
-        { date: date },
+        "http://localhost:5000/employee/checkEditAccess",
+        {},
         { headers: { Authorization: "key " + sessionToken } }
       )
       .then((res) => {
