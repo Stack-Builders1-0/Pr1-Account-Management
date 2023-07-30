@@ -539,3 +539,8 @@ add column start_transection boolean default false;
 
 alter table advance_bp_partial_settle
 add column start_transection boolean default false;
+
+
+ALTER TABLE `accountmanagement`.`employees` 
+ADD COLUMN `edit_access` TINYINT NOT NULL DEFAULT 0 AFTER `dob`,
+ADD COLUMN `edit_access_at` DATETIME NULL DEFAULT NULL AFTER `edit_access`;
