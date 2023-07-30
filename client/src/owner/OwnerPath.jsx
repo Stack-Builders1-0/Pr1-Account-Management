@@ -22,9 +22,8 @@ import EditTransaction from "./pages/transaction/EditTransaction";
 import EditAdvanceBPForm from "./pages/transaction/AdvanceBP/EditAdvanceBPForm";
 import EditAdvanceAPForm from "./pages/transaction/AdvanceAP/EditAdvanceAPForm";
 import AddCreditForm from "./pages/transaction/Credit/AddCreditForm";
-// import EditCashTransaction from "./pages/transaction/Cash" "./pages/transaction/Cash/EditCashForm";
-// import EditCreditTransaction from "./pages/transaction/Credit/EditCreditForm";
-// import EditAdvanceTransaction from "./pages/transaction/AdvanceBP/EditAdvanceForm";
+import EditAccessForm from "./pages/transaction/EditAccessForm";
+import EditAccess from "./pages/transaction/EditAccess";
 import ReturnAdvanceBP from "./pages/transaction/AdvanceBP/ReturnAdvanceBP";
 import SettleAdvancedBP from "./pages/transaction/AdvanceBP/SettleAdvancedBP";
 import Expenses from "./pages/expenses/Expenses";
@@ -35,120 +34,111 @@ import History from "./pages/customer/History";
 import Report from "./pages/report/Report";
 
 function OwnerPath() {
-  
   return (
-   
-      
-       
-          <Routes>
-            <Route path="/" element={<NavAndHeder />}>
-              <Route path="" element={<Dashboard />}></Route>
-              <Route path="/employee" element={<Employee />}></Route>
-              <Route path="/transaction" element={<AddTransaction />}></Route>
-              <Route path="/profile" element={<Profile />}></Route>
-              <Route path="/customer" element={<Customer />}></Route>
-              <Route path="/addemployee" element={<AddEmployee />}></Route>
-              <Route path="/addcustomer" element={<AddCustomer />}></Route>
-              <Route path="/expenses" element={<Expenses />}></Route>
-              <Route path="/addexpense" element={<AddExpense />}></Route>
-              <Route path="/history" element={<History />}></Route>
-              <Route path="/report" element={<Report />}></Route>
-              <Route
-                path="/transaction/cashtransaction"
-                element={<CashTransaction />}
-              ></Route>
-              <Route
-                path="/transaction/credittransaction"
-                element={<CreditTransaction />}
-              ></Route>
-              <Route
-                path="/transaction/advancebptransaction"
-                element={<AdvanceBPTransaction />}
-              ></Route>
+    <Routes>
+      <Route path="/" element={<NavAndHeder />}>
+        <Route path="" element={<Dashboard />}></Route>
+        <Route path="/employee" element={<Employee />}></Route>
+        <Route path="/transaction" element={<AddTransaction />}></Route>
+        <Route path="/profile" element={<Profile />}></Route>
+        <Route path="/customer" element={<Customer />}></Route>
+        <Route path="/addemployee" element={<AddEmployee />}></Route>
+        <Route path="/addcustomer" element={<AddCustomer />}></Route>
+        <Route path="/expenses" element={<Expenses />}></Route>
+        <Route path="/addexpense" element={<AddExpense />}></Route>
+        <Route path="/history" element={<History />}></Route>
+        <Route path="/report" element={<Report />}></Route>
+        <Route
+          path="/transaction/cashtransaction"
+          element={<CashTransaction />}
+        ></Route>
+        <Route
+          path="/transaction/credittransaction"
+          element={<CreditTransaction />}
+        ></Route>
+        <Route
+          path="/transaction/advancebptransaction"
+          element={<AdvanceBPTransaction />}
+        ></Route>
 
-              <Route
-                path="/transaction/credittransaction/settlepayment"
-                element={<SettleForm />}
-              ></Route>
-              <Route
-                path="/transaction/advancebptransaction"
-                element={<AdvanceBPTransaction />}
-              ></Route>
+        <Route
+          path="/transaction/credittransaction/settlepayment"
+          element={<SettleForm />}
+        ></Route>
+        <Route
+          path="/transaction/advancebptransaction"
+          element={<AdvanceBPTransaction />}
+        ></Route>
 
-              <Route
-                path="/transaction/credittransaction/add"
-                element={<AddCreditForm />}
-              ></Route>
+        <Route
+          path="/transaction/credittransaction/add"
+          element={<AddCreditForm />}
+        ></Route>
 
-              <Route
-                path="/transaction/advancebptransaction/add"
-                element={<AddAdvanceBPForm />}
-              ></Route>
+        <Route
+          path="/transaction/advancebptransaction/add"
+          element={<AddAdvanceBPForm />}
+        ></Route>
 
-              <Route
-                path="/transaction/advancebptransaction/settletransaction"
-                element={<SettleAdvancedBP />}
-              ></Route>
+        <Route
+          path="/transaction/advancebptransaction/settletransaction"
+          element={<SettleAdvancedBP />}
+        ></Route>
 
-              <Route
-                path="/transaction/advanceaptransaction/returntransaction"
-                element={<ReturnAdvanceBP />}
-              ></Route>
+        <Route
+          path="/transaction/advanceaptransaction/returntransaction"
+          element={<ReturnAdvanceBP />}
+        ></Route>
 
-              <Route
-                path="/transaction/advanceaptransaction"
-                element={<AdvanceAPTransaction />}
-              ></Route>
+        <Route
+          path="/transaction/advanceaptransaction"
+          element={<AdvanceAPTransaction />}
+        ></Route>
 
-              <Route
-                path="/transaction/advanceaptransaction/add"
-                element={<AddAdvanceAPForm />}
-              ></Route>
+        <Route
+          path="/transaction/advanceaptransaction/add"
+          element={<AddAdvanceAPForm />}
+        ></Route>
 
-              <Route
-                path="/transaction/advanceaptransaction/settletransaction"
-                element={<SettleAdvancedAP />}
-              ></Route>
+        <Route
+          path="/transaction/advanceaptransaction/settletransaction"
+          element={<SettleAdvancedAP />}
+        ></Route>
 
-              <Route
-                path="/edittransaction/credit"
-                element={<EditCreditForm />}
-              ></Route>
+        <Route
+          path="/edittransaction/credit"
+          element={<EditCreditForm />}
+        ></Route>
 
-              <Route
-                path="/edittransaction/cash"
-                element={<EditCashForm />}
-              ></Route>
+        <Route path="/edittransaction/cash" element={<EditCashForm />}></Route>
 
-              <Route
-                path="/edittransaction/advancebp"
-                element={<EditAdvanceBPForm />}
-              ></Route>
+        <Route
+          path="/edittransaction/advancebp"
+          element={<EditAdvanceBPForm />}
+        ></Route>
 
-              <Route
-                path="/edittransaction/advanceap"
-                element={<EditAdvanceAPForm />}
-              ></Route>
+        <Route
+          path="/edittransaction/advanceap"
+          element={<EditAdvanceAPForm />}
+        ></Route>
 
-              <Route
-                path="/edittransaction"
-                element={<EditTransaction />}
-              ></Route>
-            
+        <Route path="/edittransaction" element={<EditTransaction />}></Route>
 
-              <Route
-                path="*"
-                element={<p>This page isn't available. Sorry about that.</p>}
-              ></Route>
-            </Route>
-          </Routes>
-        
+        <Route path="/editaccess" element={<EditAccess />}></Route>
+        <Route path="/editaccess/add" element={<EditAccessForm />}></Route>
 
+        <Route
+          path="*"
+          element={<p>This page isn't available. Sorry about that.</p>}
+        ></Route>
+      </Route>
+    </Routes>
   );
 }
 
 export default OwnerPath;
-  {/* <Route
+{
+  /* <Route
                 path="/editcashtransaction"
                 element={<EditCashTransaction />}
               ></Route>
@@ -159,4 +149,5 @@ export default OwnerPath;
               <Route
                 path="/editadvancetransaction"
                 element={<EditAdvanceTransaction />}
-              ></Route> */}
+              ></Route> */
+}
