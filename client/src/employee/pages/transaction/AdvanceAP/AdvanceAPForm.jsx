@@ -30,7 +30,7 @@ function AddAdvanceAPForm() {
       .post(apiUrl, { nic: data.nic_no })
       .then((res) => {
         const responseData = res.data;
-        console.log(responseData);
+        // console.log(responseData);
         if (responseData.sucess && responseData.result.length > 0) {
           // NIC number is valid and customer information is found
           const customerData = responseData.result[0];
@@ -103,7 +103,7 @@ function AddAdvanceAPForm() {
 
       const newErrors = findFormErrors();
 
-      console.log(formdata);
+      // console.log(formdata);
       if (Object.keys(newErrors).length > 0) {
         // We got errors!
         setErrors(newErrors);
@@ -114,7 +114,7 @@ function AddAdvanceAPForm() {
           })
           .then((res) => {
             const responseData = res.data;
-            console.log(res.data);
+            // console.log(res.data);
             if (responseData.sucess) {
               // Success is true, so navigate to /transaction
               navigate("/transaction");

@@ -99,7 +99,7 @@ function CashTransaction() {
 
       const newErrors = findFormErrors();
 
-      console.log(formdata);
+      // console.log(formdata);
       if (Object.keys(newErrors).length > 0) {
         // We got errors!
         setErrors(newErrors);
@@ -111,7 +111,7 @@ function CashTransaction() {
           .then((res) => {
             const responseData = res.data;
             if (responseData.sucess) {
-              console.log(responseData);
+              // console.log(responseData);
               // Success is true, so navigate to /transaction
               navigate("/transaction");
             } else {
@@ -262,43 +262,3 @@ function CashTransaction() {
 }
 
 export default CashTransaction;
-
-// if (searchedNic) {
-//   if (
-//     data.manual_invoice_id.trim() === "" ||
-//     data.bill_amount === "" ||
-//     data.discount === ""
-//   ) {
-//     alert("Please fill all the required fields.");
-//     return;
-//   }
-
-//   // Only allow form submission if NIC has been searched
-//   const formdata = {
-//     type_id: "ca", // we manually set the type id of tha cash sale
-//     manual_invoice_id: data.manual_invoice_id,
-//     customer_id: data.customer_id,
-//     description: data.description,
-//     bill_amount: data.bill_amount,
-//     discount: data.discount,
-//   };
-
-//   axios
-//     .post("http://localhost:5000/cashSale/add", formdata, {
-//       headers: { Authorization: "key " + sessionToken },
-//     })
-//     .then((res) => {
-//       const responseData = res.data;
-//       if (responseData.sucess) {
-//         // Success is true, so navigate to /transaction
-//         navigate("/transaction");
-//       } else {
-//         // Success is false, show an error or handle it as needed
-//         alert("An error occurred. Please try again later.");
-//       }
-//     })
-//     .catch((err) => console.log(err));
-// } else {
-//   alert(
-//     "Please search for a valid NIC first before submitting the form or you have to register first"
-//   );

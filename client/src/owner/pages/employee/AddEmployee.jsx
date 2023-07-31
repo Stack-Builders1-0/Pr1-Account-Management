@@ -68,7 +68,7 @@ function AddEmployee() {
 		// formdata.append("image", data.image);
 		axios.post(import.meta.env.VITE_API_URL + '/employee/add', form)
 			.then(res => {
-				console.log(res.data);
+				// console.log(res.data);
 				if (res.data.isExist) {
 					alert("NIC already exist. Please check your NIC!!!")
 				}

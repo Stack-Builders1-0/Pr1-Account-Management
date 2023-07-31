@@ -39,7 +39,7 @@ function SettleForm() {
             setCustomerID(data.customer_id);
             setBalance(data.balance);
             setSelectedBillNumber(data.invoice_id);
-            console.log(data);
+            // console.log(data);
           } else {
             setShowAlert(true);
             console.log("No records found for the provided invoice number.");
@@ -86,7 +86,7 @@ function SettleForm() {
         description: description,
       };
 
-      console.log(settleData);
+      // console.log(settleData);
 
       axios
         .post(
@@ -100,7 +100,7 @@ function SettleForm() {
           setSelectedInvoiceNumber("");
           setDescription("");
           const responseData = response.data;
-          console.log(response.data);
+          // console.log(response.data);
           if (responseData.sucess) {
             alert("Settlement is successfully submitted.");
           } else {

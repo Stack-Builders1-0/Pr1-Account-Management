@@ -106,7 +106,7 @@ function SettleAdvancedAP() {
           setSelectedInvoiceNumber("");
           setDescription("");
           const responseData = response.data;
-          console.log(response.data);
+          // console.log(response.data);
           if (responseData.sucess) {
             alert("Settlement is successfully submitted.");
           } else {

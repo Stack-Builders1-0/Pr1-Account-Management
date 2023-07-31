@@ -27,7 +27,7 @@ const date = currentDate.getFullYear() + '-0' + (currentDate.getMonth() + 1) + '
         } else {
           axios.post(import.meta.env.VITE_API_URL + '/dashboard/isAddOpeningBalance',{ date: date }, { headers: { 'Authorization': 'key ' + sessionToken } })
             .then((res) => {
-              console.log(res.data);
+              // console.log(res.data);
               if (res.data.sucess) {
                 // we want to diply sucess message 
                 navigate('');

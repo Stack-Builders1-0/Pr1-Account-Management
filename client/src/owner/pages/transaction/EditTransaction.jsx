@@ -44,7 +44,7 @@ function EditTransaction() {
       )
       .then((res) => {
         // console.log(res.data.result[0]);
-        console.log(res.data);
+        // console.log(res.data);
         setEmployeeId(res.data.result[0].employee_id);
       });
 
@@ -57,7 +57,7 @@ function EditTransaction() {
       )
       .then((res) => {
         // console.log(res.data.result[0]);
-        console.log(res.data);
+        // console.log(res.data);
         setAddedTransactionCount(res.data.result[0].count);
       });
   }, []);
