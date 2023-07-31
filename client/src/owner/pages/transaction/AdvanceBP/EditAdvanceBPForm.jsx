@@ -46,7 +46,7 @@ function EditAdvanceBPForm() {
       .then((res) => {
         if (res.data.sucess) {
           const data = res.data.result[0];
-          console.log(data);
+          // console.log(data);
           if (data) {
             setSearchedTransaction(data);
             setEditMode(true);
@@ -59,7 +59,7 @@ function EditAdvanceBPForm() {
             setOldAdvanceAmount(parseFloat(data.advance_amount));
             setOldReturnPayment(parseFloat(data.return_payment));
 
-            console.log(data);
+            // console.log(data);
           } else {
             setSearchedTransaction(null);
             setEditMode(false);
@@ -99,11 +99,11 @@ function EditAdvanceBPForm() {
       .post(apiUrl, { nic: data.nic_no })
       .then((res) => {
         const responseData = res.data;
-        console.log(responseData);
+        // console.log(responseData);
         if (responseData.sucess && responseData.result.length > 0) {
           // NIC number is valid and customer information is found
           const customerData = responseData.result[0];
-          console.log(customerData);
+          // console.log(customerData);
           setCustomerInfo({
             customerName: customerData.customer_name,
             businessName: customerData.business_name,
@@ -163,7 +163,7 @@ function EditAdvanceBPForm() {
       oldReturnPayment: old_return_payment,
     };
 
-    console.log(formdata);
+    // console.log(formdata);
 
     axios
       .post(
@@ -173,7 +173,7 @@ function EditAdvanceBPForm() {
       )
       .then((res) => {
         const responseData = res.data;
-        console.log(res.data);
+        // console.log(res.data);
         if (responseData.sucess) {
           // Success is true, so navigate to /transaction
           navigate("/edittransaction");

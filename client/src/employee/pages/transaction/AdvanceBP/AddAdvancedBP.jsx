@@ -32,7 +32,7 @@ function AddAdvanceBPForm() {
       .post(apiUrl, { nic: data.nic_no })
       .then((res) => {
         const responseData = res.data;
-        console.log(responseData);
+        // console.log(responseData);
         if (responseData.sucess && responseData.result.length > 0) {
           // NIC number is valid and customer information is found
           const customerData = responseData.result[0];
@@ -105,7 +105,7 @@ function AddAdvanceBPForm() {
 
       const newErrors = findFormErrors();
 
-      console.log(formdata);
+      // console.log(formdata);
       if (Object.keys(newErrors).length > 0) {
         // We got errors!
         setErrors(newErrors);
@@ -116,7 +116,7 @@ function AddAdvanceBPForm() {
           })
           .then((res) => {
             const responseData = res.data;
-            console.log(res.data);
+            // console.log(res.data);
             if (responseData.sucess) {
               // Success is true, so navigate to /transaction
               navigate("/transaction");
@@ -289,52 +289,3 @@ function AddAdvanceBPForm() {
 }
 
 export default AddAdvanceBPForm;
-
-// const handleSubmit = (event) => {
-//   event.preventDefault();
-
-//   if (searchedNic) {
-//     if (
-//       data.manual_invoice_id.trim() === "" ||
-//       data.bill_amount === "" ||
-//       data.discount === "" ||
-//       data.advance_amount === ""
-//     ) {
-//       alert("Please fill all the required fields.");
-//       return;
-//     }
-
-//     const formdata = {
-//       type_id: "as", // we manually set the type id of tha advancebp sale
-//       manual_invoice_id: data.manual_invoice_id,
-//       customer_id: data.customer_id,
-//       description: data.description,
-//       bill_amount: data.bill_amount,
-//       discount: data.discount,
-//       advance_amount: data.advance_amount,
-//     };
-
-//     console.log(formdata);
-
-//     axios
-//       .post("http://localhost:5000/advanceSaleBP/add", formdata, {
-//         headers: { Authorization: "key " + sessionToken },
-//       })
-//       .then((res) => {
-//         const responseData = res.data;
-//         console.log(res.data);
-//         if (responseData.sucess) {
-//           // Success is true, so navigate to /transaction
-//           navigate("/transaction");
-//         } else {
-//           // Success is false, show an error or handle it as needed
-//           alert("An error occurred. Please try again later.");
-//         }
-//       })
-//       .catch((err) => console.log(err));
-//   } else {
-//     alert(
-//       "Please search for a valid NIC first before submitting the form or you have to register first"
-//     );
-//   }
-// };

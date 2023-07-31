@@ -29,7 +29,7 @@ function AddCreditForm() {
       .post(apiUrl, { nic: data.nic_no })
       .then((res) => {
         const responseData = res.data;
-        console.log(responseData);
+        // console.log(responseData);
         if (responseData.sucess && responseData.result.length > 0) {
           // NIC number is valid and customer information is found
           const customerData = responseData.result[0];
@@ -108,7 +108,7 @@ function AddCreditForm() {
             discount: data.discount,
           };
 
-          console.log(formdata);
+          // console.log(formdata);
 
           axios
             .post("http://localhost:5000/creditSale/add", formdata, {
@@ -116,7 +116,7 @@ function AddCreditForm() {
             })
             .then((res) => {
               const responseData = res.data;
-              console.log(res.data);
+              // console.log(res.data);
               if (responseData.sucess) {
                 // Success is true, so navigate to /transaction
                 navigate("/transaction");
@@ -280,58 +280,3 @@ function AddCreditForm() {
 }
 
 export default AddCreditForm;
-
-// const sessionToken = localStorage.getItem("sessionToken");
-
-//   const handleSubmit = (event) => {
-//     event.preventDefault();
-
-//     if (searchedNic) {
-//       // Only allow form submission if NIC has been
-//       if (
-//         data.manual_invoice_id.trim() === "" ||
-//         data.bill_amount === "" ||
-//         data.discount === ""
-//       ) {
-//         alert("Please fill all the required fields.");
-//         return;
-//       }
-//       const billAmount = parseFloat(data.bill_amount);
-//       const creditLimit = parseFloat(customerInfo.creditLimit);
-
-//       if (billAmount <= creditLimit) {
-//         const formdata = {
-//           type_id: "cr", // we manually set the type id of the credit sale
-//           manual_invoice_id: data.manual_invoice_id,
-//           customer_id: data.customer_id,
-//           description: data.description,
-//           bill_amount: data.bill_amount,
-//           discount: data.discount,
-//         };
-
-//         console.log(formdata);
-
-//         axios
-//           .post("http://localhost:5000/creditSale/add", formdata, {
-//             headers: { Authorization: "key " + sessionToken },
-//           })
-//           .then((res) => {
-//             const responseData = res.data;
-//             console.log(res.data);
-//             if (responseData.sucess) {
-//               // Success is true, so navigate to /transaction
-//               navigate("/transaction");
-//             } else {
-//               // Success is false, show an error or handle it as needed
-//               alert("An error occurred. Please try again later.");
-//             }
-//           })
-//           .catch((err) => console.log(err));
-//       } else {
-//         // Bill amount exceeds the credit limit, display error message
-//         alert(
-//           "Bill amount exceeds the credit limit. Please adjust the bill amount."
-//         );
-//       }
-//     }
-//   };

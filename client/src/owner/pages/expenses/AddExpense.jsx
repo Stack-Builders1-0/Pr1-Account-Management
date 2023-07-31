@@ -20,13 +20,13 @@ function AddExpense() {
   const handleSubmit = (event) => {
     event.preventDefault();
     // formdata.append("image", data.image);
-    console.log(data);
+    // console.log(data);
     axios
       .post("http://localhost:5000/expenses/add", data, {
         headers: { Authorization: "key " + sessionToken },
       })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         if (res.data.sucess) {
           // we want to diply sucess message
           navigate("/employee");

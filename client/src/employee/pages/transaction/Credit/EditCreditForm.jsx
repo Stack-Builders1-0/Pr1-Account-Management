@@ -47,7 +47,7 @@ function EditCreditForm() {
             setEditMode(true);
             setFilteredRecords(data);
             setShowAlert(false);
-            console.log(data);
+            // console.log(data);
 
             setOldBillAmount(parseFloat(data.bill_amount));
             setOldDiscount(parseFloat(data.discount));
@@ -91,11 +91,11 @@ function EditCreditForm() {
       .post(apiUrl, { nic: data.nic_no })
       .then((res) => {
         const responseData = res.data;
-        console.log(res.data);
+        // console.log(res.data);
         if (responseData.sucess && responseData.result.length > 0) {
           // NIC number is valid and customer information is found
           const customerData = responseData.result[0];
-          console.log(customerData);
+          // console.log(customerData);
           setCustomerInfo({
             customerName: customerData.customer_name,
             businessName: customerData.business_name,
@@ -161,7 +161,7 @@ function EditCreditForm() {
         balance: old_balance,
       };
 
-      console.log(formdata);
+      // console.log(formdata);
 
       axios
         .post(
@@ -171,7 +171,7 @@ function EditCreditForm() {
         )
         .then((res) => {
           const responseData = res.data;
-          console.log(res.data);
+          // console.log(res.data);
           if (responseData.sucess) {
             // Success is true, so navigate to /transaction
             navigate("/edittransaction");

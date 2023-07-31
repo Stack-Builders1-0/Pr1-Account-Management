@@ -62,7 +62,7 @@ function AddCustomer() {
     const handleSubmit = (event) => {
         event.preventDefault();
         const newErrors = findFormErrors();
-        console.log(form)
+        // console.log(form)
         if (Object.keys(newErrors).length > 0) {
             // We got errors!
             setErrors(newErrors)

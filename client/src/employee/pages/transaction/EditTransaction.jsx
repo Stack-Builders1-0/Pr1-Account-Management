@@ -30,7 +30,7 @@ function EditTransaction() {
         { headers: { Authorization: "key " + sessionToken } }
       )
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setEmployeeId(res.data.result[0].employee_id);
       })
       .catch((error) => {
@@ -45,7 +45,7 @@ function EditTransaction() {
         { headers: { Authorization: "key " + sessionToken } }
       )
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setAddedTransactionCount(res.data.result[0].count);
       })
       .catch((error) => {
@@ -59,7 +59,7 @@ function EditTransaction() {
         { headers: { Authorization: "key " + sessionToken } }
       )
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         if (res.data.result[0].count === 1) {
           setHasAccess(true);
         }

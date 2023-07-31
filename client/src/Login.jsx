@@ -22,7 +22,7 @@ function Login() {
     event.preventDefault();
     axios.post(import.meta.env.VITE_API_URL + '/login', values)
       .then(res => {
-        console.log(res.data);
+        // console.log(res.data);
         if (res.data.sucess) {
           // store the session token in the local storage
           localStorage.setItem('sessionToken', res.data.sessionToken);

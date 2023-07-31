@@ -51,7 +51,7 @@ function Dashboard() {
       )
       .then((res) => {
         const { cash, credit } = res.data.result[0];
-        console.log(res.data.result[0]);
+        // console.log(res.data.result[0]);
         setData({
           ...data,
           totalCashSales: cash,
@@ -59,7 +59,7 @@ function Dashboard() {
           totalSales: cash + credit,
         });
       });
-    console.log(data);
+    // console.log(data);
 
     // axios.post(import.meta.env.VITE_API_URL + "/dashboard/totalCreditSales", { date: date }, { headers: { 'Authorization': 'key ' + sessionToken } })
     //   .then((res) => {

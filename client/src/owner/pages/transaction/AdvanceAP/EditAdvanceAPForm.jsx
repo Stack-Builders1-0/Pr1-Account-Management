@@ -55,7 +55,7 @@ function EditAdvanceAPForm() {
             setOldBalance(parseFloat(data.balance));
             setOldAdvanceAmount(parseFloat(data.advance_amount));
 
-            console.log(data);
+            // console.log(data);
           } else {
             setSearchedTransaction(null);
             setEditMode(false);
@@ -95,7 +95,7 @@ function EditAdvanceAPForm() {
       .post(apiUrl, { nic: data.nic_no })
       .then((res) => {
         const responseData = res.data;
-        console.log(responseData);
+        // console.log(responseData);
         if (responseData.sucess && responseData.result.length > 0) {
           // NIC number is valid and customer information is found
           const customerData = responseData.result[0];
@@ -156,7 +156,7 @@ function EditAdvanceAPForm() {
       oldAdvanceAmount: old_advance_amount,
     };
 
-    console.log(formdata);
+    // console.log(formdata);
 
     axios
       .post(
@@ -166,7 +166,7 @@ function EditAdvanceAPForm() {
       )
       .then((res) => {
         const responseData = res.data;
-        console.log(res.data);
+        // console.log(res.data);
         if (responseData.sucess) {
           // Success is true, so navigate to /transaction
           navigate("/edittransaction");

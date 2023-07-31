@@ -40,7 +40,7 @@ function EditAccessForm() {
         employee_id: employeeInfo.employeeId,
         date: date,
       };
-      console.log(formData);
+      // console.log(formData);
 
       axios
         .post(
@@ -50,9 +50,9 @@ function EditAccessForm() {
         )
         .then((res) => {
           const responseData = res.data;
-          console.log(res.data);
+          // console.log(res.data);
           if (responseData.sucess) {
-            console.log(responseData);
+            // console.log(responseData);
             // Success is true, so navigate to /transaction
             navigate("/editaccess");
           } else {
@@ -75,11 +75,11 @@ function EditAccessForm() {
       .post(apiUrl, { nic: data.nic_no })
       .then((res) => {
         const responseData = res.data;
-        console.log(responseData);
+        // console.log(responseData);
         if (responseData.sucess && responseData.result.length > 0) {
           // NIC number is valid and customer information is found
           const employeeData = responseData.result[0];
-          console.log(employeeData);
+          // console.log(employeeData);
           setEmployeeInfo({
             employeeId: employeeData.employee_id,
             employeeName: employeeData.employee_name,

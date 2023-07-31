@@ -18,7 +18,7 @@ function EditAccessTable() {
       )
       .then((res) => {
         setEditAccessData(res.data.result);
-        console.log(editAccessData);
+        // console.log(editAccessData);
       })
       .catch((error) => {
         console.log("Error fetching creditSale data:", error);
