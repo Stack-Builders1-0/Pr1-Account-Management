@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 // Function to generate a session token (JWT)
 function generateSessionToken(userId) {
   const secretKey = "secret_key"; // Replace with your own secret key
-  const expiresIn = "18h"; // Set the expiration time for the token
+  const expiresIn = "12h"; // Set the expiration time for the token
 
   const payload = {
     userId: userId,
