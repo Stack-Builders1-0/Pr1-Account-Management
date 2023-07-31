@@ -15,6 +15,7 @@ function NavAndHeder() {
   const logout = () => {
     setUser(null);
     localStorage.removeItem("sessionToken");
+    localStorage.removeItem("type_id");
     navigate("/login");
     // setIsLoggedin(false);
   };
