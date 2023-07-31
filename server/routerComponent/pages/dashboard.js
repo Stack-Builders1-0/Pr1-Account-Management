@@ -256,7 +256,7 @@ router.post("/totalTransection", (req, res) => {
     // const employee_id = body.employee_id
 
     // date format is yyyy-mm-dd (2023-07-14)
-        const selectQuery ="SELECT SUM(CASE WHEN type_id IN ('cr', 'as') THEN balance ELSE 0 END) AS credit, SUM(CASE WHEN type_id IN ('ca', 'as') THEN amount - balance ELSE 0 END) AS cash FROM total_transection WHERE type_id IN ('ca', 'cr', 'as') AND (type_id <> 'as' OR amount <> return_payment) and employee_id = ? and locate(?, date);"
+        const selectQuery ="SELECT SUM(CASE WHEN type_id IN ('cr', 'ap', 'bp') THEN balance ELSE 0 END) AS credit, SUM(CASE WHEN type_id IN ('ca', 'ap', 'bp') THEN amount - balance ELSE 0 END) AS cash FROM total_transection WHERE type_id IN ('ca', 'cr', 'ap', 'bp') AND (type_id <> 'as' OR amount <> return_payment) and employee_id = ? and locate(?, date);"
 
         // response has 3 field
         // error occur then error = true , otherwise error = false
@@ -299,7 +299,7 @@ router.post("/totalTransectionForOwner", (req, res) => {
     // const employee_id = body.employee_id
 
     // date format is yyyy-mm-dd (2023-07-14)
-        const selectQuery ="SELECT SUM(CASE WHEN type_id IN ('cr', 'as') THEN balance ELSE 0 END) AS credit, SUM(CASE WHEN type_id IN ('ca', 'as') THEN amount - balance ELSE 0 END) AS cash FROM total_transection WHERE type_id IN ('ca', 'cr', 'as') AND (type_id <> 'as' OR amount <> return_payment) and locate(?, date);"
+        const selectQuery ="SELECT SUM(CASE WHEN type_id IN ('cr', 'ap', 'bp') THEN balance ELSE 0 END) AS credit, SUM(CASE WHEN type_id IN ('ca', 'ap', 'bp') THEN amount - balance ELSE 0 END) AS cash FROM total_transection WHERE type_id IN ('ca', 'cr', 'ap', 'bp') AND (type_id <> 'bp' OR amount <> return_payment) and locate(?, date);"
 
         // response has 3 field
         // error occur then error = true , otherwise error = false

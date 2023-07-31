@@ -94,7 +94,7 @@ function AddAdvanceBPForm() {
 
     if (searchedNic) {
       const formdata = {
-        type_id: "as", // we manually set the type id of tha cash sale
+        type_id: "bp", // we manually set the type id of tha cash sale  =====================================================================================================================
         manual_invoice_id: data.manual_invoice_id,
         customer_id: customerInfo.customer_id,
         description: data.description,
