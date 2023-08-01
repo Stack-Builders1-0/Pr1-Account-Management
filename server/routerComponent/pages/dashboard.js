@@ -358,5 +358,44 @@ router.post("/histoyCreditTransection", (req, res) => {
 
 
 
+router.post('/editedSales', (req, res) => {
+  const date  = req.body.date;
+
+  try{
+    const sessionToken = req.headers.authorization.replace('key ','');
+    const employee_id = decodedUserId(sessionToken);
+// const employee_id = req.body.employee_id;
+
+    const getQuery = "select * from combine_4_sales where (updated_by= "+mysql.escape(employee_id)+" and locate("+mysql.escape(date)+" , updated_at))";
+
+   
+    connection.query(getQuery, (err, result) => {
+        if (err) {
+            console.log(err)
+            res.send({
+                sucess : false,
+                isError : true,
+                isExist : false
+            })
+        }
+        else{
+            res.send({
+              sucess : true,
+              isError : false,
+              isExist : true
+          }) 
+        }
+    });
+  }catch(err){
+    res.send({
+      isTokenValied : false
+    });
+  }
+
+});
+
+
+
+
 
 module.exports = router;
