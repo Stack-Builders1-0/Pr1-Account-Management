@@ -1,7 +1,7 @@
 const mysql = require("mysql");
 const express = require("express");
-const decodeUserId = require('../Authentication/decodedToken');
-const CheckEdited = require('./CheckingEditAmount/checkEdited');
+const decodeUserId = require("../Authentication/decodedToken");
+const CheckEdited = require("./CheckingEditAmount/checkEdited");
 
 const router = express.Router();
 
@@ -26,9 +26,8 @@ router.post("/add", (req, res) => {
   const amount = body.bill_amount - body.discount;
   const balance = amount - body.advance_amount;
 
-  const sessionToken = req.headers.authorization.replace('key ','');
+  const sessionToken = req.headers.authorization.replace("key ", "");
   const employee_id = decodeUserId(sessionToken);
-
 
   const insertQuery =
     "insert into accountmanagement.advance_sales_bp (type_id,manual_invoice_id, customer_id, description, bill_amount,advance_amount, discount, employee_id, amount,balance, balance_updated_by ) values (?,?,?,?,?,?,?,?,?,?,?);";
@@ -59,14 +58,14 @@ router.post("/add", (req, res) => {
           sucess: false,
           isError: true,
           error: err,
-          result:result
+          result: result,
         });
       } else {
         res.send({
           sucess: true,
           isError: false,
-          error :null,
-          result : result
+          error: null,
+          result: result,
         });
       }
     }
@@ -94,14 +93,12 @@ router.get("/showAll", (req, res) => {
   });
 });
 
-function updateReturnPayment(oldReturnPayment, returnPayment){
-
-}
+function updateReturnPayment(oldReturnPayment, returnPayment) {}
 router.post("/edit", (req, res) => {
   const body = req.body.data;
   // console.log(body);
-  try{
-    const sessionToken = req.headers.authorization.replace('key ','');
+  try {
+    const sessionToken = req.headers.authorization.replace("key ", "");
     const employee_id = decodeUserId(sessionToken);
     // employee_id = body.employee_id
 
@@ -114,8 +111,13 @@ router.post("/edit", (req, res) => {
       body.advanceAmount,
       body.oldAdvanceAmount
     );
-    
-    const totalSettleAmount =  body.oldBillAmount-body.oldDisCount-body.oldAdvanceAmount-body.balance-body.oldReturnPayment
+
+    const totalSettleAmount =
+      body.oldBillAmount -
+      body.oldDisCount -
+      body.oldAdvanceAmount -
+      body.balance -
+      body.oldReturnPayment;
     const bill_amount = checkEdited.updateBillAmount();
     const discount = checkEdited.updateDiscount();
     const advance_amount = checkEdited.updateAdvanceAmount();
@@ -126,7 +128,6 @@ router.post("/edit", (req, res) => {
 
     const balance = checkEdited.updateBalance() + differenceReturnPayment;
     const amount = bill_amount - discount;
-    
 
     const updateQueryAdvanceAP =
       "UPDATE accountmanagement.advance_sales_bp SET type_id = " +
@@ -150,15 +151,14 @@ router.post("/edit", (req, res) => {
       ", return_payment =" +
       mysql.escape(returnPayment) + // =================return_payment============================================
       ", updated_by = " +
-      mysql.escape(body.employee_id) +
+      mysql.escape(employee_id) +
       ", updated_at = " +
-      mysql.escape(body.updated_at) +
+      mysql.escape(body.update_at) +
       "  WHERE (invoice_id = " +
       mysql.escape(body.invoice_id) +
       ");";
-      
 
-      const insertQueryCreditPartial =
+    const insertQueryCreditPartial =
       "INSERT INTO `accountmanagement`.`advance_bp_partial_settle` (`type_id`, `invoice_id`, `description`, `customer_id`, `settle_amount`, `balance`, `employee_id`,`return_payment`, `total_settle_amount`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
     //  response has 2 field
@@ -183,7 +183,7 @@ router.post("/edit", (req, res) => {
             balance,
             employee_id,
             returnPayment,
-            totalSettleAmount
+            totalSettleAmount,
           ],
           (err, result) => {
             if (err) {
@@ -202,10 +202,10 @@ router.post("/edit", (req, res) => {
         );
       }
     });
-  } catch (err){
+  } catch (err) {
     console.log(err);
     res.send({
-      isTokenValied : false
+      isTokenValied: false,
     });
   }
 });
@@ -213,9 +213,12 @@ router.post("/settle", (req, res) => {
   body = req.body.data;
   const balance = body.balance - body.settle_amount;
 
-  const sessionToken = req.headers.authorization.replace('key ','');
+  const sessionToken = req.headers.authorization.replace("key ", "");
   employee_id = decodeUserId(sessionToken);
-  const total_settle_amount = parseFloat(body.amount)-parseFloat(body.balance) + parseFloat(body.settle_amount)
+  const total_settle_amount =
+    parseFloat(body.amount) -
+    parseFloat(body.balance) +
+    parseFloat(body.settle_amount);
 
   const settleQuery =
     "insert into accountmanagement.advance_bp_partial_settle (type_id,invoice_id, customer_id, description, settle_amount, balance, employee_id, total_settle_amount ) values (?,?,?,?,?,?,?,?);";
@@ -234,7 +237,7 @@ router.post("/settle", (req, res) => {
       body.settle_amount,
       balance,
       employee_id,
-      total_settle_amount
+      total_settle_amount,
     ],
     (err, result) => {
       if (err) {
@@ -242,7 +245,7 @@ router.post("/settle", (req, res) => {
         res.send({
           sucess: false,
           iError: true,
-          error:err,
+          error: err,
           result: null,
         });
       } else {
@@ -250,7 +253,7 @@ router.post("/settle", (req, res) => {
           sucess: true,
           isError: false,
           error: null,
-          result:result
+          result: result,
         });
       }
     }
@@ -307,49 +310,49 @@ router.post("/histoyCreditTransection", (req, res) => {
   });
 });
 
-
 router.post("/filterManualInvoice", (req, res) => {
-
   const selectQuery =
-    "SELECT * from amount_details_on_date_bp where manual_invoice_id = "+ mysql.escape(req.body.manual_invoice_id);
+    "SELECT * from amount_details_on_date_bp where manual_invoice_id = " +
+    mysql.escape(req.body.manual_invoice_id);
 
   connection.query(selectQuery, (err, result) => {
     if (err) {
       res.send({
         sucess: false,
         isError: true,
-        error : err,
-        result: null
+        error: err,
+        result: null,
       });
     } else {
-      if (result.length == 0){
+      if (result.length == 0) {
         res.send({
           sucess: true,
           isError: false,
-          error : null,
-          result: null
+          error: null,
+          result: null,
         });
-      }else{
+      } else {
         res.send({
           sucess: true,
           isError: false,
-          error : null,
-          result: result
+          error: null,
+          result: result,
         });
       }
     }
   });
 });
 
-
-
 router.post("/return", (req, res) => {
   body = req.body.data;
   const balance = parseFloat(body.balance) + parseFloat(body.return_payment);
 
-  const sessionToken = req.headers.authorization.replace('key ','');
+  const sessionToken = req.headers.authorization.replace("key ", "");
   employee_id = decodeUserId(sessionToken);
-  const total_settle_amount = parseFloat(body.amount)-parseFloat(body.balance) - parseFloat(body.return_payment)
+  const total_settle_amount =
+    parseFloat(body.amount) -
+    parseFloat(body.balance) -
+    parseFloat(body.return_payment);
 
   const returnQuery =
     "insert into accountmanagement.advance_bp_partial_settle (type_id,invoice_id, customer_id, description, settle_amount, balance, employee_id, total_settle_amount,return_payment ) values (?,?,?,?,?,?,?,?,?);";
@@ -369,7 +372,7 @@ router.post("/return", (req, res) => {
       balance,
       employee_id,
       total_settle_amount,
-      body.return_payment
+      body.return_payment,
     ],
     (err, result) => {
       if (err) {
@@ -377,7 +380,7 @@ router.post("/return", (req, res) => {
         res.send({
           sucess: false,
           iError: true,
-          error:err,
+          error: err,
           result: null,
         });
       } else {
@@ -385,29 +388,25 @@ router.post("/return", (req, res) => {
           sucess: true,
           isError: false,
           error: null,
-          result:result
+          result: result,
         });
       }
     }
   );
 });
 
-
-
-
 //  we want to show the all advance BP transection on today enter by specific employee
 // i want to date yyyy-mm-dd format
 router.post("/showTodayForEmployee", (req, res) => {
   const date = req.body.date;
 
-  const sessionToken = req.headers.authorization.replace('key ','');
+  const sessionToken = req.headers.authorization.replace("key ", "");
   const employee_id = decodeUserId(sessionToken);
 
   const selectQuery =
     "SELECT invoice_id, accountmanagement.advance_sales_bp.type_id, type, manual_invoice_id,customer_id, description, bill_amount,advance_amount, discount, date, amount, balance  FROM accountmanagement.advance_sales_bp join accountmanagement.income_type using (type_id) where employee_id = ? and locate(?, date) order by(date) desc;";
 
-
-  connection.query(selectQuery,[employee_id, date], (err, result) => {
+  connection.query(selectQuery, [employee_id, date], (err, result) => {
     if (err) {
       res.send({
         sucess: false,
@@ -425,37 +424,31 @@ router.post("/showTodayForEmployee", (req, res) => {
   });
 });
 
-
-
 //  we want to show the all advance BP transection on today enter by all employee
 // i want to date yyyy-mm-dd format
 router.post("/showTodayForOwner", (req, res) => {
   const date = req.body.date;
 
-   const selectQuery =
+  const selectQuery =
     "SELECT invoice_id, accountmanagement.advance_sales_bp.type_id, type, manual_invoice_id,customer_id, description, bill_amount,advance_amount, discount, date, amount, balance  FROM accountmanagement.advance_sales_bp join accountmanagement.income_type using (type_id) where locate(?, date) order by(date) desc;";
 
-
-  connection.query(selectQuery,[date], (err, result) => {
+  connection.query(selectQuery, [date], (err, result) => {
     if (err) {
       res.send({
         sucess: false,
         isError: true,
         error: err,
-        result: null
+        result: null,
       });
     } else {
       res.send({
         sucess: true,
         isError: false,
-        error : null,
-        result: result
+        error: null,
+        result: result,
       });
     }
   });
 });
-
-
-
 
 module.exports = router;

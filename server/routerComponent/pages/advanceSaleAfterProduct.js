@@ -137,9 +137,9 @@ router.post("/edit", (req, res) => {
       ", balance =" +
       mysql.escape(balance) +
       ", updated_by = " +
-      mysql.escape(body.employee_id) +
+      mysql.escape(employee_id) +
       ", updated_at = " +
-      mysql.escape(body.updated_at) +
+      mysql.escape(body.update_at) +
       "  WHERE (invoice_id = " +
       mysql.escape(body.invoice_id) +
       ");";
