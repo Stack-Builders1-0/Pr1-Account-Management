@@ -270,3 +270,112 @@ create VIEW `total_transection` AS
     FROM
         (`advance_ap_partial_settle`
         JOIN `advance_sales_ap` ON ((`advance_ap_partial_settle`.`invoice_id` = `advance_sales_ap`.`invoice_id`)));
+
+
+
+
+
+
+
+create VIEW `combine_4_sales` AS
+    SELECT 
+        `amount_details_on_date_bp`.`invoice_id` AS `invoice_id`,
+        `amount_details_on_date_bp`.`type_id` AS `type_id`,
+        `amount_details_on_date_bp`.`manual_invoice_id` AS `manual_invoice_id`,
+        `amount_details_on_date_bp`.`description` AS `description`,
+        `amount_details_on_date_bp`.`bill_amount` AS `bill_amount`,
+        `amount_details_on_date_bp`.`advance_amount` AS `advance_amount`,
+        `amount_details_on_date_bp`.`discount` AS `discount`,
+        `amount_details_on_date_bp`.`amount` AS `amount`,
+        `amount_details_on_date_bp`.`balance` AS `balance`,
+        `amount_details_on_date_bp`.`employee_id` AS `employee_id`,
+        `amount_details_on_date_bp`.`date` AS `date`,
+        `amount_details_on_date_bp`.`updated_by` AS `updated_by`,
+        `amount_details_on_date_bp`.`updated_at` AS `updated_at`,
+        `amount_details_on_date_bp`.`balance_updated_by` AS `balance_updated_by`,
+        `amount_details_on_date_bp`.`balance_updated_at` AS `balance_updated_at`,
+        `amount_details_on_date_bp`.`customer_name` AS `customer_name`,
+        `amount_details_on_date_bp`.`business_name` AS `business_name`,
+        `amount_details_on_date_bp`.`mobile` AS `mobile`,
+        `amount_details_on_date_bp`.`adress` AS `adress`,
+        `amount_details_on_date_bp`.`credit_limit` AS `credit_limit`,
+        `amount_details_on_date_bp`.`type` AS `type`,
+        `amount_details_on_date_bp`.`return_payment` AS `return_payment`
+    FROM
+        `amount_details_on_date_bp` 
+    UNION ALL SELECT 
+        `amount_details_on_date_ap`.`invoice_id` AS `invoice_id`,
+        `amount_details_on_date_ap`.`type_id` AS `type_id`,
+        `amount_details_on_date_ap`.`manual_invoice_id` AS `manual_invoice_id`,
+        `amount_details_on_date_ap`.`description` AS `description`,
+        `amount_details_on_date_ap`.`bill_amount` AS `bill_amount`,
+        `amount_details_on_date_ap`.`advance_amount` AS `advance_amount`,
+        `amount_details_on_date_ap`.`discount` AS `discount`,
+        `amount_details_on_date_ap`.`amount` AS `amount`,
+        `amount_details_on_date_ap`.`balance` AS `balance`,
+        `amount_details_on_date_ap`.`employee_id` AS `employee_id`,
+        `amount_details_on_date_ap`.`date` AS `date`,
+        `amount_details_on_date_ap`.`updated_by` AS `updated_by`,
+        `amount_details_on_date_ap`.`updated_at` AS `updated_at`,
+        `amount_details_on_date_ap`.`balance_updated_by` AS `balance_updated_by`,
+        `amount_details_on_date_ap`.`balance_updated_at` AS `balance_updated_at`,
+        `amount_details_on_date_ap`.`customer_name` AS `customer_name`,
+        `amount_details_on_date_ap`.`business_name` AS `business_name`,
+        `amount_details_on_date_ap`.`mobile` AS `mobile`,
+        `amount_details_on_date_ap`.`adress` AS `adress`,
+        `amount_details_on_date_ap`.`credit_limit` AS `credit_limit`,
+        `amount_details_on_date_ap`.`type` AS `type`,
+        NULL AS `return_payment`
+    FROM
+        `amount_details_on_date_ap` 
+    UNION ALL SELECT 
+        `amount_details_on_date_credit`.`invoice_id` AS `invoice_id`,
+        `amount_details_on_date_credit`.`type_id` AS `type_id`,
+        `amount_details_on_date_credit`.`manual_invoice_id` AS `manual_invoice_id`,
+        `amount_details_on_date_credit`.`description` AS `description`,
+        `amount_details_on_date_credit`.`bill_amount` AS `bill_amount`,
+        NULL AS `advance_amount`,
+        `amount_details_on_date_credit`.`discount` AS `discount`,
+        `amount_details_on_date_credit`.`amount` AS `amount`,
+        `amount_details_on_date_credit`.`balance` AS `balance`,
+        `amount_details_on_date_credit`.`employee_id` AS `employee_id`,
+        `amount_details_on_date_credit`.`date` AS `date`,
+        `amount_details_on_date_credit`.`updated_by` AS `updated_by`,
+        `amount_details_on_date_credit`.`updated_at` AS `updated_at`,
+        `amount_details_on_date_credit`.`balance_updated_by` AS `balance_updated_by`,
+        `amount_details_on_date_credit`.`balance_updated_at` AS `balance_updated_at`,
+        `amount_details_on_date_credit`.`customer_name` AS `customer_name`,
+        `amount_details_on_date_credit`.`business_name` AS `business_name`,
+        `amount_details_on_date_credit`.`mobile` AS `mobile`,
+        `amount_details_on_date_credit`.`adress` AS `adress`,
+        `amount_details_on_date_credit`.`credit_limit` AS `credit_limit`,
+        `amount_details_on_date_credit`.`type` AS `type`,
+        NULL AS `return_payment`
+    FROM
+        `amount_details_on_date_credit`
+	UNION ALL SELECT 
+        `amount_details_on_date_cash`.`invoice_id` AS `invoice_id`,
+        `amount_details_on_date_cash`.`type_id` AS `type_id`,
+        `amount_details_on_date_cash`.`manual_invoice_id` AS `manual_invoice_id`,
+        `amount_details_on_date_cash`.`description` AS `description`,
+        `amount_details_on_date_cash`.`bill_amount` AS `bill_amount`,
+        NULL AS `advance_amount`,
+        `amount_details_on_date_cash`.`discount` AS `discount`,
+        `amount_details_on_date_cash`.`amount` AS `amount`,
+        NULL AS `balance`,
+        `amount_details_on_date_cash`.`employee_id` AS `employee_id`,
+        `amount_details_on_date_cash`.`date` AS `date`,
+        `amount_details_on_date_cash`.`updated_by` AS `updated_by`,
+        `amount_details_on_date_cash`.`updated_at` AS `updated_at`,
+        `amount_details_on_date_cash`.`balance_updated_by` AS `balance_updated_by`,
+        `amount_details_on_date_cash`.`balance_updated_at` AS `balance_updated_at`,
+        `amount_details_on_date_cash`.`customer_name` AS `customer_name`,
+        `amount_details_on_date_cash`.`business_name` AS `business_name`,
+        `amount_details_on_date_cash`.`mobile` AS `mobile`,
+        `amount_details_on_date_cash`.`adress` AS `adress`,
+        `amount_details_on_date_cash`.`credit_limit` AS `credit_limit`,
+        `amount_details_on_date_cash`.`type` AS `type`,
+        NULL AS `return_payment`
+    FROM
+        `amount_details_on_date_cash`
+
