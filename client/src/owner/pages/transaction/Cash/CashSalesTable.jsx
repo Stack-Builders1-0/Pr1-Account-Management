@@ -5,15 +5,14 @@ import CommonTable from "../Table";
 function CashSale() {
   const [cashSaleData, setCashSaleData] = useState([]);
   const currentDate = new Date();
-  const date =
-    currentDate.getFullYear() +
-    "-0" +
-    (currentDate.getMonth() + 1) +
-    "-" +
-    currentDate.getDate();
+  const year = currentDate.getFullYear();
+  const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
+  const day = currentDate.getDate().toString().padStart(2, "0");
+  const date = `${year}-${month}-${day}`;
 
   useEffect(() => {
     const sessionToken = localStorage.getItem("sessionToken");
+    console.log(date);
 
     axios
       .post(
@@ -25,6 +24,7 @@ function CashSale() {
       )
       .then((res) => {
         setCashSaleData(res.data.result);
+        console.log(res.data.result);
       })
       .catch((error) => {
         console.log("Error fetching cashSale data:", error);
