@@ -225,6 +225,7 @@ router.post("/edit", (req, res) => {
 
 router.post("/settle", (req, res) => {
   body = req.body.data;
+  console.log(body);
   const balance = body.balance - body.settle_amount;
 
   try {

@@ -5,6 +5,7 @@ import { Link, Outlet, NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { FaSignOutAlt } from "react-icons/fa";
 import { UserContext } from "../../UserContext";
+import jwtDecode from "jwt-decode";
 
 function NavAndHeder() {
   const navigate = useNavigate();
@@ -15,14 +16,47 @@ function NavAndHeder() {
   const logout = () => {
     setUser(null);
     localStorage.removeItem("sessionToken");
+    localStorage.removeItem("type_id");
     navigate("/login");
     // setIsLoggedin(false);
   };
 
-  // Token is not present, consider it expired
+  // // Token is not present, consider it expired
+  // function isTokenExpired() {
+  //   const sessionToken = localStorage.getItem("sessionToken");
+  //   console.log(sessionToken)
+  //   if (!sessionToken) return true;
+  //   else return false;
+  // }
+
+  // Function to check if the session token is expired
   function isTokenExpired() {
     const sessionToken = localStorage.getItem("sessionToken");
-    if (!sessionToken) return true;
+
+    if (sessionToken) {
+      try {
+        // Decode the token to get its payload
+        const decodedToken = jwtDecode(sessionToken);
+
+        // Check if the decodedToken has an expiration time (exp property)
+        if (decodedToken.exp) {
+          // Get the expiration timestamp in seconds
+          const expirationTime = decodedToken.exp;
+
+          // Get the current timestamp in seconds
+          const currentTime = Math.floor(Date.now() / 1000);
+        
+          // Compare the current time with the expiration time to check if it's expired
+          return currentTime > expirationTime;
+        }
+      } catch (error) {
+        // If there's an error decoding the token or it doesn't have an expiration time, consider it expired
+        return true;
+      }
+    }
+
+    // If the token is not present in local storage or is invalid, consider it expired
+    return true;
   }
 
   // Check token expiration when the app loads at regular intervals

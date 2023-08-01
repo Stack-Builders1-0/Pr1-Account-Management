@@ -92,7 +92,7 @@ function SettleForm() {
         .post(
           "http://localhost:5000/creditSale/settle",
           { data: settleData },
-          { headers: { Authorization: "key" + sessionToken } }
+          { headers: { Authorization: "key " + sessionToken } }
         )
         .then((response) => {
           setSettleAmount("");
