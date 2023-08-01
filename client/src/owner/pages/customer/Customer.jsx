@@ -13,6 +13,7 @@ function Customer() {
       })
       .then((res) => {
         setCustomerData(res.data.result);
+        console.log(res.data.result);
       })
       .catch((error) => {
         console.log("Error fetching creditSale data:", error);
@@ -34,7 +35,8 @@ function Customer() {
               <th>Business_Name</th>
               <th>Email</th>
               <th>Address</th>
-              <th>Telephone_No</th>
+              <th>Mobile_No</th>
+              <th>Landphone_No</th>
               <th>WhatsApp_No</th>
               <th>Office_No</th>
               <th>NIC</th>
@@ -49,6 +51,7 @@ function Customer() {
                 <td>{data.business_name}</td>
                 <td>{data.email_id}</td>
                 <td>{data.adress}</td>
+                <td>{data.mobile}</td>
                 <td>{data.lan_line}</td>
                 <td>{data.w_app_no}</td>
                 <td>{data.office_num}</td>

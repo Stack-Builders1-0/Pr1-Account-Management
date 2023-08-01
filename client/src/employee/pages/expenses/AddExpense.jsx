@@ -29,7 +29,7 @@ function AddExpense() {
         // console.log(res.data);
         if (res.data.sucess) {
           // we want to diply sucess message
-          navigate("/employee");
+          navigate("/expenses");
         } else if (res.data.isError) {
           alert("Please check your details!!!");
         }

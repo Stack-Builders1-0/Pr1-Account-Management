@@ -9,6 +9,7 @@ import CommonNavbar from "./CommonNavBar";
 function SettleForm() {
   const [searchInvoiceNumber, setSearchInvoiceNumber] = useState("");
   const [customerID, setCustomerID] = useState("");
+  const [customerName, setCustomerName] = useState("");
   const [balance, setBalance] = useState("");
   const [filteredRecords, setFilteredRecords] = useState([]);
   const [selectedInvoiceNumber, setSelectedInvoiceNumber] = useState("");
@@ -31,6 +32,7 @@ function SettleForm() {
       .then((res) => {
         if (res.data.sucess) {
           const data = res.data.result[0];
+          console.log(data);
           if (data) {
             setFilteredRecords(data);
             setIsSearchPerformed(true);
@@ -39,6 +41,7 @@ function SettleForm() {
             setCustomerID(data.customer_id);
             setBalance(data.balance);
             setSelectedBillNumber(data.invoice_id);
+            setCustomerName(data.customer_name);
             // console.log(data);
           } else {
             setShowAlert(true);
@@ -84,9 +87,10 @@ function SettleForm() {
         settle_amount: settleAmount,
         customer_id: customerID,
         description: description,
+        balance: balance,
       };
 
-      // console.log(settleData);
+      //console.log(settleData);
 
       axios
         .post(
@@ -101,6 +105,7 @@ function SettleForm() {
           setDescription("");
           const responseData = response.data;
           // console.log(response.data);
+          console.log(response.data);
           if (responseData.sucess) {
             alert("Settlement is successfully submitted.");
           } else {
@@ -167,7 +172,7 @@ function SettleForm() {
           {isSearchPerformed && filteredRecords && (
             <>
               <h4 className="text-center">Credit Sales Information</h4>
-              <p>Customer ID: {filteredRecords.customer_id}</p>
+              <p>Customer name: {customerName}</p>
               <p>Description: {filteredRecords.description}</p>
               <p>Bill Amount: {filteredRecords.bill_amount}</p>
               <p>Discount: {filteredRecords.discount}</p>

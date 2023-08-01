@@ -23,7 +23,7 @@ connection.connect((err) => {
 router.post("/add", (req, res) => {
   const body = req.body;
 
-  const sessionToken = req.headers.authorization.replace('key ','');
+  const sessionToken = req.headers.authorization.replace("key ", "");
 
   const employee_id = decodeUserId(sessionToken);
 
@@ -51,21 +51,21 @@ router.post("/add", (req, res) => {
     ],
     (err, result) => {
       if (err) {
-        console.log(err)
+        console.log(err);
         res.send({
           sucess: false,
           isError: true,
           isExist: false,
-          error : err,
-          result : result
+          error: err,
+          result: result,
         });
       } else {
         res.send({
           sucess: true,
           isError: false,
           isExist: false,
-          error : null,
-          result : result
+          error: null,
+          result: result,
         });
       }
     }
@@ -73,14 +73,14 @@ router.post("/add", (req, res) => {
 });
 
 router.post("/showByEmployee", (req, res) => {
-  const sessionToken = req.headers.authorization.replace('key ','');
+  const sessionToken = req.headers.authorization.replace("key ", "");
 
   const employee_id = decodeUserId(sessionToken);
 
   const selectQuery =
-    "SELECT customer_id, customer_name, business_name, adress, lan_line, w_app_no, office_num, email_id, nic_no,credit_limit FROM accountmanagement.customers where employee_id=?;";
+    "SELECT customer_id, customer_name, business_name, adress, mobile, lan_line, w_app_no, office_num, email_id, nic_no,credit_limit FROM accountmanagement.customers where employee_id=?;";
 
-  connection.query(selectQuery, [employee_id],(err, result) => {
+  connection.query(selectQuery, [employee_id], (err, result) => {
     if (err) {
       res.send({
         sucess: false,
@@ -129,7 +129,7 @@ router.post("/filterCustomerNIC", (req, res) => {
       res.send({
         sucess: false,
         isError: true,
-        error:err,
+        error: err,
         result: null,
       });
     } else {
@@ -144,7 +144,6 @@ router.post("/filterCustomerNIC", (req, res) => {
 });
 
 router.post("/edit", (req, res) => {
-  
   body = req.body;
 
   const updateQuery =
