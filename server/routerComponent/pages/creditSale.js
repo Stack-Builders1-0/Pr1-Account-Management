@@ -118,113 +118,109 @@ router.post("/filterManualInvoice", (req, res) => {
   });
 });
 
-
 router.post("/edit", (req, res) => {
   const body = req.body.data;
   console.log(body);
   // const checkEdited = new CheckEdited(body.billAmount, body.oldBillAmount, body.discount, body.oldDisCount, body.balance, body.advanceAmount, body.OldAdvanceAmount )
-  
-  try{
 
-    const sessionToken = req.headers.authorization.replace('key ','');
-  const employee_id = decodedUserId(sessionToken);
-  // const employee_id = body.employee_id;
+  try {
+    const sessionToken = req.headers.authorization.replace("key ", "");
+    const employee_id = decodedUserId(sessionToken);
+    // const employee_id = body.employee_id;
 
-  const checkEdited = new CheckEdited(
-    body.billAmount,
-    body.oldBillAmount,
-    body.discount,
-    body.oldDisCount,
-    body.balance,
-    0,
-    0
-  );
+    const checkEdited = new CheckEdited(
+      body.billAmount,
+      body.oldBillAmount,
+      body.discount,
+      body.oldDisCount,
+      body.balance,
+      0,
+      0
+    );
 
-  const bill_amount = checkEdited.updateBillAmount();
-  const discount = checkEdited.updateDiscount();
-  const balance = checkEdited.updateBalance();
-  const amount = bill_amount - discount;
+    const bill_amount = checkEdited.updateBillAmount();
+    const discount = checkEdited.updateDiscount();
+    const balance = checkEdited.updateBalance();
+    const amount = bill_amount - discount;
 
-  
+    const updateQueryCredit =
+      "UPDATE accountmanagement.credit_sales SET type_id = " +
+      mysql.escape(body.type_id) +
+      ", manual_invoice_id = " +
+      mysql.escape(body.manual_invoice_id) +
+      ", customer_id = " +
+      mysql.escape(body.customer_id) +
+      ", description = " +
+      mysql.escape(body.description) +
+      ", bill_amount = " +
+      mysql.escape(bill_amount) +
+      ", discount =" +
+      mysql.escape(discount) +
+      ", amount =" +
+      mysql.escape(amount) +
+      ", balance =" +
+      mysql.escape(balance) +
+      ", updated_by = " +
+      mysql.escape(employee_id) +
+      ", updated_at = " +
+      mysql.escape(body.update_at) +
+      "  WHERE (invoice_id = " +
+      mysql.escape(body.invoice_id) +
+      ");";
 
-  const updateQueryCredit =
-    "UPDATE accountmanagement.credit_sales SET type_id = " +
-    mysql.escape(body.type_id) +
-    ", manual_invoice_id = " +
-    mysql.escape(body.manual_invoice_id) +
-    ", customer_id = " +
-    mysql.escape(body.customer_id) +
-    ", description = " +
-    mysql.escape(body.description) +
-    ", bill_amount = " +
-    mysql.escape(bill_amount) +
-    ", discount =" +
-    mysql.escape(discount) +
-    ", amount =" +
-    mysql.escape(amount) +
-    ", balance =" +
-    mysql.escape(balance) +
-    ", updated_by = " +
-    mysql.escape(employee_id) +
-    ", updated_at = " +
-    mysql.escape(body.update_at) +
-    "  WHERE (invoice_id = " +
-    mysql.escape(body.invoice_id) +
-    ");";
+    const insertQueryCreditPartial =
+      "INSERT INTO `accountmanagement`.`credit_partial_settle` (`type_id`, `invoice_id`, `description`, `customer_id`, `settle_amount`, `balance`, `employee_id`) VALUES (?, ?, ?, ?, ?, ?, ?);";
 
-  const insertQueryCreditPartial =
-    "INSERT INTO `accountmanagement`.`credit_partial_settle` (`type_id`, `invoice_id`, `description`, `customer_id`, `settle_amount`, `balance`, `employee_id`) VALUES (?, ?, ?, ?, ?, ?, ?);";
-
-  //  response has 2 field
-  // error occur then error = true , otherwise error = false
-  // employee regeister is sucess then sucess=true
-  connection.query(updateQueryCredit, (err, result) => {
-    if (err) {
-      console.log(err);
-      res.send({
-        sucess: false,
-        error: true,
-      });
-    } else {
-      connection.query(
-        insertQueryCreditPartial,
-        [
-          body.type_id,
-          body.invoice_id,
-          "edited",
-          body.customer_id,
-          0,
-          balance,
-          employee_id,
-        ],
-        (err, result) => {
-          if (err) {
-            console.log(err);
-            res.send({
-              sucess: false,
-              error: true,
-            });
-          } else {
-            res.send({
-              sucess: true,
-              error: false,
-            });
+    //  response has 2 field
+    // error occur then error = true , otherwise error = false
+    // employee regeister is sucess then sucess=true
+    connection.query(updateQueryCredit, (err, result) => {
+      if (err) {
+        console.log(err);
+        res.send({
+          sucess: false,
+          error: true,
+        });
+      } else {
+        connection.query(
+          insertQueryCreditPartial,
+          [
+            body.type_id,
+            body.invoice_id,
+            "edited",
+            body.customer_id,
+            0,
+            balance,
+            employee_id,
+          ],
+          (err, result) => {
+            if (err) {
+              console.log(err);
+              res.send({
+                sucess: false,
+                error: true,
+              });
+            } else {
+              res.send({
+                sucess: true,
+                error: false,
+              });
+            }
           }
-        }
-      );
-    }
-  });
-  } catch (err){
+        );
+      }
+    });
+  } catch (err) {
     console.log(err);
     res.send({
-      isTokenValied : false
-    })
+      isTokenValied: false,
+    });
   }
-  
 });
 
 router.post("/settle", (req, res) => {
   body = req.body.data;
+  console.log(body);
   const balance = body.balance - body.settle_amount;
 
   try {
@@ -324,19 +320,17 @@ router.post("/histoyCreditTransection", (req, res) => {
   });
 });
 
-
-
 //  we want to show the all credit transection on today enter by specific employee
 // i want to date yyyy-mm-dd format
 router.post("/showTodayForEmployee", (req, res) => {
   const date = req.body.date;
 
-  const sessionToken = req.headers.authorization.replace('key ','');
+  const sessionToken = req.headers.authorization.replace("key ", "");
   const employee_id = decodedUserId(sessionToken);
   const selectQuery =
     "SELECT invoice_id, accountmanagement.credit_sales.type_id, type, manual_invoice_id,customer_id, description, bill_amount, discount, amount, date  FROM accountmanagement.credit_sales join accountmanagement.income_type using (type_id) where employee_id = ? and locate(?, date) order by(date) desc;";
 
-  connection.query(selectQuery,[employee_id, date], (err, result) => {
+  connection.query(selectQuery, [employee_id, date], (err, result) => {
     if (err) {
       res.send({
         sucess: false,
@@ -354,8 +348,6 @@ router.post("/showTodayForEmployee", (req, res) => {
   });
 });
 
-
-
 //  we want to show the all credit transection on today enter by all employee
 // i want to date yyyy-mm-dd format
 router.post("/showTodayForOwner", (req, res) => {
@@ -363,8 +355,7 @@ router.post("/showTodayForOwner", (req, res) => {
   const selectQuery =
     "SELECT invoice_id, accountmanagement.credit_sales.type_id, type, manual_invoice_id,customer_id, description, bill_amount, discount, amount, date  FROM accountmanagement.credit_sales join accountmanagement.income_type using (type_id) where locate(?, date) order by(date) desc;";
 
-
-  connection.query(selectQuery,[date], (err, result) => {
+  connection.query(selectQuery, [date], (err, result) => {
     if (err) {
       res.send({
         sucess: false,

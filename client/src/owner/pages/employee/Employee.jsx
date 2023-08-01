@@ -2,9 +2,18 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { format } from "date-fns";
 
 function Employee() {
   const [employeeData, setEmployeeData] = useState([]);
+
+  const currentDate = new Date();
+  const date =
+    currentDate.getFullYear() +
+    "-0" +
+    (currentDate.getMonth() + 1) +
+    "-" +
+    currentDate.getDate();
 
   useEffect(() => {
     axios
@@ -45,7 +54,7 @@ function Employee() {
                 <td>{data.address}</td>
                 <td>{data.mobile}</td>
                 <td>{data.nic}</td>
-                <td>{data.dob}</td>
+                <td>{format(new Date(data.dob), "yyyy-MM-dd")}</td>
               </tr>
             ))}
           </tbody>

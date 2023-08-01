@@ -40,6 +40,7 @@ function AddAdvanceBPForm() {
             customerName: customerData.customer_name,
             businessName: customerData.business_name,
             customer_id: customerData.customer_id,
+            creditLimit: customerData.credit_limit,
           });
           setShowAlert(false);
           setData({ ...data, customer_name: customerData.customer_name });
@@ -93,39 +94,51 @@ function AddAdvanceBPForm() {
     event.preventDefault();
 
     if (searchedNic) {
-      const formdata = {
-        type_id: "as", // we manually set the type id of tha cash sale
-        manual_invoice_id: data.manual_invoice_id,
-        customer_id: customerInfo.customer_id,
-        description: data.description,
-        bill_amount: data.bill_amount,
-        advance_amount: data.advance_amount,
-        discount: data.discount,
-      };
-
       const newErrors = findFormErrors();
 
-      // console.log(formdata);
       if (Object.keys(newErrors).length > 0) {
         // We got errors!
         setErrors(newErrors);
       } else {
-        axios
-          .post("http://localhost:5000/advanceSaleBP/add", formdata, {
-            headers: { Authorization: "key " + sessionToken },
-          })
-          .then((res) => {
-            const responseData = res.data;
-            // console.log(res.data);
-            if (responseData.sucess) {
-              // Success is true, so navigate to /transaction
-              navigate("/transaction");
-            } else {
-              // Success is false, show an error or handle it as needed
-              alert("An error occurred. Please try again later.");
-            }
-          })
-          .catch((err) => console.log(err));
+        const billAmount = parseFloat(data.bill_amount);
+        const creditLimit = parseFloat(customerInfo.creditLimit);
+        const advanceAmount = parseFloat(data.advance_amount);
+
+        console.log(billAmount - advanceAmount);
+        console.log(creditLimit);
+
+        if (billAmount - advanceAmount <= creditLimit) {
+          const formdata = {
+            type_id: "bp", // we manually set the type id of the credit sale
+            manual_invoice_id: data.manual_invoice_id,
+            customer_id: customerInfo.customer_id,
+            description: data.description,
+            bill_amount: data.bill_amount,
+            advance_amount: data.advance_amount,
+            discount: data.discount,
+          };
+          axios
+            .post("http://localhost:5000/advanceSaleBP/add", formdata, {
+              headers: { Authorization: "key " + sessionToken },
+            })
+            .then((res) => {
+              const responseData = res.data;
+              // console.log(res.data);
+              if (responseData.sucess) {
+                // Success is true, so navigate to /transaction
+                navigate("/transaction");
+              } else {
+                // Success is false, show an error or handle it as needed
+                alert("An error occurred. Please try again later.");
+              }
+            })
+            .catch((err) => console.log(err));
+        } else {
+          // Bill amount exceeds the credit limit, display error message
+          alert(
+            "Bill amount exceeds the credit limit. Please adjust the bill amount."
+          );
+        }
       }
     } else {
       alert(
@@ -187,6 +200,9 @@ function AddAdvanceBPForm() {
             </p>
             <p>
               <strong>Business Name:</strong> {customerInfo.businessName}
+            </p>
+            <p>
+              <strong>Credit Limit:</strong> {customerInfo.creditLimit}
             </p>
           </div>
         )}

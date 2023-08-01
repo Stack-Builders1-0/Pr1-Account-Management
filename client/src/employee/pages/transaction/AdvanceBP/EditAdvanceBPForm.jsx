@@ -7,7 +7,6 @@ import moment from "moment";
 function EditAdvanceBPForm() {
   const [data, setData] = useState({
     manual_invoice_id: "",
-    description: "",
     bill_amount: "",
     discount: "",
     advance_amount: "",
@@ -150,7 +149,6 @@ function EditAdvanceBPForm() {
       manual_invoice_id: filteredRecords.manual_invoice_id,
       update_at: currentDateTime,
       customer_id: searchedNic ? data.customer_id : filteredRecords.customer_id,
-      description: filteredRecords.description,
       billAmount: filteredRecords.bill_amount,
       discount: filteredRecords.discount,
       employee_id: filteredRecords.employee_id,
@@ -289,21 +287,6 @@ function EditAdvanceBPForm() {
                   </Button>
                 </Modal.Footer>
               </Modal>
-
-              <Form.Group className="mb-3" controlId="formBasicDescription">
-                <Form.Label>Description</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter description"
-                  value={filteredRecords.description}
-                  onChange={(e) =>
-                    setFilteredRecords({
-                      ...filteredRecords,
-                      description: e.target.value,
-                    })
-                  }
-                />
-              </Form.Group>
 
               <Form.Group className="mb-3" controlId="formBasicBillAmount">
                 <Form.Label>Bill Amount</Form.Label>
