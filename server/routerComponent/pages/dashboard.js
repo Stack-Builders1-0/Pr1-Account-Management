@@ -220,7 +220,7 @@ router.post('/isAddOpeningBalance', (req, res) => {
 
 // this show the 15 transection which transection not settle 
 router.get('/creditNotSettle', (req, res) => {
-  const selectQuery = "select * from (select * from combine_sales where balance <> '0'  union all select * from combine_sales where (balance <> amount and return_payment >0)  ) as serch_query order by date limit 10"
+  const selectQuery = "select * from (select * from combine_sales where balance <> '0' and type_id in ('cr', 'ap') union all select * from combine_sales where ( amount <> return_payment )  ) as serch_query order by date limit 15;"
 
   connection.query(selectQuery, (err, result) => {
     if (err) {
@@ -327,6 +327,33 @@ router.post("/totalTransectionForOwner", (req, res) => {
   catch(err){
     res.send({tokenValied: false})
   }
+});
+
+
+
+// this show the history of the specific transection
+router.post("/histoyCreditTransection", (req, res) => {
+  const body = req.body;
+  const selectQuery =
+    'select invoice_id,type_id, date, settle_amount, balance, customer_id,customer_name, business_name from total_transection join customers using (customer_id) where type_id = ' + mysql.escape(body.type_id)  + ' and invoice_id = ' + mysql.escape(body.invoice_id) +' order by date;';
+  connection.query(selectQuery, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.send({
+        sucess: false,
+        isError: true,
+        error: err,
+        result: null,
+      });
+    } else {
+      res.send({
+        sucess: true,
+        isError: false,
+        error: null,
+        result: result,
+      });
+    }
+  });
 });
 
 
