@@ -25,119 +25,119 @@ connection.connect((err) => {
 router.post("/totalCashSales", (req, res) => {
   const body = req.body;
 
-  
-  try{
+
+  try {
     const sessionToken = req.headers("Authorization").replace("key ", "");
     const employee_id = decodedUserId(sessionToken);
 
-  // date format is yyyy-mm-dd (2023-07-14)
-  const selectQuery =
-    "SELECT SUM(amount) AS total_cash FROM (SELECT sum(amount) AS amount FROM cash_sales WHERE locate( " +
-    mysql.escape(body.date) +
-    ", date)  and employee_id = " +
-    mysql.escape(employee_id) +
-    " UNION ALL SELECT sum(advance_amount) AS amount FROM advance_sales_ap WHERE locate( " +
-    mysql.escape(body.date) +
-    ", date)  and employee_id = " +
-    mysql.escape(employee_id) +
-    " UNION ALL SELECT sum(advance_amount) AS amount FROM advance_sales_bp WHERE locate( " +
-    mysql.escape(body.date) +
-    ", date)  and employee_id = " +
-    mysql.escape(employee_id) +
-    " UNION ALL SELECT sum(settle_amount) AS amount FROM credit_partial_settle WHERE locate( " +
-    mysql.escape(body.date) +
-    ", date)  and employee_id = " +
-    mysql.escape(employee_id) +
-    " ) AS subquery;";
+    // date format is yyyy-mm-dd (2023-07-14)
+    const selectQuery =
+      "SELECT SUM(amount) AS total_cash FROM (SELECT sum(amount) AS amount FROM cash_sales WHERE locate( " +
+      mysql.escape(body.date) +
+      ", date)  and employee_id = " +
+      mysql.escape(employee_id) +
+      " UNION ALL SELECT sum(advance_amount) AS amount FROM advance_sales_ap WHERE locate( " +
+      mysql.escape(body.date) +
+      ", date)  and employee_id = " +
+      mysql.escape(employee_id) +
+      " UNION ALL SELECT sum(advance_amount) AS amount FROM advance_sales_bp WHERE locate( " +
+      mysql.escape(body.date) +
+      ", date)  and employee_id = " +
+      mysql.escape(employee_id) +
+      " UNION ALL SELECT sum(settle_amount) AS amount FROM credit_partial_settle WHERE locate( " +
+      mysql.escape(body.date) +
+      ", date)  and employee_id = " +
+      mysql.escape(employee_id) +
+      " ) AS subquery;";
 
-  // response has 3 field
-  // error occur then error = true , otherwise error = false
-  // sucess or not
-  connection.query(selectQuery, (err, result) => {
-    if (err) {
-      console.log(err);
-      res.send({
-        sucess: false,
-        error: true,
-        result: result,
-      });
-    } else {
-      res.send({
-        sucess: true,
-        error: false,
-        result: result,
-      });
-    }
-  });
-  }catch(error){
-    res.send({tokenValied: false})
+    // response has 3 field
+    // error occur then error = true , otherwise error = false
+    // sucess or not
+    connection.query(selectQuery, (err, result) => {
+      if (err) {
+        console.log(err);
+        res.send({
+          sucess: false,
+          error: true,
+          result: result,
+        });
+      } else {
+        res.send({
+          sucess: true,
+          error: false,
+          result: result,
+        });
+      }
+    });
+  } catch (error) {
+    res.send({ tokenValied: false })
   }
-  
+
 });
 
 // this is send the total credit income of the specific employee id and todays update
 router.post("/totalCreditSales", (req, res) => {
   const body = req.body;
 
-  
 
-  try{
+
+  try {
     const sessionToken = req.headers("Authorization").replace("key ", "");
     const employee_id = decodedUserId(sessionToken);
 
     // date format is yyyy-mm-dd (2023-07-14)
-        const selectQuery =
-        "SELECT SUM(credit) AS total_credit FROM (select sum(balance) as credit from advance_sales_ap where locate( " +
-        mysql.escape(body.date) +
-        ", date)  and employee_id = " +
-        mysql.escape(employee_id) +
-        " UNION ALL select sum(balance) as credit from advance_sales_bp where locate( " +
-        mysql.escape(body.date) +
-        ", date)  and employee_id = " +
-        mysql.escape(employee_id) +
-        " UNION ALL select sum(balance) as credit from credit_sales where locate( " +
-        mysql.escape(body.date) +
-        ", date)  and employee_id = " +
-        mysql.escape(employee_id) +
-        " ) AS subquery;";
+    const selectQuery =
+      "SELECT SUM(credit) AS total_credit FROM (select sum(balance) as credit from advance_sales_ap where locate( " +
+      mysql.escape(body.date) +
+      ", date)  and employee_id = " +
+      mysql.escape(employee_id) +
+      " UNION ALL select sum(balance) as credit from advance_sales_bp where locate( " +
+      mysql.escape(body.date) +
+      ", date)  and employee_id = " +
+      mysql.escape(employee_id) +
+      " UNION ALL select sum(balance) as credit from credit_sales where locate( " +
+      mysql.escape(body.date) +
+      ", date)  and employee_id = " +
+      mysql.escape(employee_id) +
+      " ) AS subquery;";
 
-        // response has 3 field
-        // error occur then error = true , otherwise error = false
-        // sucess or not
-        connection.query(selectQuery, (err, result) => {
-        if (err) {
-            console.log(err);
-            res.send({
-            sucess: false,
-            error: true,
-            result: result,
-            tokenValied: true
-            });
-        } else {
-            res.send({
-            sucess: true,
-            error: false,
-            result: result,
-            tokenValied: true
-            });
-        }
+    // response has 3 field
+    // error occur then error = true , otherwise error = false
+    // sucess or not
+    connection.query(selectQuery, (err, result) => {
+      if (err) {
+        console.log(err);
+        res.send({
+          sucess: false,
+          error: true,
+          result: result,
+          tokenValied: true
+        });
+      } else {
+        res.send({
+          sucess: true,
+          error: false,
+          result: result,
+          tokenValied: true
+        });
+      }
     });
 
   }
-  catch(err){
-    res.send({tokenValied: false})
+  catch (err) {
+    res.send({ tokenValied: false })
   }
 });
 
 
 
 router.post('/addOpeningBalance', (req, res) => {
-  const amount  = req.body.amount;
+  const amount = req.body.amount;
 
-  try{
-    const sessionToken = req.headers.authorization.replace('key ','');
+  try {
+    const sessionToken = req.headers.authorization.replace('key ', '');
     const employee_id = decodedUserId(sessionToken);
-// const employee_id = req.body.employee_id;
+    // const employee_id = req.body.employee_id;
 
     const settleQuery = "insert into opening_balance (employee_id, amount) values (?,?);";
 
@@ -145,24 +145,24 @@ router.post('/addOpeningBalance', (req, res) => {
     // error occur then error = true , otherwise error = false
     // exist => if the employee nic alredy regiterd exist = true else exist = false
     // employee regeister is sucess then sucess=true
-    connection.query(settleQuery, [employee_id, amount ], (err, result) => {
-        if (err) {
-            console.log(err)
-            res.send({
-                sucess : false,
-                isError : true
-            })
-        }
-        else{
-            res.send({
-                sucess : true,
-                isError : false
-            })
-        }
+    connection.query(settleQuery, [employee_id, amount], (err, result) => {
+      if (err) {
+        console.log(err)
+        res.send({
+          sucess: false,
+          isError: true
+        })
+      }
+      else {
+        res.send({
+          sucess: true,
+          isError: false
+        })
+      }
     });
-  }catch(err){
+  } catch (err) {
     res.send({
-      isTokenValied : false
+      isTokenValied: false
     });
   }
 
@@ -170,48 +170,48 @@ router.post('/addOpeningBalance', (req, res) => {
 
 
 router.post('/isAddOpeningBalance', (req, res) => {
-  const date  = req.body.date;
+  const date = req.body.date;
 
-  try{
-    const sessionToken = req.headers.authorization.replace('key ','');
+  try {
+    const sessionToken = req.headers.authorization.replace('key ', '');
     const employee_id = decodedUserId(sessionToken);
-// const employee_id = req.body.employee_id;
+    // const employee_id = req.body.employee_id;
 
-    const getQuery = "select * from opening_balance where (employee_id= "+mysql.escape(employee_id)+" and locate("+mysql.escape(date)+" , date))";
+    const getQuery = "select * from opening_balance where (employee_id= " + mysql.escape(employee_id) + " and locate(" + mysql.escape(date) + " , date))";
 
     // response has 3 field 
     // error occur then error = true , otherwise error = false
     // exist => if the employee nic alredy regiterd exist = true else exist = false
     // employee regeister is sucess then sucess=true
     connection.query(getQuery, (err, result) => {
-        if (err) {
-            console.log(err)
-            res.send({
-                sucess : false,
-                isError : true,
-                isExist : false
-            })
-        }
-        else{
-          if(result.length == 0){
-            res.send({
-              sucess : false,
-              isError : false,
-              isExist : false
+      if (err) {
+        console.log(err)
+        res.send({
+          sucess: false,
+          isError: true,
+          isExist: false
+        })
+      }
+      else {
+        if (result.length == 0) {
+          res.send({
+            sucess: false,
+            isError: false,
+            isExist: false
           })
-          }else {
-            res.send({
-              sucess : true,
-              isError : false,
-              isExist : true
+        } else {
+          res.send({
+            sucess: true,
+            isError: false,
+            isExist: true
           })
-          }
-            
         }
+
+      }
     });
-  }catch(err){
+  } catch (err) {
     res.send({
-      isTokenValied : false
+      isTokenValied: false
     });
   }
 
@@ -226,17 +226,17 @@ router.get('/creditNotSettle', (req, res) => {
     if (err) {
       console.log(err)
       res.send({
-          sucess : false,
-          error : true,
-          result : result
+        sucess: false,
+        error: true,
+        result: result
       })
     }
-    else{
-        res.send({
-            sucess : true,
-            error : false,
-            result : result
-        })
+    else {
+      res.send({
+        sucess: true,
+        error: false,
+        result: result
+      })
     }
   });
 
@@ -248,41 +248,42 @@ router.get('/creditNotSettle', (req, res) => {
 router.post("/totalTransection", (req, res) => {
   const body = req.body;
 
-  
 
-  try{
-    const sessionToken =req.headers.authorization.replace("key ", "");
+
+  try {
+    const sessionToken = req.headers.authorization.replace("key ", "");
     const employee_id = decodedUserId(sessionToken);
     // const employee_id = body.employee_id
 
     // date format is yyyy-mm-dd (2023-07-14)
-        const selectQuery ="SELECT SUM(CASE WHEN type_id IN ('cr', 'ap', 'bp') THEN balance ELSE 0 END) AS credit, SUM(CASE WHEN type_id IN ('ca', 'ap', 'bp') THEN amount - balance ELSE 0 END) AS cash FROM total_transection WHERE type_id IN ('ca', 'cr', 'ap', 'bp') AND (type_id <> 'as' OR amount <> return_payment) and employee_id = ? and locate(?, date);"
+    const selectQuery = "SELECT SUM(CASE WHEN type_id IN ('cr', 'ap', 'bp') THEN balance ELSE 0 END) AS credit, SUM(CASE WHEN type_id IN ('ca', 'ap', 'bp') THEN amount - balance ELSE 0 END) AS cash FROM total_transection WHERE type_id IN ('ca', 'cr', 'ap', 'bp') AND (type_id <> 'as' OR amount <> return_payment) and employee_id = ? and locate(?, date);"
 
-        // response has 3 field
-        // error occur then error = true , otherwise error = false
-        // sucess or not
-        connection.query(selectQuery,[employee_id, body.date], (err, result) => {
-        if (err) {
-            console.log(err);
-            res.send({
-            sucess: false,
-            error: true,
-            result: result,
-            tokenValied: true
-            });
-        } else {
-            res.send({
-            sucess: true,
-            error: false,
-            result: result,
-            tokenValied: true
-            });
-        }
+    // response has 3 field
+    // error occur then error = true , otherwise error = false
+    // sucess or not
+    connection.query(selectQuery, [employee_id, body.date], (err, result) => {
+      if (err) {
+        console.log(err);
+        res.send({
+          sucess: false,
+          isError: true,
+          result: result,
+          error: err,
+          tokenValied: true
+        });
+      } else {
+        res.send({
+          sucess: true,
+          isError: false,
+          result: result,
+          tokenValied: true
+        });
+      }
     });
 
   }
-  catch(err){
-    res.send({tokenValied: false})
+  catch (err) {
+    res.send({ tokenValied: false })
   }
 });
 
@@ -291,41 +292,41 @@ router.post("/totalTransection", (req, res) => {
 router.post("/totalTransectionForOwner", (req, res) => {
   const body = req.body;
 
-  
 
-  try{
-    const sessionToken =req.headers.authorization.replace("key ", "");
+
+  try {
+    const sessionToken = req.headers.authorization.replace("key ", "");
     const employee_id = decodedUserId(sessionToken);
     // const employee_id = body.employee_id
 
     // date format is yyyy-mm-dd (2023-07-14)
-        const selectQuery ="SELECT SUM(CASE WHEN type_id IN ('cr', 'ap', 'bp') THEN balance ELSE 0 END) AS credit, SUM(CASE WHEN type_id IN ('ca', 'ap', 'bp') THEN amount - balance ELSE 0 END) AS cash FROM total_transection WHERE type_id IN ('ca', 'cr', 'ap', 'bp') AND (type_id <> 'bp' OR amount <> return_payment) and locate(?, date);"
+    const selectQuery = "SELECT SUM(CASE WHEN type_id IN ('cr', 'ap', 'bp') THEN balance ELSE 0 END) AS credit, SUM(CASE WHEN type_id IN ('ca', 'ap', 'bp') THEN amount - balance ELSE 0 END) AS cash FROM total_transection WHERE type_id IN ('ca', 'cr', 'ap', 'bp') AND (type_id <> 'bp' OR amount <> return_payment) and locate(?, date);"
 
-        // response has 3 field
-        // error occur then error = true , otherwise error = false
-        // sucess or not
-        connection.query(selectQuery,[employee_id, body.date], (err, result) => {
-        if (err) {
-            console.log(err);
-            res.send({
-            sucess: false,
-            error: true,
-            result: result,
-            tokenValied: true
-            });
-        } else {
-            res.send({
-            sucess: true,
-            error: false,
-            result: result,
-            tokenValied: true
-            });
-        }
+    // response has 3 field
+    // error occur then error = true , otherwise error = false
+    // sucess or not
+    connection.query(selectQuery, [employee_id, body.date], (err, result) => {
+      if (err) {
+        console.log(err);
+        res.send({
+          sucess: false,
+          error: true,
+          result: result,
+          tokenValied: true
+        });
+      } else {
+        res.send({
+          sucess: true,
+          error: false,
+          result: result,
+          tokenValied: true
+        });
+      }
     });
 
   }
-  catch(err){
-    res.send({tokenValied: false})
+  catch (err) {
+    res.send({ tokenValied: false })
   }
 });
 
@@ -335,7 +336,7 @@ router.post("/totalTransectionForOwner", (req, res) => {
 router.post("/histoyCreditTransection", (req, res) => {
   const body = req.body;
   const selectQuery =
-    'select invoice_id,type_id, date, settle_amount, balance, customer_id,customer_name, business_name from total_transection join customers using (customer_id) where type_id = ' + mysql.escape(body.type_id)  + ' and invoice_id = ' + mysql.escape(body.invoice_id) +' order by date;';
+    'select invoice_id,type_id, date, settle_amount, balance, customer_id,customer_name, business_name from total_transection join customers using (customer_id) where type_id = ' + mysql.escape(body.type_id) + ' and invoice_id = ' + mysql.escape(body.invoice_id) + ' order by date;';
   connection.query(selectQuery, (err, result) => {
     if (err) {
       console.log(err);
@@ -359,38 +360,38 @@ router.post("/histoyCreditTransection", (req, res) => {
 
 
 router.post('/editedSales', (req, res) => {
-  const date  = req.body.date;
+  const date = req.body.date;
 
-  try{
-    const sessionToken = req.headers.authorization.replace('key ','');
+  try {
+    const sessionToken = req.headers.authorization.replace('key ', '');
     const employee_id = decodedUserId(sessionToken);
-// const employee_id = req.body.employee_id;
+    // const employee_id = req.body.employee_id;
 
-    const getQuery = "select * from combine_4_sales where (updated_by= "+mysql.escape(employee_id)+" and locate("+mysql.escape(date)+" , updated_at))";
+    const getQuery = "select * from combine_4_sales where (updated_by= " + mysql.escape(employee_id) + " and locate(" + mysql.escape(date) + " , updated_at))";
 
-   
+
     connection.query(getQuery, (err, result) => {
-        if (err) {
-            console.log(err)
-            res.send({
-                sucess : false,
-                isError : true,
-                result : null,
-                error : err
-            })
-        }
-        else{
-            res.send({
-              sucess : true,
-              isError : false,
-              result : result,
-              error : null
-          }) 
-        }
+      if (err) {
+        console.log(err)
+        res.send({
+          sucess: false,
+          isError: true,
+          result: null,
+          error: err
+        })
+      }
+      else {
+        res.send({
+          sucess: true,
+          isError: false,
+          result: result,
+          error: null
+        })
+      }
     });
-  }catch(err){
+  } catch (err) {
     res.send({
-      isTokenValied : false
+      isTokenValied: false
     });
   }
 

@@ -10,7 +10,7 @@ function CustomModel({ show, onHide }) {
   const sessionToken = localStorage.getItem('sessionToken');
 // get the current date in yyyy-mm-dd this format
 const currentDate = new Date();
-const date = currentDate.getFullYear() + '-0' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
+const date = currentDate.getFullYear() + '-0' + (currentDate.getMonth() + 1) + '-' +  String(currentDate.getDate()).padStart(2, "0");
 
 
   const [amount, setAmount] = useState({});
