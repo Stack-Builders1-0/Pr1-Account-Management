@@ -208,6 +208,7 @@ create VIEW `combine_sales` AS
 
 create VIEW `total_transection` AS
     SELECT 
+        null as id,
         `cash_sales`.`invoice_id` AS `invoice_id`,
         `cash_sales`.`type_id` AS `type_id`,
         `cash_sales`.`manual_invoice_id` AS `manual_invoice_id`,
@@ -218,11 +219,12 @@ create VIEW `total_transection` AS
         `cash_sales`.`amount` AS `settle_amount`,
         NULL AS `balance`,
         NULL AS `return_payment`,
-        true as start_transection,
+        TRUE AS `start_transection`,
         `cash_sales`.`employee_id` AS `employee_id`
     FROM
         `cash_sales` 
     UNION ALL SELECT 
+     `credit_partial_settle`.`invoice_id` AS `id`,
         `credit_partial_settle`.`invoice_id` AS `invoice_id`,
         `credit_partial_settle`.`type_id` AS `type_id`,
         `credit_sales`.`manual_invoice_id` AS `manual_invoice_id`,
@@ -239,6 +241,7 @@ create VIEW `total_transection` AS
         (`credit_partial_settle`
         JOIN `credit_sales` ON ((`credit_partial_settle`.`invoice_id` = `credit_sales`.`invoice_id`))) 
     UNION ALL SELECT 
+        `advance_bp_partial_settle`.`invoice_id` AS `id`,
         `advance_bp_partial_settle`.`invoice_id` AS `invoice_id`,
         `advance_bp_partial_settle`.`type_id` AS `type_id`,
         `advance_sales_bp`.`manual_invoice_id` AS `manual_invoice_id`,
@@ -255,6 +258,7 @@ create VIEW `total_transection` AS
         (`advance_bp_partial_settle`
         JOIN `advance_sales_bp` ON ((`advance_bp_partial_settle`.`invoice_id` = `advance_sales_bp`.`invoice_id`))) 
     UNION ALL SELECT 
+        `advance_ap_partial_settle`.`invoice_id` AS `id`,
         `advance_ap_partial_settle`.`invoice_id` AS `invoice_id`,
         `advance_ap_partial_settle`.`type_id` AS `type_id`,
         `advance_sales_ap`.`manual_invoice_id` AS `manual_invoice_id`,
