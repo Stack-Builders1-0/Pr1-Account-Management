@@ -1,13 +1,14 @@
-import { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import Form from 'react-bootstrap/Form';
+import { useState } from "react";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+import Form from "react-bootstrap/Form";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function CustomModel({ show, onHide }) {
-  const sessionToken = localStorage.getItem('sessionToken');
+  const sessionToken = localStorage.getItem("sessionToken");
   // get the current date in yyyy-mm-dd this format
   const currentDate = new Date();
 
@@ -15,6 +16,7 @@ function CustomModel({ show, onHide }) {
   const [form, setForm] = useState({ amount: "" });
 
   const setField = (field, value) => {
+    // console.log(field, value);
     setForm({
       ...form,
       [field]: value,
@@ -31,58 +33,66 @@ function CustomModel({ show, onHide }) {
     const { amount } = form;
     const newErrors = {};
     // name errors
-    if (!amount || amount === "")
-      newErrors.amount = "cannot be empty";
+    if (!amount || amount === "") newErrors.amount = "cannot be empty";
 
     return newErrors;
   };
 
-  const date = currentDate.getFullYear() + '-0' + (currentDate.getMonth() + 1) + '-' + String(currentDate.getDate()).padStart(2, "0");
+  const date =
+    currentDate.getFullYear() +
+    "-0" +
+    (currentDate.getMonth() + 1) +
+    "-" +
+    String(currentDate.getDate()).padStart(2, "0");
 
-
-
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleCancel = (event) => {
     event.preventDefault();
-    axios.post(import.meta.env.VITE_API_URL + '/dashboard/isAddOpeningBalance', { date: date }, { headers: { 'Authorization': 'key ' + sessionToken } })
+    axios
+      .post(
+        import.meta.env.VITE_API_URL + "/dashboard/isAddOpeningBalance",
+        { date: date },
+        { headers: { Authorization: "key " + sessionToken } }
+      )
       .then((res) => {
         if (res.data.sucess) {
-          // we want to diply sucess message 
-          navigate('');
+          // we want to diply sucess message
+          navigate("");
         }
       })
       .catch((err) => {
         console.log(err);
-      })
-  }
+      });
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
+    // console.log(form.amount);
     const newErrors = findFormErrors();
     if (Object.keys(newErrors).length > 0) {
       // We got errors!
       setErrors(newErrors);
     } else {
-      axios.post(import.meta.env.VITE_API_URL + '/dashboard/addOpeningBalance', { amount: amount }, { headers: { 'Authorization': 'key ' + sessionToken } })
+      axios
+        .post(
+          import.meta.env.VITE_API_URL + "/dashboard/addOpeningBalance",
+          { amount: form.amount },
+          { headers: { Authorization: "key " + sessionToken } }
+        )
         .then((res) => {
-
           if (res.data.sucess) {
-            // we want to diply sucess message 
-            navigate('');
+            // we want to diply sucess message
+            navigate("");
           }
-
         })
         .catch((err) => {
           console.log(err);
-        })
+        });
     }
-  }
-
+  };
 
   return (
     <>
-
       <Modal
         show={show}
         onHide={onHide}
@@ -90,7 +100,7 @@ function CustomModel({ show, onHide }) {
         keyboard={false}
         centered
       >
-        <Modal.Header >
+        <Modal.Header>
           <Modal.Title>Opening Amount</Modal.Title>
         </Modal.Header>
 
@@ -102,14 +112,12 @@ function CustomModel({ show, onHide }) {
               placeholder="Enter cash amount"
               autoFocus
               onChange={(e) => setField("amount", e.target.value)}
-
               isInvalid={!!errors.amount}
             />
             <Form.Control.Feedback type="invalid">
               {errors.amount}
             </Form.Control.Feedback>
           </Form.Group>
-
         </Modal.Body>
 
         <Modal.Footer>
@@ -123,11 +131,10 @@ function CustomModel({ show, onHide }) {
           {/* <Link to="/" className="btn btn-primary">
             Submit
           </Link> */}
-
         </Modal.Footer>
       </Modal>
     </>
   );
 }
 
-export default CustomModel
+export default CustomModel;
