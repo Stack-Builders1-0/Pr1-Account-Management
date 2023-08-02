@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useReactToPrint } from "react-to-print";
+import logo from "./aivha-full.png";
 
 function Report() {
   const componentPdf = useRef();
@@ -37,6 +38,7 @@ function Report() {
     setStartDate(todayFormatted + " 00:00:00");
     setEndDate(todayFormatted + " 23:59:59");
   };
+
   useEffect(() => {
     // Fetch the data for today's date when the component mounts
     axios
@@ -137,11 +139,7 @@ function Report() {
               <header className="header-container  xl:flex-row">
                 <div className="font-bold uppercase tracking-wide text-4xl mb-3">
                   <h1>
-                    <img
-                      src="src\pages\report\aivha-full.png"
-                      class="small-image"
-                      alt="Aivha Logo"
-                    />
+                    <img src={logo} class="small-image" alt="Aivha Logo" />
                   </h1>
                   <div>
                     <ul>
@@ -206,14 +204,16 @@ function Report() {
                 </thead>
                 <tbody>
                   {transactionData.map((data) => (
-                    <tr key={data.invoice_id + data.type_id}>
+                    <tr key={data.invoice_id}>
                       <td>{data.manual_invoice_id}</td>
                       <td>{getDate(data)}</td>
                       <td>
-                        {(
-                          data.description.charAt(0).toUpperCase() +
-                          data.description.slice(1)
-                        ).replace(/_/g, " ")}
+                        {typeof data.description === "string"
+                          ? (
+                              data.description?.charAt(0).toUpperCase() +
+                              data.description?.slice(1)
+                            )?.replace(/_/g, " ") || ""
+                          : ""}
                       </td>
                       <td className="text-success">
                         {data.settle_amount ? data.settle_amount : ""}
