@@ -375,14 +375,16 @@ router.post('/editedSales', (req, res) => {
             res.send({
                 sucess : false,
                 isError : true,
-                isExist : false
+                result : null,
+                error : err
             })
         }
         else{
             res.send({
               sucess : true,
               isError : false,
-              isExist : true
+              result : result,
+              error : null
           }) 
         }
     });
@@ -393,7 +395,6 @@ router.post('/editedSales', (req, res) => {
   }
 
 });
-
 
 
 
