@@ -49,8 +49,8 @@ function Dashboard() {
         { headers: { Authorization: "key " + sessionToken } }
       )
       .then((res) => {
-        const { cash, credit } = res.data.result[0];
-        // console.log(res.data.result[0]);
+        const { cash, credit } = res.data.result;
+       
         setData({
           ...data,
           totalCashSales: cash,
@@ -135,6 +135,7 @@ function Dashboard() {
         <Link to="/addcustomer" className="btn btn-primary">
           Add Customer
         </Link>
+
       </div>
 
       <div className="mt-4 px-4 pt-3">

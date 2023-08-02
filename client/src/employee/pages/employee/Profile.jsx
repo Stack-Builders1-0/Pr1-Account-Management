@@ -16,6 +16,7 @@ function Profile() {
     axios.post(import.meta.env.VITE_API_URL + "/employee/showCurrent", {}, { headers: { 'Authorization': 'key ' + sessionToken } })
       .then((res) => {
         setEmployeeData(res.data.result);
+      
       })
       .catch((error) => {
         console.log("Error fetching creditSale data:", error);
@@ -24,14 +25,14 @@ function Profile() {
 
   return (
     <div>
-      
-     <div className="row mt-5 px-5 pt-4 ">
+
+      <div className="row mt-5 px-5 pt-4 ">
         {employeeData.map((data) => (
           <div className="col-md-6 w-60 " key={data.employee_id}>
             <Card className="mb-4 mb-md-0 ">
               <Card.Body>
                 <h2 className="mb-4" >
-                &#128100; User Profile 
+                  &#128100; User Profile
                 </h2>
                 <Table striped bordered hover size="sm" className="mb-4" style={{ fontSize: "20px" }}>
                   <tbody>

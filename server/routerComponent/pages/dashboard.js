@@ -69,7 +69,7 @@ router.post("/totalCashSales", (req, res) => {
       }
     });
   } catch (error) {
-    res.send({ tokenValied: false });
+    res.send({ tokenValied: false })
   }
 });
 
@@ -107,24 +107,27 @@ router.post("/totalCreditSales", (req, res) => {
           sucess: false,
           error: true,
           result: result,
-          tokenValied: true,
+          tokenValied: true
         });
       } else {
         res.send({
           sucess: true,
           error: false,
           result: result,
-          tokenValied: true,
+          tokenValied: true
         });
       }
     });
-  } catch (err) {
-    res.send({ tokenValied: false });
+
+  }
+  catch (err) {
+    res.send({ tokenValied: false })
   }
 });
 
 router.post("/addOpeningBalance", (req, res) => {
   const amount = req.body.amount;
+
 
   try {
     const sessionToken = req.headers.authorization.replace("key ", "");
@@ -162,6 +165,7 @@ router.post("/addOpeningBalance", (req, res) => {
 router.post("/isAddOpeningBalance", (req, res) => {
   const date = req.body.date;
 
+
   try {
     const sessionToken = req.headers.authorization.replace("key ", "");
     const employee_id = decodedUserId(sessionToken);
@@ -180,6 +184,7 @@ router.post("/isAddOpeningBalance", (req, res) => {
     // employee regeister is sucess then sucess=true
     connection.query(getQuery, (err, result) => {
       if (err) {
+
         console.log(err);
         res.send({
           sucess: false,
@@ -191,6 +196,7 @@ router.post("/isAddOpeningBalance", (req, res) => {
           res.send({
             sucess: false,
             isError: false,
+
             isExist: false,
           });
         } else {
@@ -235,15 +241,13 @@ router.get("/creditNotSettle", (req, res) => {
 // this is send the total credit income of the specific employee id and todays update
 router.post("/totalTransection", (req, res) => {
   const body = req.body;
-
   try {
     const sessionToken = req.headers.authorization.replace("key ", "");
     const employee_id = decodedUserId(sessionToken);
     // const employee_id = body.employee_id
 
     // date format is yyyy-mm-dd (2023-07-14)
-    const selectQuery =
-      "SELECT SUM(CASE WHEN type_id IN ('cr', 'ap', 'bp') THEN balance ELSE 0 END) AS credit, SUM(CASE WHEN type_id IN ('ca', 'ap', 'bp') THEN amount - balance ELSE 0 END) AS cash FROM total_transection WHERE type_id IN ('ca', 'cr', 'ap', 'bp') AND (type_id <> 'as' OR amount <> return_payment) and employee_id = ? and locate(?, date);";
+    const selectQuery = "SELECT SUM(CASE WHEN type_id IN ('cr', 'ap', 'bp') THEN balance ELSE 0 END) AS credit, SUM(CASE WHEN type_id IN ('ca', 'ap', 'bp') THEN amount - balance ELSE 0 END) AS cash FROM total_transection WHERE type_id IN ('ca', 'cr', 'ap', 'bp') AND (type_id <> 'as' OR amount <> return_payment) and employee_id = ? and locate(?, date);"
 
     // response has 3 field
     // error occur then error = true , otherwise error = false
@@ -253,21 +257,24 @@ router.post("/totalTransection", (req, res) => {
         console.log(err);
         res.send({
           sucess: false,
-          error: true,
+          isError: true,
           result: result,
-          tokenValied: true,
+          error: err,
+          tokenValied: true
         });
       } else {
         res.send({
           sucess: true,
-          error: false,
+          isError: false,
           result: result,
-          tokenValied: true,
+          tokenValied: true
         });
       }
     });
-  } catch (err) {
-    res.send({ tokenValied: false });
+
+  }
+  catch (err) {
+    res.send({ tokenValied: false })
   }
 });
 
@@ -281,32 +288,34 @@ router.post("/totalTransectionForOwner", (req, res) => {
     // const employee_id = body.employee_id
 
     // date format is yyyy-mm-dd (2023-07-14)
-    const selectQuery =
-      "SELECT SUM(CASE WHEN type_id IN ('cr', 'ap', 'bp') THEN balance ELSE 0 END) AS credit, SUM(CASE WHEN type_id IN ('ca', 'ap', 'bp') THEN amount - balance ELSE 0 END) AS cash FROM total_transection WHERE type_id IN ('ca', 'cr', 'ap', 'bp') AND (type_id <> 'bp' OR amount <> return_payment) and locate(?, date);";
+    const selectQuery = "SELECT SUM(CASE WHEN type_id IN ('cr', 'ap', 'bp') THEN balance ELSE 0 END) AS credit, SUM(CASE WHEN type_id IN ('ca', 'ap', 'bp') THEN amount - balance ELSE 0 END) AS cash FROM total_transection WHERE type_id IN ('ca', 'cr', 'ap', 'bp') AND (type_id <> 'bp' OR amount <> return_payment) and locate(?, date);"
 
     // response has 3 field
     // error occur then error = true , otherwise error = false
     // sucess or not
     connection.query(selectQuery, [employee_id, body.date], (err, result) => {
-      if (err) {
+     if (err) {
         console.log(err);
         res.send({
           sucess: false,
-          error: true,
+          isError: true,
           result: result,
-          tokenValied: true,
+          error: err,
+          tokenValied: true
         });
       } else {
         res.send({
           sucess: true,
-          error: false,
+          isError: false,
           result: result,
-          tokenValied: true,
+          tokenValied: true
         });
       }
     });
-  } catch (err) {
-    res.send({ tokenValied: false });
+
+  }
+  catch (err) {
+    res.send({ tokenValied: false })
   }
 });
 
@@ -314,6 +323,7 @@ router.post("/totalTransectionForOwner", (req, res) => {
 router.post("/histoyCreditTransection", (req, res) => {
   const body = req.body;
   const selectQuery =
+
     "select id, invoice_id,type_id, date, settle_amount, balance, customer_id,customer_name, business_name from total_transection join customers using (customer_id) where type_id = " +
     mysql.escape(body.type_id) +
     " and invoice_id = " +
@@ -342,6 +352,7 @@ router.post("/histoyCreditTransection", (req, res) => {
 router.post("/editedSales", (req, res) => {
   const date = req.body.date;
 
+
   try {
     const sessionToken = req.headers.authorization.replace("key ", "");
     const employee_id = decodedUserId(sessionToken);
@@ -361,6 +372,7 @@ router.post("/editedSales", (req, res) => {
           sucess: false,
           isError: true,
           result: null,
+
           error: err,
         });
       } else {
