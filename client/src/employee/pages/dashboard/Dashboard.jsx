@@ -17,8 +17,7 @@ function Dashboard() {
   const navigate = useNavigate();
 
   const handleHistory = (invoice_id, type_id) => {
-    localStorage.setItem("type_id", type_id);
-    navigate(`/history/${invoice_id}`);
+    navigate(`/history/${invoice_id}/${type_id}`);
   };
 
   const [data, setData] = useState({
@@ -58,19 +57,6 @@ function Dashboard() {
           totalSales: cash + credit,
         });
       });
-    // console.log(data);
-
-    // axios.post(import.meta.env.VITE_API_URL + "/dashboard/totalCreditSales", { date: date }, { headers: { 'Authorization': 'key ' + sessionToken } })
-    //   .then((res) => {
-    //     setData({ ...data, totalCreditSales: res.data.result });
-    //   });
-
-    // axios.post(import.meta.env.VITE_API_URL + "/dashboard/totalCashSales", { date: date }, { headers: { 'Authorization': 'key ' + sessionToken } })
-    //   .then((res) => {
-    //     setData({ ...data, totalCashSales: res.data.result });
-    //   });
-
-    // setData({ ...data, totalSales: data.totalCashSales + data.totalCreditSales });
 
     axios
       .get(import.meta.env.VITE_API_URL + "/dashboard/creditNotSettle")
@@ -80,16 +66,6 @@ function Dashboard() {
       .catch((error) => {
         console.log("Error fetching creditSale data:", error);
       });
-
-    // axios.get(import.meta.env.VITE_API_URL + "/advanceSaleAP/creditNotSettle")
-    //   .then((res) => {
-    //     // console.log(res.data.result);
-    //   });
-
-    // axios.get(import.meta.env.VITE_API_URL + "/advanceSaleBP/creditNotSettle")
-    //   .then((res) => {
-    //     // console.log(res.data.result);
-    //   });
   }, []);
 
   return (

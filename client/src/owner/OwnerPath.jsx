@@ -46,7 +46,7 @@ function OwnerPath() {
         <Route path="/addcustomer" element={<AddCustomer />}></Route>
         <Route path="/expenses" element={<Expenses />}></Route>
         <Route path="/addexpense" element={<AddExpense />}></Route>
-        <Route path="/history/:invoice_id" element={<History />}></Route>
+        <Route path="/history/:invoice_id/:type_id" element={<History />}></Route>
         <Route path="/report" element={<Report />}></Route>
         <Route
           path="/transaction/cashtransaction"

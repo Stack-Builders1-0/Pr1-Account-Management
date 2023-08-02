@@ -5,8 +5,7 @@ import axios from "axios";
 import { useParams } from "react-router";
 
 function History() {
-  const { invoice_id } = useParams();
-  const type_id = localStorage.getItem("type_id");
+  const { invoice_id, type_id } = useParams();
   const [invoiceHistory, setInvoiceHistory] = useState([]);
 
   useEffect(() => {
