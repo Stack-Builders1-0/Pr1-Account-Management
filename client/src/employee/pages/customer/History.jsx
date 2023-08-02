@@ -2,12 +2,13 @@ import React from "react";
 
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useParams } from "react-router";
 
 function History() {
-  const invoice_id = localStorage.getItem("invoice_id");
+  const { invoice_id } = useParams();
   const type_id = localStorage.getItem("type_id");
+  console.log(invoice_id, type_id);
   const [invoiceHistory, setInvoiceHistory] = useState([]);
-  // console.log(invoice_id,type_id)
   useEffect(() => {
     axios
       .post(
@@ -20,7 +21,7 @@ function History() {
       .catch((error) => {
         console.log("Error fetching creditSale data:", error);
       });
-  });
+  }, []);
 
   return (
     <div>
