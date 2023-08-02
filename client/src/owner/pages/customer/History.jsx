@@ -2,26 +2,27 @@ import React from "react";
 
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useParams } from "react-router";
 
 function History() {
-  const invoice_id = localStorage.getItem("invoice_id");
+  const { invoice_id } = useParams();
   const type_id = localStorage.getItem("type_id");
   const [invoiceHistory, setInvoiceHistory] = useState([]);
-  // console.log(invoice_id,type_id)
+
   useEffect(() => {
     axios
       .post(
         import.meta.env.VITE_API_URL + "/dashboard/histoyCreditTransection",
-        { invoice_id: invoice_id, type_id:type_id}
-
+        { invoice_id: invoice_id, type_id: type_id }
       )
       .then((res) => {
         setInvoiceHistory(res.data.result);
+        console.log(res.data.result);
       })
       .catch((error) => {
         console.log("Error fetching creditSale data:", error);
       });
-  });
+  }, []);
 
   return (
     <div>

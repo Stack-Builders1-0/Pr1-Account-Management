@@ -17,9 +17,8 @@ function Dashboard() {
   const navigate = useNavigate();
 
   const handleHistory = (invoice_id, type_id) => {
-    localStorage.setItem("invoice_id", invoice_id);
     localStorage.setItem("type_id", type_id);
-    navigate("/history");
+    navigate(`/history/${invoice_id}`);
   };
 
   const [data, setData] = useState({
