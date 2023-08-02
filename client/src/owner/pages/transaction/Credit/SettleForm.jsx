@@ -32,7 +32,7 @@ function SettleForm() {
       .then((res) => {
         if (res.data.sucess) {
           const data = res.data.result[0];
-          console.log(data);
+          // console.log(data);
           if (data) {
             setFilteredRecords(data);
             setIsSearchPerformed(true);
@@ -105,7 +105,7 @@ function SettleForm() {
           setDescription("");
           const responseData = response.data;
           // console.log(response.data);
-          console.log(response.data);
+          // console.log(response.data);
           if (responseData.sucess) {
             alert("Settlement is successfully submitted.");
           } else {

@@ -12,7 +12,7 @@ function CashSale() {
 
   useEffect(() => {
     const sessionToken = localStorage.getItem("sessionToken");
-    console.log(date);
+    // console.log(date);
 
     axios
       .post(
@@ -24,7 +24,7 @@ function CashSale() {
       )
       .then((res) => {
         setCashSaleData(res.data.result);
-        console.log(res.data.result);
+        // console.log(res.data.result);
       })
       .catch((error) => {
         console.log("Error fetching cashSale data:", error);

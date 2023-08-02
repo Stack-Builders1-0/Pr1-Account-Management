@@ -13,7 +13,7 @@ function SalesList() {
 
   useEffect(() => {
     const sessionToken = localStorage.getItem("sessionToken");
-    console.log(sessionToken);
+    // console.log(sessionToken);
 
     axios
       .post(
@@ -25,8 +25,8 @@ function SalesList() {
       )
       .then((res) => {
         setEditTransactionData(res.data.result);
-        console.log(res.data.result);
-        console.log(res.data);
+        // console.log(res.data.result);
+        // console.log(res.data);
       })
       .catch((error) => {
         console.log("Error fetching editSale data:", error);
