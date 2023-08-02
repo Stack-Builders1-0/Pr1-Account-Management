@@ -17,7 +17,9 @@ function Dashboard() {
   const navigate = useNavigate();
 
   const handleHistory = (invoice_id, type_id) => {
-    navigate(`/history/${invoice_id}/${type_id}`);
+    const encodedInvoiceId = btoa(invoice_id); // Encode the invoice_id
+    const encodedtypeId = btoa(type_id); // Encode the type_id
+    navigate(`/history/${encodedInvoiceId}/${encodedtypeId}`);
   };
 
   const [data, setData] = useState({
