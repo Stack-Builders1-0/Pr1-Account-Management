@@ -17,7 +17,6 @@ function History() {
       )
       .then((res) => {
         setInvoiceHistory(res.data.result);
-        console.log(res.data.result);
       })
       .catch((error) => {
         console.log("Error fetching creditSale data:", error);
