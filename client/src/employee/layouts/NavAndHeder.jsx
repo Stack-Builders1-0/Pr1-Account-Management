@@ -99,7 +99,7 @@ function NavAndHeder() {
     <div className=" ">
       <div class="row flex-nowrap w-100 m-0">
         <div class="col-auto col-md-3 col-xl-2 px-sm-0 px-0 bg-dark h-100 sticky-top">
-          
+        
           <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100  navstyle">
           <div className="row justify-content-center logoContainer">
           <img src="Images/aivha-full.png" />
