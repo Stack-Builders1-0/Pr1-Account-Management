@@ -1,0 +1,11 @@
+DELIMITER //
+CREATE EVENT update_edit_access_event
+ON SCHEDULE EVERY 1 MINUTE
+DO
+BEGIN
+    UPDATE employees
+    SET edit_access = 0
+    WHERE type_id = 'cas' AND edit_access = 1 AND NOW() > ADDTIME(edit_access_at, '01:00:00');
+END;
+//
+DELIMITER ;
