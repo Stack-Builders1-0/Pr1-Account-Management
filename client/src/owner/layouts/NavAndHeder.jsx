@@ -21,13 +21,6 @@ function NavAndHeder() {
     // setIsLoggedin(false);
   };
 
-  // // Token is not present, consider it expired
-  // function isTokenExpired() {
-  //   const sessionToken = localStorage.getItem("sessionToken");
-  //   console.log(sessionToken)
-  //   if (!sessionToken) return true;
-  //   else return false;
-  // }
 
   // Function to check if the session token is expired
   function isTokenExpired() {

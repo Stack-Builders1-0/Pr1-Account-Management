@@ -14,6 +14,8 @@ function NavAndHeder() {
 
   // const [isLockedin, setIsLoggedin] = useState({});
 
+  // const [isLockedin, setIsLoggedin] = useState({});
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem("sessionToken");
@@ -22,11 +24,6 @@ function NavAndHeder() {
     // setIsLoggedin(false);
   };
 
-  // Token is not present, consider it expired
-  // function isTokenExpired() {
-  //   const sessionToken = localStorage.getItem("sessionToken");
-  //   if (!sessionToken) return true;
-  // }
 
   // Function to check if the session token is expired
   function isTokenExpired() {
@@ -44,6 +41,7 @@ function NavAndHeder() {
 
           // Get the current timestamp in seconds
           const currentTime = Math.floor(Date.now() / 1000);
+        
           // Compare the current time with the expiration time to check if it's expired
           return currentTime > expirationTime;
         }
@@ -56,8 +54,6 @@ function NavAndHeder() {
     // If the token is not present in local storage or is invalid, consider it expired
     return true;
   }
-
-
 
   // Check token expiration when the app loads at regular intervals
   // Check every minute
